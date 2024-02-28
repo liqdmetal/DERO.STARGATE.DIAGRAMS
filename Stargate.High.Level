@@ -1,4 +1,4 @@
-<mxfile modified="2024-02-28T03:53:10.433Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="ZUfRU2sRSm3Tgub71p0z" version="23.1.7" type="github">
+<mxfile modified="2024-02-28T03:54:52.920Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="zFMMY0_WeC_rR3lPU0DM" version="23.1.7" type="github">
   <diagram id="eIo0H9kK7ql945uVP1NC" name="Page-1">
     <mxGraphModel dx="1434" dy="754" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1400" math="0" shadow="0">
       <root>
@@ -147,6 +147,9 @@
               <mxPoint x="1240" y="770" />
             </Array>
           </mxGeometry>
+        </mxCell>
+        <mxCell id="jV3UVNujCAtiIQ4h1m6J-1" value="Transactions, SC interactions, messaging or 28bytes of data" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1164.1999999999998" y="130" width="137.9" height="70" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
