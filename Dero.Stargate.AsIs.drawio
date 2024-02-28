@@ -1,4 +1,4 @@
-<mxfile modified="2024-02-28T03:17:16.335Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="RrF-OuufarJ0qj26Et5d" version="23.1.7" type="github">
+<mxfile modified="2024-02-28T03:20:36.614Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="sqehsOb7ipyxi-ZvgZE2" version="23.1.7" type="github">
   <diagram id="eIo0H9kK7ql945uVP1NC" name="Page-1">
     <mxGraphModel dx="930" dy="520" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -43,8 +43,8 @@
             <mxPoint x="1199" y="223" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="T21aQVliIUyU_0U-5JRh-37" value="" style="swimlane;fontStyle=0;horizontal=1;collapsible=0;startSize=28;swimlaneLine=0;swimlaneFillColor=none;fillColor=none;rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=12;strokeColor=#417CB9;fontColor=#417CB9;verticalAlign=top;align=center;spacingLeft=5;dashed=0;strokeWidth=2;" parent="1" vertex="1">
-          <mxGeometry x="560" y="20" width="430" height="540" as="geometry" />
+        <mxCell id="T21aQVliIUyU_0U-5JRh-37" value="DERO VIRTUAL MACHINE - SMART CONTRACTS" style="swimlane;fontStyle=0;horizontal=1;collapsible=0;startSize=28;swimlaneLine=0;swimlaneFillColor=none;fillColor=none;rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=12;strokeColor=#417CB9;fontColor=#417CB9;verticalAlign=top;align=center;spacingLeft=5;dashed=0;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="540" y="106.4" width="430" height="540" as="geometry" />
         </mxCell>
         <mxCell id="T21aQVliIUyU_0U-5JRh-52" value="" style="edgeStyle=orthogonalEdgeStyle;fontSize=12;html=1;endArrow=classicThin;endFill=1;rounded=0;strokeColor=#0076BE;strokeWidth=2;" parent="T21aQVliIUyU_0U-5JRh-37" source="T21aQVliIUyU_0U-5JRh-9" target="T21aQVliIUyU_0U-5JRh-11" edge="1">
           <mxGeometry width="60" height="60" relative="1" as="geometry">
@@ -242,7 +242,13 @@
           <mxGeometry x="1048.6" y="424.3" width="48" height="48" as="geometry" />
         </mxCell>
         <mxCell id="OaAuVJMLidD0WzkcKo5m-34" value="DHEBP - Layer 1 POW Network - AstroBWTv3 Algorithm" style="shape=mxgraph.ibm.box;prType=classic;fontStyle=0;verticalAlign=top;align=left;spacingLeft=32;spacingTop=4;fillColor=none;rounded=0;whiteSpace=wrap;html=1;strokeColor=#4376BB;strokeWidth=2;dashed=0;container=1;spacing=-4;collapsible=0;expand=0;recursiveResize=0;" vertex="1" parent="1">
-          <mxGeometry x="1010" y="240" width="460" height="330" as="geometry" />
+          <mxGeometry x="1011" y="241.5" width="460" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="OaAuVJMLidD0WzkcKo5m-35" value="" style="edgeStyle=orthogonalEdgeStyle;fontSize=12;html=1;endArrow=classicThin;endFill=1;rounded=0;strokeColor=#0076BE;strokeWidth=2;startArrow=classicThin;startFill=1;" edge="1" parent="1" target="OaAuVJMLidD0WzkcKo5m-34">
+          <mxGeometry width="60" height="60" relative="1" as="geometry">
+            <mxPoint x="970" y="405" as="sourcePoint" />
+            <mxPoint x="980" y="280" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
