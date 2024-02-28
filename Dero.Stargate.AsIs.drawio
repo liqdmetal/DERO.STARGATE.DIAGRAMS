@@ -1,9 +1,12 @@
-<mxfile modified="2024-02-28T03:28:09.405Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="lqfv4jipPfPoBaj4HBbn" version="23.1.7" type="github">
+<mxfile modified="2024-02-28T03:28:15.905Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="pMyuhsSe0d4eO02LDo3Q" version="23.1.7" type="github">
   <diagram id="eIo0H9kK7ql945uVP1NC" name="Page-1">
     <mxGraphModel dx="2247" dy="1257" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1400" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="T21aQVliIUyU_0U-5JRh-37" value="DERO VIRTUAL MACHINE - SMART CONTRACTS" style="swimlane;fontStyle=0;horizontal=1;collapsible=0;startSize=28;swimlaneLine=0;swimlaneFillColor=none;fillColor=none;rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=12;strokeColor=#417CB9;fontColor=#417CB9;verticalAlign=top;align=center;spacingLeft=5;dashed=0;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="1005.1" y="770" width="474.9" height="540" as="geometry" />
+        </mxCell>
         <mxCell id="OaAuVJMLidD0WzkcKo5m-34" value="DHEBP - Layer 1 POW Network - AstroBWTv3 Algorithm" style="shape=mxgraph.ibm.box;prType=classic;fontStyle=0;verticalAlign=top;align=left;spacingLeft=32;spacingTop=4;fillColor=none;rounded=0;whiteSpace=wrap;html=1;strokeColor=#4376BB;strokeWidth=2;dashed=0;container=1;spacing=-4;collapsible=0;expand=0;recursiveResize=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" vertex="1" parent="1">
           <mxGeometry x="1011" y="241.5" width="460" height="330" as="geometry" />
         </mxCell>
@@ -49,9 +52,6 @@
               <mxPoint x="1236" y="172" />
             </Array>
           </mxGeometry>
-        </mxCell>
-        <mxCell id="T21aQVliIUyU_0U-5JRh-37" value="DERO VIRTUAL MACHINE - SMART CONTRACTS" style="swimlane;fontStyle=0;horizontal=1;collapsible=0;startSize=28;swimlaneLine=0;swimlaneFillColor=none;fillColor=none;rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=12;strokeColor=#417CB9;fontColor=#417CB9;verticalAlign=top;align=center;spacingLeft=5;dashed=0;strokeWidth=2;" parent="1" vertex="1">
-          <mxGeometry x="1005.1" y="770" width="474.9" height="540" as="geometry" />
         </mxCell>
         <mxCell id="T21aQVliIUyU_0U-5JRh-95" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=none;strokeWidth=7;fillColor=#A71E6C;fontSize=14;fontColor=#FFFFFF;align=center;" parent="1" vertex="1">
           <mxGeometry x="1273.1" y="501.5" width="8" height="8" as="geometry" />
