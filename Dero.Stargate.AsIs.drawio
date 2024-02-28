@@ -1,4 +1,4 @@
-<mxfile modified="2024-02-28T02:53:48.683Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="jF4C5MW3RxI2VKoXJ_fG" version="23.1.7" type="github">
+<mxfile modified="2024-02-28T02:55:19.635Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="qkoZqbG5Lx5Xgvmh2etJ" version="23.1.7" type="github">
   <diagram id="eIo0H9kK7ql945uVP1NC" name="Page-1">
     <mxGraphModel dx="999" dy="559" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -278,9 +278,6 @@
         </mxCell>
         <mxCell id="T21aQVliIUyU_0U-5JRh-33" value="API" style="aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;fontColor=#4277BB;labelBackgroundColor=#ffffff;fontSize=7;spacingTop=0;image;image=img/lib/ibm/applications/application_logic.svg;" parent="T21aQVliIUyU_0U-5JRh-38" vertex="1">
           <mxGeometry x="236.8421052631579" y="90.43478260869566" width="41.73913043478261" height="41.73913043478261" as="geometry" />
-        </mxCell>
-        <mxCell id="T21aQVliIUyU_0U-5JRh-34" value="" style="swimlane;fontStyle=0;horizontal=1;collapsible=0;startSize=28;swimlaneLine=0;swimlaneFillColor=none;fillColor=none;rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=12;strokeColor=#417CB9;fontColor=#417CB9;verticalAlign=top;align=left;spacingLeft=5;dashed=0;strokeWidth=2;fontSize=7;spacingTop=0;" parent="T21aQVliIUyU_0U-5JRh-38" vertex="1">
-          <mxGeometry width="300" height="160" as="geometry" />
         </mxCell>
         <mxCell id="T21aQVliIUyU_0U-5JRh-63" value="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=none;strokeWidth=7;fillColor=#939598;fontSize=14;align=center;fontColor=#FFFFFF;" parent="1" vertex="1">
           <mxGeometry x="460.5" y="93" width="21" height="21" as="geometry" />
