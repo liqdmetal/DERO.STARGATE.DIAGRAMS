@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1020" viewBox="0 0 1920 1020" font-family="Segoe UI, Arial, sans-serif">
+<rect x="0" y="0" width="1920" height="1020" fill="#FFFFFF"/>
+<text x="960" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="#4277BB">RUN YOUR OWN EXPERIMENT — FIVE STEPS FROM IDEA TO ON-CHAIN</text>
+<text x="960" y="82" text-anchor="middle" font-size="13.5" fill="#5A6B7A">The fastest path from ‘what if’ to a working contract. No funding, no permission, no trust required.</text>
+<rect x="60" y="130" width="1560" height="88" rx="10" fill="#FFFFFF" stroke="#1E88E5" stroke-width="2"/>
+<circle cx="45" cy="145" r="15" fill="#1E88E5" stroke="#FFFFFF" stroke-width="2"/>
+<text x="45" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">1</text>
+<text x="80" y="160" font-size="13" font-weight="700" fill="#1E88E5">STEP 1 · PICK A USE CASE</text>
+<text x="80" y="184" font-size="12.5" fill="#22303C">From page 1 — or your own pain point. Write one sentence: ‘I want X to happen without Y.’</text>
+<rect x="60" y="230" width="1560" height="88" rx="10" fill="#FFFFFF" stroke="#00838F" stroke-width="2"/>
+<circle cx="45" cy="245" r="15" fill="#00838F" stroke="#FFFFFF" stroke-width="2"/>
+<text x="45" y="250" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">2</text>
+<text x="80" y="260" font-size="13" font-weight="700" fill="#00838F">STEP 2 · MAP IT TO PRIMITIVES</text>
+<text x="80" y="284" font-size="12.5" fill="#22303C">Money = DHEBP · Logic = DVM · State = GravitonDB · UI = TELA · Wallet = XSWD · Funding = EPOCH · Identity = DeroAuth/Name Service · Privacy = zero-knowledge proofs</text>
+<rect x="60" y="330" width="1560" height="88" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+<circle cx="45" cy="345" r="15" fill="#2E7D32" stroke="#FFFFFF" stroke-width="2"/>
+<text x="45" y="350" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">3</text>
+<text x="80" y="360" font-size="13" font-weight="700" fill="#2E7D32">STEP 3 · RUN THE SIMULATOR</text>
+<text x="80" y="384" font-size="12.5" fill="#22303C">derod --simulator spins up a local chain with pre-funded wallets — no risk, no cost, instant feedback.</text>
+<rect x="60" y="430" width="1560" height="88" rx="10" fill="#FFFFFF" stroke="#FB8C00" stroke-width="2"/>
+<circle cx="45" cy="445" r="15" fill="#FB8C00" stroke="#FFFFFF" stroke-width="2"/>
+<text x="45" y="450" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">4</text>
+<text x="80" y="460" font-size="13" font-weight="700" fill="#FB8C00">STEP 4 · START FROM EXISTING CODE</text>
+<text x="80" y="484" font-size="12.5" fill="#22303C">Fork lottery.bas, Dero-Baccarat, the marketplace SC, DeroBeats, or a dSlate template — don’t start from zero.</text>
+<rect x="60" y="530" width="1560" height="88" rx="10" fill="#FFFFFF" stroke="#8E24AA" stroke-width="2"/>
+<circle cx="45" cy="545" r="15" fill="#8E24AA" stroke="#FFFFFF" stroke-width="2"/>
+<text x="45" y="550" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">5</text>
+<text x="80" y="560" font-size="13" font-weight="700" fill="#8E24AA">STEP 5 · DEPLOY &amp; SHIP</text>
+<text x="80" y="584" font-size="12.5" fill="#22303C">Testnet first (install_sc → SCID), then mainnet. Wire XSWD permissions (ask / accept_always / deny_always) and serve on TELA.</text>
+<text x="60" y="630" font-size="17" font-weight="700" fill="#4277BB">WHEN TO REACH FOR WHICH PRIMITIVE</text>
+<rect x="60" y="664" width="900" height="64" rx="8" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="70" y="688" font-size="12" font-weight="700" fill="#4277BB">DHEBP · L1</text>
+<text x="70" y="708" font-size="11" fill="#5A6B7A">— money &amp; settlement</text>
+<text x="70" y="723" font-size="10.5" fill="#66727E">private payments, escrow, remittances</text>
+<rect x="1000" y="664" width="900" height="64" rx="8" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="1010" y="688" font-size="12" font-weight="700" fill="#4277BB">DVM + DeroScript</text>
+<text x="1010" y="708" font-size="11" fill="#5A6B7A">— logic</text>
+<text x="1010" y="723" font-size="10.5" fill="#66727E">lotteries, loans, insurance, DAOs, markets</text>
+<rect x="60" y="738" width="900" height="64" rx="8" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="70" y="762" font-size="12" font-weight="700" fill="#4277BB">GravitonDB</text>
+<text x="70" y="782" font-size="11" fill="#5A6B7A">— encrypted state</text>
+<text x="70" y="797" font-size="10.5" fill="#66727E">registries, inventories, credentials, votes</text>
+<rect x="1000" y="738" width="900" height="64" rx="8" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="1010" y="762" font-size="12" font-weight="700" fill="#4277BB">TELA</text>
+<text x="1010" y="782" font-size="11" fill="#5A6B7A">— front-end</text>
+<text x="1010" y="797" font-size="10.5" fill="#66727E">storefronts, dashboards, uncensorable sites</text>
+<rect x="60" y="812" width="900" height="64" rx="8" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="70" y="836" font-size="12" font-weight="700" fill="#4277BB">XSWD</text>
+<text x="70" y="856" font-size="11" fill="#5A6B7A">— wallet bridge</text>
+<text x="70" y="871" font-size="10.5" fill="#66727E">sign-in, pay, approve every dApp action</text>
+<rect x="1000" y="812" width="900" height="64" rx="8" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="1010" y="836" font-size="12" font-weight="700" fill="#4277BB">EPOCH</text>
+<text x="1010" y="856" font-size="11" fill="#5A6B7A">— funding</text>
+<text x="1010" y="871" font-size="10.5" fill="#66727E">crowd mining — usage pays for the app</text>
+<rect x="60" y="886" width="900" height="64" rx="8" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="70" y="910" font-size="12" font-weight="700" fill="#4277BB">Name Service</text>
+<text x="70" y="930" font-size="11" fill="#5A6B7A">— identity</text>
+<text x="70" y="945" font-size="10.5" fill="#66727E">human-readable addresses</text>
+<rect x="1000" y="886" width="900" height="64" rx="8" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="1010" y="910" font-size="12" font-weight="700" fill="#4277BB">ZK proofs</text>
+<text x="1010" y="930" font-size="11" fill="#5A6B7A">— privacy</text>
+<text x="1010" y="945" font-size="10.5" fill="#66727E">prove without revealing — balance, age, origin</text>
+<rect x="18" y="976" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/><text x="208" y="998" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">⚠️ DRAFT — community draft: not verified, reviewed, or audited</text></svg>

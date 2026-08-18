@@ -171,6 +171,8 @@ def build_page1():
                     cy = zy + 66 + ii * (CHIP_H + 12)
                     add(f'<mxCell id="u-gc-{gi}-{ii}" value="{chip_value(name, desc, acc)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={acc};strokeWidth=1.8;fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{gx}" y="{cy}" width="{col_w}" height="{CHIP_H}" as="geometry"/></mxCell>')
             add(f'<mxCell id="u-gmore" value="\U0001F4E6 40+ more projects \u2192 DERO.TELA.drawio \u00b7 page 3 (full index)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={acc};strokeWidth=1.8;dashed=1;fontSize=11;fontStyle=1;fontColor={acc};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="{zx+20}" y="{zy+zh-52}" width="{zw-40}" height="36" as="geometry"/></mxCell>')
+        elif key == "born":
+            add(f'<mxCell id="u-bornmore" value="\U0001F9EA 12 experimental use cases + how to build them \u2192 DERO.EXPERIMENTS.drawio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={acc};strokeWidth=1.8;dashed=1;fontSize=11;fontStyle=1;fontColor={acc};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="{zx+20}" y="{zy+zh-52}" width="{zw-40}" height="36" as="geometry"/></mxCell>')
         else:
             for i, (name, desc) in enumerate(content):
                 cx, cy = chip_positions(zx, zy, zw, cols, len(content))[i]
@@ -220,6 +222,9 @@ def build_svg():
                     A(f'<text x="{gx+col_w/2}" y="{cy+44}" text-anchor="middle" font-size="9.5" fill="#66727E">{svg_esc(desc)}</text>')
             A(f'<rect x="{zx+20}" y="{zy+zh-52}" width="{zw-40}" height="36" rx="8" fill="#FFFFFF" stroke="{acc}" stroke-width="1.8" stroke-dasharray="6 5"/>')
             A(f'<text x="{zx+zw/2}" y="{zy+zh-29}" text-anchor="middle" font-size="11" font-weight="700" fill="{acc}">\U0001F4E6 40+ more projects \u2192 DERO.TELA.drawio \u00b7 page 3 (full index)</text>')
+        elif key == "born":
+            A(f'<rect x="{zx+20}" y="{zy+zh-52}" width="{zw-40}" height="36" rx="8" fill="#FFFFFF" stroke="{acc}" stroke-width="1.8" stroke-dasharray="6 5"/>')
+            A(f'<text x="{zx+zw/2}" y="{zy+zh-29}" text-anchor="middle" font-size="11" font-weight="700" fill="{acc}">\U0001F9EA 12 experimental use cases + how to build them \u2192 DERO.EXPERIMENTS.drawio</text>')
         else:
             for i, (name, desc) in enumerate(content):
                 cx, cy = chip_positions(zx, zy, zw, cols, len(content))[i]
