@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1000" viewBox="0 0 1920 1000" font-family="Segoe UI, Arial, sans-serif">
+<rect x="0" y="0" width="1920" height="1000" fill="#FFFFFF"/>
+<text x="960" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="#4277BB">DEEP DIVES — TWO GREENFIELD EXPERIMENTS</text>
+<text x="960" y="82" text-anchor="middle" font-size="13.5" fill="#5A6B7A">Both use cases are empty slots in the ecosystem (greenfield). Here is the pattern, an illustrative DVM-BASIC starter contract, the honest blockers, and the test path. Sketches are NOT deployed or audited — they are a starting line.</text>
+<rect x="40" y="110" width="900" height="120" rx="10" fill="#E3F2FD" stroke="#1E88E5" stroke-width="2"/>
+<text x="56" y="138" font-size="16" font-weight="700" fill="#1E88E5">🤖 M2M PAYMENTS — DEVICE-TO-DEVICE VALUE</text>
+<rect x="56" y="150" width="220" height="26" rx="6" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="166" y="167" text-anchor="middle" font-size="10.5" font-weight="700" fill="#C62828">🔴 GREENFIELD — NOT FILLED YET</text>
+<text x="56" y="200" font-size="12" font-weight="700" fill="#1E88E5">THE PATTERN</text>
+<text x="150" y="196" font-size="11.5" fill="#22303C">1 · Device contract holds a prepaid balance → 2 · every service use fires a micro-transfer (18 s finality) → 3 ·</text>
+<text x="150" y="213" font-size="11.5" fill="#22303C">provider releases the service on payment</text>
+<text x="56" y="262" font-size="12" font-weight="700" fill="#1E88E5">CONTRACT SKETCH — DVM-BASIC (illustrative)</text>
+<rect x="56" y="272" width="868" height="374" rx="8" fill="#F7F9FB" stroke="#C9D6E3" stroke-width="1.5"/>
+<text x="72" y="296" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">Function Initialize() Uint64</text>
+<text x="72" y="316" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  10 STORE(&quot;owner&quot;, SIGNER())</text>
+<text x="72" y="336" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  20 STORE(&quot;balance&quot;, 0)</text>
+<text x="72" y="356" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  30 RETURN 0</text>
+<text x="72" y="376" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">End Function</text>
+<text x="72" y="396" font-size="10.5" font-family="Consolas, monospace" fill="#22303C"> </text>
+<text x="72" y="416" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">Function TopUp() Uint64</text>
+<text x="72" y="436" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  10 STORE(&quot;balance&quot;, LOAD(&quot;balance&quot;) + DEROVALUE())</text>
+<text x="72" y="456" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  20 RETURN 0</text>
+<text x="72" y="476" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">End Function</text>
+<text x="72" y="496" font-size="10.5" font-family="Consolas, monospace" fill="#22303C"> </text>
+<text x="72" y="516" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">Function UseService(provider as String) Uint64</text>
+<text x="72" y="536" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  10 LET fee = LOAD(&quot;fee_&quot; + provider)</text>
+<text x="72" y="556" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  20 IF LOAD(&quot;balance&quot;) &lt; fee THEN RETURN 1</text>
+<text x="72" y="576" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  30 SEND_DERO_TO_ADDRESS(provider, fee)</text>
+<text x="72" y="596" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  40 STORE(&quot;balance&quot;, LOAD(&quot;balance&quot;) - fee)</text>
+<text x="72" y="616" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  50 RETURN 0</text>
+<text x="72" y="636" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">End Function</text>
+<text x="56" y="666" font-size="12" font-weight="700" fill="#C62828">WHAT’S MISSING (honest blockers)</text>
+<rect x="56" y="678" width="868" height="96" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="70" y="700" font-size="11.5" fill="#22303C">Device key custody (secure element per device) · device identity registry (extend the Name Service) · dust-fee economics &amp;</text>
+<text x="70" y="717" font-size="11.5" fill="#22303C">IoT-scale throughput · user override (XSWD-style approval for big spends)</text>
+<text x="56" y="794" font-size="12" font-weight="700" fill="#1E88E5">TEST IT — simulator path</text>
+<rect x="56" y="806" width="868" height="80" rx="8" fill="#F4F8FC" stroke="#1E88E5" stroke-width="1.5"/>
+<text x="70" y="828" font-size="11.5" fill="#22303C">derod --simulator → deploy the contract → TopUp from wallet RPC → fire 100 UseService calls → watch the balance drain and</text>
+<text x="70" y="845" font-size="11.5" fill="#22303C">confirmations land (~18 s each). Measure time and cost.</text>
+<rect x="980" y="110" width="900" height="120" rx="10" fill="#FFF3E0" stroke="#FB8C00" stroke-width="2"/>
+<text x="996" y="138" font-size="16" font-weight="700" fill="#FB8C00">🛡️ PARAMETRIC INSURANCE — PAYOUTS BY CODE</text>
+<rect x="996" y="150" width="220" height="26" rx="6" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="1106" y="167" text-anchor="middle" font-size="10.5" font-weight="700" fill="#C62828">🔴 GREENFIELD — NOT FILLED YET</text>
+<text x="996" y="200" font-size="12" font-weight="700" fill="#FB8C00">THE PATTERN</text>
+<text x="1090" y="196" font-size="11.5" fill="#22303C">1 · policies buy in, premiums pool in the SC → 2 · an oracle reports the trigger (e.g. 120-min delay) → 3 · contract</text>
+<text x="1090" y="213" font-size="11.5" fill="#22303C">pays every policy automatically — no adjuster</text>
+<text x="996" y="262" font-size="12" font-weight="700" fill="#FB8C00">CONTRACT SKETCH — DVM-BASIC (illustrative)</text>
+<rect x="996" y="272" width="868" height="374" rx="8" fill="#F7F9FB" stroke="#C9D6E3" stroke-width="1.5"/>
+<text x="1012" y="296" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">Function Initialize() Uint64</text>
+<text x="1012" y="316" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  10 STORE(&quot;pool&quot;, 0)</text>
+<text x="1012" y="336" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  20 STORE(&quot;policies&quot;, 0)</text>
+<text x="1012" y="356" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  30 RETURN 0</text>
+<text x="1012" y="376" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">End Function</text>
+<text x="1012" y="396" font-size="10.5" font-family="Consolas, monospace" fill="#22303C"> </text>
+<text x="1012" y="416" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">Function BuyPolicy() Uint64</text>
+<text x="1012" y="436" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  10 STORE(&quot;policy_&quot; + LOAD(&quot;policies&quot;), SIGNER())</text>
+<text x="1012" y="456" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  20 STORE(&quot;pool&quot;, LOAD(&quot;pool&quot;) + DEROVALUE())</text>
+<text x="1012" y="476" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  30 STORE(&quot;policies&quot;, LOAD(&quot;policies&quot;) + 1)</text>
+<text x="1012" y="496" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  40 RETURN 0</text>
+<text x="1012" y="516" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">End Function</text>
+<text x="1012" y="536" font-size="10.5" font-family="Consolas, monospace" fill="#22303C"> </text>
+<text x="1012" y="556" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">Function ReportEvent(minutes as Uint64) Uint64</text>
+<text x="1012" y="576" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  10 IF minutes &lt; 120 THEN RETURN 0</text>
+<text x="1012" y="596" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  20 LET payout = LOAD(&quot;pool&quot;) / LOAD(&quot;policies&quot;)</text>
+<text x="1012" y="616" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  30 SEND_DERO_TO_ADDRESS(LOAD(&quot;policy_0&quot;), payout)</text>
+<text x="1012" y="636" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  40 STORE(&quot;event_triggered&quot;, 1)</text>
+<text x="1012" y="656" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">  50 RETURN 0</text>
+<text x="1012" y="676" font-size="10.5" font-family="Consolas, monospace" fill="#22303C">End Function</text>
+<text x="996" y="666" font-size="12" font-weight="700" fill="#C62828">WHAT’S MISSING (honest blockers)</text>
+<rect x="996" y="678" width="868" height="96" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="1010" y="700" font-size="11.5" fill="#22303C">The oracle problem — DERO has no native oracle: trusted reporter, multi-signer threshold, or crowd attestation · capital-pool</text>
+<text x="1010" y="717" font-size="11.5" fill="#22303C">sizing &amp; underwriting · dispute/refund path · regulatory grey area</text>
+<text x="996" y="794" font-size="12" font-weight="700" fill="#FB8C00">TEST IT — simulator path</text>
+<rect x="996" y="806" width="868" height="80" rx="8" fill="#F4F8FC" stroke="#FB8C00" stroke-width="1.5"/>
+<text x="1010" y="828" font-size="11.5" fill="#22303C">Simulator + fake oracle: call ReportEvent(180) via wallet RPC → verify automatic payout to every policy holder. Try edge cases:</text>
+<text x="1010" y="845" font-size="11.5" fill="#22303C">empty pool, double event, 119 minutes.</text>
+<rect x="40" y="920" width="1840" height="56" rx="10" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="960" y="950" text-anchor="middle" font-size="12" fill="#5A6B7A">Next step for either: run the simulator, deploy the sketch, and break it. If it survives, take it to testnet and share it — that is how greenfield slots get filled.</text>
+<rect x="18" y="956" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/><text x="208" y="978" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">⚠️ DRAFT — community draft: not verified, reviewed, or audited</text></svg>

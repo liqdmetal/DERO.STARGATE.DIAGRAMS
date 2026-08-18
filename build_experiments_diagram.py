@@ -87,6 +87,50 @@ RAMP = [
     ("DEPLOY & SHIP", "Testnet first (install_sc \u2192 SCID), then mainnet. Wire XSWD permissions (ask / accept_always / deny_always) and serve on TELA.", "purple"),
 ]
 
+M2M_CODE = [
+    "Function Initialize() Uint64",
+    "  10 STORE(\"owner\", SIGNER())",
+    "  20 STORE(\"balance\", 0)",
+    "  30 RETURN 0",
+    "End Function",
+    "",
+    "Function TopUp() Uint64",
+    "  10 STORE(\"balance\", LOAD(\"balance\") + DEROVALUE())",
+    "  20 RETURN 0",
+    "End Function",
+    "",
+    "Function UseService(provider as String) Uint64",
+    "  10 LET fee = LOAD(\"fee_\" + provider)",
+    "  20 IF LOAD(\"balance\") < fee THEN RETURN 1",
+    "  30 SEND_DERO_TO_ADDRESS(provider, fee)",
+    "  40 STORE(\"balance\", LOAD(\"balance\") - fee)",
+    "  50 RETURN 0",
+    "End Function",
+]
+
+INS_CODE = [
+    "Function Initialize() Uint64",
+    "  10 STORE(\"pool\", 0)",
+    "  20 STORE(\"policies\", 0)",
+    "  30 RETURN 0",
+    "End Function",
+    "",
+    "Function BuyPolicy() Uint64",
+    "  10 STORE(\"policy_\" + LOAD(\"policies\"), SIGNER())",
+    "  20 STORE(\"pool\", LOAD(\"pool\") + DEROVALUE())",
+    "  30 STORE(\"policies\", LOAD(\"policies\") + 1)",
+    "  40 RETURN 0",
+    "End Function",
+    "",
+    "Function ReportEvent(minutes as Uint64) Uint64",
+    "  10 IF minutes < 120 THEN RETURN 0",
+    "  20 LET payout = LOAD(\"pool\") / LOAD(\"policies\")",
+    "  30 SEND_DERO_TO_ADDRESS(LOAD(\"policy_0\"), payout)",
+    "  40 STORE(\"event_triggered\", 1)",
+    "  50 RETURN 0",
+    "End Function",
+]
+
 PRIMITIVES = [
     ("DHEBP \u00b7 L1", "money & settlement", "private payments, escrow, remittances"),
     ("DVM + DeroScript", "logic", "lotteries, loans, insurance, DAOs, markets"),
@@ -99,7 +143,7 @@ PRIMITIVES = [
 ]
 
 def esc(s):
-    return sax.escape(s, {"'": "&apos;"})
+    return sax.escape(s, {"'": "&apos;", '"': "&quot;"})
 
 def val(s):
     return s.replace("<", "&lt;").replace(">", "&gt;")
@@ -255,6 +299,91 @@ def build_svg_p2():
     A('</svg>')
     return "\n".join(out), y + 60
 
+DEEP_DIVES = [
+    dict(key="m2m", emoji="\U0001F916", title="M2M PAYMENTS \u2014 DEVICE-TO-DEVICE VALUE",
+         pattern="1 \u00b7 Device contract holds a prepaid balance \u2192 2 \u00b7 every service use fires a micro-transfer (18 s finality) \u2192 3 \u00b7 provider releases the service on payment",
+         code=M2M_CODE,
+         missing="Device key custody (secure element per device) \u00b7 device identity registry (extend the Name Service) \u00b7 dust-fee economics & IoT-scale throughput \u00b7 user override (XSWD-style approval for big spends)",
+         test="derod --simulator \u2192 deploy the contract \u2192 TopUp from wallet RPC \u2192 fire 100 UseService calls \u2192 watch the balance drain and confirmations land (~18 s each). Measure time and cost."),
+    dict(key="ins", emoji="\U0001F6E1\uFE0F", title="PARAMETRIC INSURANCE \u2014 PAYOUTS BY CODE",
+         pattern="1 \u00b7 policies buy in, premiums pool in the SC \u2192 2 \u00b7 an oracle reports the trigger (e.g. 120-min delay) \u2192 3 \u00b7 contract pays every policy automatically \u2014 no adjuster",
+         code=INS_CODE,
+         missing="The oracle problem \u2014 DERO has no native oracle: trusted reporter, multi-signer threshold, or crowd attestation \u00b7 capital-pool sizing & underwriting \u00b7 dispute/refund path \u00b7 regulatory grey area",
+         test="Simulator + fake oracle: call ReportEvent(180) via wallet RPC \u2192 verify automatic payout to every policy holder. Try edge cases: empty pool, double event, 119 minutes."),
+]
+
+def build_page3():
+    cells = []
+    add = cells.append
+    add(f'<mxCell id="d-t1" value="DEEP DIVES \u2014 TWO GREENFIELD EXPERIMENTS" style="text;html=1;align=center;fontSize=28;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="40" as="geometry"/></mxCell>')
+    add(f'<mxCell id="d-t2" value="Both use cases are empty slots in the ecosystem (greenfield). Here is the pattern, an illustrative DVM-BASIC starter contract, the honest blockers, and the test path. Sketches are NOT deployed or audited \u2014 they are a starting line." style="text;html=1;align=center;fontSize=13.5;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
+    for i, dd in enumerate(DEEP_DIVES):
+        x = 40 + i * 940
+        acc = "#1E88E5" if i == 0 else "#FB8C00"
+        tint = "#E3F2FD" if i == 0 else "#FFF3E0"
+        code_label = esc("CONTRACT SKETCH \u2014 DVM-BASIC (illustrative)")
+        missing_label = esc("WHAT\u2019S MISSING (honest blockers)")
+        test_label = esc("TEST IT \u2014 simulator path")
+        # header
+        add(f'<mxCell id="d-h{i}" value="" style="rounded=1;html=1;fillColor={tint};strokeColor={acc};strokeWidth=2;verticalAlign=top;" vertex="1" parent="1"><mxGeometry x="{x}" y="110" width="900" height="120" as="geometry"/></mxCell>')
+        dd_title = dd["emoji"] + " " + dd["title"]
+        add(f'<mxCell id="d-ht{i}" value="{esc(dd_title)}" style="text;html=1;align=left;fontSize=16;fontStyle=1;fontColor={acc};" vertex="1" parent="1"><mxGeometry x="{x+16}" y="118" width="700" height="24" as="geometry"/></mxCell>')
+        add(f'<mxCell id="d-hc{i}" value="\U0001F534 GREENFIELD \u2014 NOT FILLED YET" style="rounded=1;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=1.5;fontSize=10.5;fontStyle=1;fontColor=#C62828;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="150" width="220" height="26" as="geometry"/></mxCell>')
+        add(f'<mxCell id="d-ht2{i}" value="{esc("THE PATTERN")}" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor={acc};" vertex="1" parent="1"><mxGeometry x="{x+16}" y="180" width="160" height="18" as="geometry"/></mxCell>')
+        add(f'<mxCell id="d-hp{i}" value="{esc(dd["pattern"])}" style="text;html=1;align=left;fontSize=11.5;fontColor={INK};whiteSpace=wrap;" vertex="1" parent="1"><mxGeometry x="{x+110}" y="174" width="770" height="46" as="geometry"/></mxCell>')
+        # code box
+        add(f'<mxCell id="d-c{i}" value="{code_label}" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor={acc};" vertex="1" parent="1"><mxGeometry x="{x+16}" y="244" width="600" height="18" as="geometry"/></mxCell>')
+        code_html = val("<br>".join(esc(ln) if ln else "" for ln in dd["code"]))
+        add(f'<mxCell id="d-cb{i}" value="{code_html}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7F9FB;strokeColor=#C9D6E3;strokeWidth=1.5;fontFamily=Courier New;fontSize=10.5;fontColor={INK};align=left;verticalAlign=top;spacing=10;spacingTop=10;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="266" width="868" height="380" as="geometry"/></mxCell>')
+        # missing
+        add(f'<mxCell id="d-m{i}" value="{missing_label}" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#C62828;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="660" width="600" height="18" as="geometry"/></mxCell>')
+        add(f'<mxCell id="d-mb{i}" value="{esc(dd["missing"])}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=1.5;fontSize=11.5;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="682" width="868" height="92" as="geometry"/></mxCell>')
+        # test
+        add(f'<mxCell id="d-t{i}" value="{test_label}" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor={acc};" vertex="1" parent="1"><mxGeometry x="{x+16}" y="788" width="600" height="18" as="geometry"/></mxCell>')
+        add(f'<mxCell id="d-tb{i}" value="{esc(dd["test"])}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={acc};strokeWidth=1.5;fontSize=11.5;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="810" width="868" height="78" as="geometry"/></mxCell>')
+    add(f'<mxCell id="d-f" value="Next step for either: run the simulator, deploy the sketch, and break it. If it survives, take it to testnet and share it in the community \u2014 that is how greenfield slots get filled." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="920" width="1840" height="56" as="geometry"/></mxCell>')
+    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1000" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+
+def build_svg_p3():
+    out = []
+    A = out.append
+    A(f'<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1000" viewBox="0 0 1920 1000" font-family="Segoe UI, Arial, sans-serif">')
+    A(f'<rect x="0" y="0" width="1920" height="1000" fill="#FFFFFF"/>')
+    A(f'<text x="960" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="{TITLE_COLOR}">DEEP DIVES \u2014 TWO GREENFIELD EXPERIMENTS</text>')
+    A(f'<text x="960" y="82" text-anchor="middle" font-size="13.5" fill="{GRAY}">Both use cases are empty slots in the ecosystem (greenfield). Here is the pattern, an illustrative DVM-BASIC starter contract, the honest blockers, and the test path. Sketches are NOT deployed or audited \u2014 they are a starting line.</text>')
+    for i, dd in enumerate(DEEP_DIVES):
+        x = 40 + i * 940
+        acc = "#1E88E5" if i == 0 else "#FB8C00"
+        tint = "#E3F2FD" if i == 0 else "#FFF3E0"
+        A(f'<rect x="{x}" y="110" width="900" height="120" rx="10" fill="{tint}" stroke="{acc}" stroke-width="2"/>')
+        A(f'<text x="{x+16}" y="138" font-size="16" font-weight="700" fill="{acc}">{svg_esc(dd["emoji"])} {svg_esc(dd["title"])}</text>')
+        A(f'<rect x="{x+16}" y="150" width="220" height="26" rx="6" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>')
+        A(f'<text x="{x+126}" y="167" text-anchor="middle" font-size="10.5" font-weight="700" fill="#C62828">\U0001F534 GREENFIELD \u2014 NOT FILLED YET</text>')
+        A(f'<text x="{x+16}" y="200" font-size="12" font-weight="700" fill="{acc}">THE PATTERN</text>')
+        ty = 196
+        for ln in wrap(dd["pattern"], 760, 11.5):
+            A(f'<text x="{x+110}" y="{ty}" font-size="11.5" fill="{INK}">{svg_esc(ln)}</text>'); ty += 17
+        A(f'<text x="{x+16}" y="262" font-size="12" font-weight="700" fill="{acc}">CONTRACT SKETCH \u2014 DVM-BASIC (illustrative)</text>')
+        A(f'<rect x="{x+16}" y="272" width="868" height="374" rx="8" fill="#F7F9FB" stroke="#C9D6E3" stroke-width="1.5"/>')
+        cy = 296
+        for ln in dd["code"]:
+            A(f'<text x="{x+32}" y="{cy}" font-size="10.5" font-family="Consolas, monospace" fill="{INK}">{svg_esc(ln) if ln else " "}</text>')
+            cy += 20
+        A(f'<text x="{x+16}" y="666" font-size="12" font-weight="700" fill="#C62828">WHAT\u2019S MISSING (honest blockers)</text>')
+        A(f'<rect x="{x+16}" y="678" width="868" height="96" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>')
+        ty = 700
+        for ln in wrap(dd["missing"], 830, 11.5):
+            A(f'<text x="{x+30}" y="{ty}" font-size="11.5" fill="{INK}">{svg_esc(ln)}</text>'); ty += 17
+        A(f'<text x="{x+16}" y="794" font-size="12" font-weight="700" fill="{acc}">TEST IT \u2014 simulator path</text>')
+        A(f'<rect x="{x+16}" y="806" width="868" height="80" rx="8" fill="#F4F8FC" stroke="{acc}" stroke-width="1.5"/>')
+        ty = 828
+        for ln in wrap(dd["test"], 830, 11.5):
+            A(f'<text x="{x+30}" y="{ty}" font-size="11.5" fill="{INK}">{svg_esc(ln)}</text>'); ty += 17
+    A(f'<rect x="40" y="920" width="1840" height="56" rx="10" fill="#F4F8FC" stroke="{TITLE_COLOR}" stroke-width="1.5"/>')
+    A(f'<text x="960" y="950" text-anchor="middle" font-size="12" fill="{GRAY}">Next step for either: run the simulator, deploy the sketch, and break it. If it survives, take it to testnet and share it \u2014 that is how greenfield slots get filled.</text>')
+    A('</svg>')
+    return "\n".join(out)
+
 if __name__ == "__main__":
     import os
     d = os.path.dirname(os.path.abspath(__file__))
@@ -264,14 +393,20 @@ if __name__ == "__main__":
            f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device">\n'
            f'  <diagram id="experiments" name="Experimental Field Guide">\n{inject_draft(build_page1())}\n  </diagram>\n'
            f'  <diagram id="ramp" name="Run Your Own Experiment">\n{inject_draft(build_page2())}\n  </diagram>\n'
+           f'  <diagram id="deepdives" name="{esc("Deep Dives - M2M and Insurance")}">\n{inject_draft(build_page3())}\n  </diagram>\n'
            '</mxfile>\n')
     with open(os.path.join(d, "DERO.EXPERIMENTS.drawio"), "w", encoding="utf-8") as f:
         f.write(xml)
     svg1 = inject_draft_svg(build_svg_p1())
     svg2 = inject_draft_svg(p2)
+    svg3 = inject_draft_svg(build_svg_p3())
     for name, svg in [("preview_experiments1.svg", svg1), ("preview_experiments2.svg", svg2)]:
         with open(os.path.join(d, name), "w", encoding="utf-8") as f:
             f.write(svg)
         with open(os.path.join(d, name.replace(".svg", ".html")), "w", encoding="utf-8") as f:
             f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{svg}</body></html>')
+    with open(os.path.join(d, "preview_experiments3.svg"), "w", encoding="utf-8") as f:
+        f.write(svg3)
+    with open(os.path.join(d, "preview_experiments3.html"), "w", encoding="utf-8") as f:
+        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{svg3}</body></html>')
     print("written OK")
