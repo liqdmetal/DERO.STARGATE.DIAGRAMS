@@ -17,54 +17,66 @@ STATUS = {"LIVE": ("#2E7D32", "\U0001F7E2 LIVE \u2014 USE IT TODAY"),
 W, H = 1920, 1420
 
 CARDS = [
-    ("\U0001F3B0 Provably-fair gambling", "EXP",
+    ("\U0001F3B0 Provably-fair gambling", "LIVE",
      "Can you trust the casino\u2019s dice?",
      "DVM on-chain RANDOM() + private bets, hidden until reveal",
-     "Fork SixofClubsss/Dero-Baccarat or the lottery.bas tutorial"),
+     "Fork SixofClubsss/Dero-Baccarat or the lottery.bas tutorial",
+     "dreamtables (baccarat, poker) \u00b7 dero_lotto \u00b7 Dero-Baccarat"),
     ("\U0001F3B5 Creator patronage", "LIVE",
      "Streaming pays artists cents; platforms sell your data",
      "DeroBeats: EPOCH mining to artists + instant DERO tips",
-     "Use DeroBeats; register your own track on-chain"),
+     "Use DeroBeats; register your own track on-chain",
+     "DeroBeats (KalinaLux/derobeats)"),
     ("\U0001F5F3\uFE0F Private DAO voting", "EXP",
      "Public ballots leak, get coerced, or get bought",
      "Encrypted SC state \u2014 votes hidden, counts verifiable",
-     "Prototype: STORE votes + SIGNER(), reveal by threshold"),
+     "Prototype: STORE votes + SIGNER(), reveal by threshold",
+     None),
     ("\U0001F3E6 Private lending & DeFi", "EXP",
      "Aave-style lending exposes your whole position",
      "Hidden collateral, encrypted positions, DVM escrow",
-     "Build a collateralized-loan SC on the simulator"),
+     "Build a collateralized-loan SC on the simulator",
+     None),
     ("\U0001F6D2 Anonymous marketplace", "PARTIAL",
      "Marketplaces know every buyer, seller, and price",
      "Private payments + TELA storefront + SC escrow",
-     "Peppinux marketplace SC or wizard-grok/ORED"),
+     "Fork the marketplace SC; wire an ORED-style asset store",
+     "Peppinux/dero-marketplace \u00b7 wizard-grok/ORED"),
     ("\U0001F69A Supply chain, selective disclosure", "EXP",
      "Proving \u2018this is genuine\u2019 reveals your whole supplier network",
      "Reveal only what a buyer needs, prove it in math",
-     "Sketch a provenance SC: STORE batch, signer proofs"),
+     "Sketch a provenance SC: STORE batch, signer proofs",
+     None),
     ("\U0001F4AC Censorship-proof social", "PARTIAL",
      "Platforms deplatform; posts vanish",
      "TELA hosting (no server) + DEchan boards + Hologram",
-     "Open DEchan; publish your own TELA page"),
+     "Open DEchan; publish your own TELA page",
+     "DEchan (Skyclad0bserver) \u00b7 Hologram (DHEBP)"),
     ("\U0001F916 Machine-to-machine payments", "EXP",
      "No rails for devices paying devices (vending, EV, IoT)",
      "18 s finality, ~2.5 KB txs, dust-friendly",
-     "Wallet RPC in a Pi script \u2014 auto-pay per use"),
+     "Wallet RPC in a Pi script \u2014 auto-pay per use",
+     None),
     ("\U0001F393 Verifiable credentials", "PARTIAL",
      "Diplomas and IDs are forged; verification is slow",
      "DeroAuth + Name Service + signed claims on-chain",
-     "Sign a credential claim; verify with DeroAuth"),
+     "Sign a credential claim; verify with DeroAuth",
+     "DeroAuth (DHEBP) \u00b7 Name Service (DVM)"),
     ("\U0001F4B8 Private remittances", "PARTIAL",
      "Cross-border costs 5\u201310% and can be frozen",
      "Private ~1-min transfers, near-zero fees",
-     "Send DERO wallet-to-wallet \u2014 no bank in the middle"),
+     "Send DERO wallet-to-wallet \u2014 no bank in the middle",
+     "core DHEBP transfers (live since 2017)"),
     ("\U0001F6E1\uFE0F Parametric insurance", "EXP",
      "Claims need adjusters; payouts are slow and disputed",
      "DVM pays out by code when conditions are met (oracle)",
-     "Model a flight-delay SC with an oracle entrypoint"),
+     "Model a flight-delay SC with an oracle entrypoint",
+     None),
     ("\U0001F3AE Play-to-earn, hidden inventories", "EXP",
      "Game economies leak: exploits, sniping, bots",
      "Encrypted game state \u2014 items & balances private",
-     "Extend Dero-Baccarat with a private item registry"),
+     "Extend Dero-Baccarat with a private item registry",
+     "dreamtables (partial \u2014 no hidden inventory yet)"),
 ]
 
 RAMP = [
@@ -124,28 +136,34 @@ def inject_draft_svg(svg):
             f'<text x="208" y="{h-22}" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">\u26A0\uFE0F DRAFT \u2014 community draft: not verified, reviewed, or audited</text>')
     return svg.replace('</svg>', chip + '</svg>')
 
-def card_value(name, status_key, problem, fit, tryit):
+def card_value(name, status_key, problem, fit, tryit, filled_by):
     sc, stxt = STATUS[status_key]
-    return val(
+    parts = [
         f"<b>{esc(name)}</b><br>"
         f"<font color=&quot;{sc}&quot;><b>{stxt}</b></font><br>"
         f"<font color=&quot;#5A6B7A&quot;>PROBLEM:</font> {esc(problem)}<br>"
         f"<font color=&quot;#5A6B7A&quot;>DERO:</font> {esc(fit)}<br>"
-        f"<font color=&quot;#5A6B7A&quot;>TRY:</font> {esc(tryit)}")
+        f"<font color=&quot;#5A6B7A&quot;>TRY:</font> {esc(tryit)}"
+    ]
+    if filled_by:
+        parts.append(f"<font color=&quot;#5A6B7A&quot;>FILLED BY:</font> <font color=&quot;#2E7D32&quot;><b>{esc(filled_by)}</b></font>")
+    else:
+        parts.append("<font color=&quot;#66727E&quot;><i>not filled yet \u2014 greenfield</i></font>")
+    return val("<br>".join(parts))
 
 def build_page1():
     cells = []
     add = cells.append
     add(f'<mxCell id="x-t1" value="REAL-WORLD USE CASES \u2014 THE EXPERIMENTAL FIELD GUIDE" style="text;html=1;align=center;fontSize=30;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="42" as="geometry"/></mxCell>')
-    add(f'<mxCell id="x-t2" value="Twelve ways DERO could work in the real world \u2014 what problem each solves, which primitives fit, and where you can start building today.  Status: \U0001F7E2 live \u00b7 \U0001F7E1 partial \u00b7 \U0001F534 experimental.  Grounded in derod.org\u2019s use-case taxonomy + community repos." style="text;html=1;align=center;fontSize=13.5;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="68" width="1880" height="22" as="geometry"/></mxCell>')
+    add(f'<mxCell id="x-t2" value="Twelve ways DERO could work in the real world \u2014 what problem each solves, which primitives fit, and where you can start building today.  Status: \U0001F7E2 live \u00b7 \U0001F7E1 partial \u00b7 \U0001F534 experimental \u00b7 FILLED BY = real project already in that slot.  Grounded in derod.org\u2019s use-case taxonomy + community repos." style="text;html=1;align=center;fontSize=13.5;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="68" width="1880" height="22" as="geometry"/></mxCell>')
     xs = [40, 700, 1360]
     ws = 640
     ys = [130, 430, 730, 1030]
     hs = 280
-    for i, (name, status_key, problem, fit, tryit) in enumerate(CARDS):
+    for i, (name, status_key, problem, fit, tryit, filled_by) in enumerate(CARDS):
         r, c = divmod(i, 3)
         x, y = xs[c], ys[r]
-        add(f'<mxCell id="x-c{i}" value="{card_value(name, status_key, problem, fit, tryit)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={STATUS[status_key][0]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=12;fontSize=10.5;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{ws}" height="{hs}" as="geometry"/></mxCell>')
+        add(f'<mxCell id="x-c{i}" value="{card_value(name, status_key, problem, fit, tryit, filled_by)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={STATUS[status_key][0]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=12;fontSize=10.5;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{ws}" height="{hs}" as="geometry"/></mxCell>')
         sc, _ = STATUS[status_key]
         add(f'<mxCell id="x-bd{i}" value="{i+1}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor={sc};strokeColor=#FFFFFF;strokeWidth=2;fontColor=#FFFFFF;fontSize=13;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="{x-15}" y="{y-15}" width="30" height="30" as="geometry"/></mxCell>')
     add(f'<mxCell id="x-f" value="Nothing here is a product claim \u2014 statuses are best-effort reads of what exists in the repos vs what is still an idea.  The point of this page is to give experiments a starting line." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1330" width="1840" height="56" as="geometry"/></mxCell>')
@@ -182,7 +200,7 @@ def build_svg_p1():
     A(f'<text x="{W/2}" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="{TITLE_COLOR}">REAL-WORLD USE CASES \u2014 THE EXPERIMENTAL FIELD GUIDE</text>')
     A(f'<text x="{W/2}" y="84" text-anchor="middle" font-size="13.5" fill="{GRAY}">Twelve ways DERO could work in the real world \u2014 what problem each solves, which primitives fit, and where you can start building today.  Status: \U0001F7E2 live \u00b7 \U0001F7E1 partial \u00b7 \U0001F534 experimental.</text>')
     xs = [40, 700, 1360]; ws = 640; ys = [130, 430, 730, 1030]; hs = 280
-    for i, (name, status_key, problem, fit, tryit) in enumerate(CARDS):
+    for i, (name, status_key, problem, fit, tryit, filled_by) in enumerate(CARDS):
         r, c = divmod(i, 3)
         x, y, w, h = xs[c], ys[r], ws, hs
         sc, stxt = STATUS[status_key]
@@ -197,6 +215,10 @@ def build_svg_p1():
             A(f'<text x="{x+14}" y="{ty}" font-size="10.5" fill="{INK}"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>{svg_esc(ln)}</text>'); ty += 17
         for ln in wrap(tryit, w - 28, 10.5):
             A(f'<text x="{x+14}" y="{ty}" font-size="10.5" fill="{INK}"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>{svg_esc(ln)}</text>'); ty += 17
+        if filled_by:
+            A(f'<text x="{x+14}" y="{ty}" font-size="10.5" fill="{INK}"><tspan font-weight="700" fill="#5A6B7A">FILLED BY: </tspan><tspan font-weight="700" fill="#2E7D32">{svg_esc(filled_by)}</tspan></text>')
+        else:
+            A(f'<text x="{x+14}" y="{ty}" font-size="10.5" font-style="italic" fill="#66727E">not filled yet \u2014 greenfield</text>')
     A(f'<rect x="40" y="1330" width="1840" height="56" rx="10" fill="#F4F8FC" stroke="{TITLE_COLOR}" stroke-width="1.5"/>')
     A(f'<text x="960" y="1360" text-anchor="middle" font-size="12" fill="{GRAY}">Nothing here is a product claim \u2014 statuses are best-effort reads of what exists in the repos vs what is still an idea. The point is to give experiments a starting line.</text>')
     A('</svg>')
