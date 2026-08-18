@@ -212,17 +212,26 @@ STACK = [
 ECO = [
     ("CORE PROTOCOL & WALLETS", "green", [
         ("DEROFDN/derohe", "active", "community-maintained node \u2014 where development lives"),
+        ("DHEBP/dhebp", "active", "Layer 1 private decentralized application platform"),
         ("DEROFDN/Engram", "alpha", "smart wallet + TELA browser"),
         ("g45w (g45t345rt)", "active", "universal wallet with mobile UI"),
-        ("dero-am/astrobwt-miner", "active", "community CPU miner (formerly astrominer)"),
     ]),
     ("DEV TOOLS", "blue", [
         ("dSlate (dMulti-c)", "active", "visual dApp builder & test environment"),
-        ("Gnomon (civilware)", "alpha", "local chain indexer"),
+        ("Gnomon / HyperGnomon", "active", "chain indexers \u2014 HyperGnomon finds all TELA apps"),
         ("dvm-basic-vscode", "active", "DVM-BASIC syntax highlighting for VSCode"),
         ("dero-rpc-bridge", "active", "Chrome extension \u2014 safe wallet\u2194website bridge"),
-        ("dero-community/xswd-api", "active", "JS/TS + Go clients for the XSWD protocol"),
+        ("xswd-api (JS/Go) + demo", "active", "XSWD protocol clients + React demo app"),
         ("DERO-SC-Standards", "active", "community smart-contract standards"),
+        ("dero-docs / engram-wallet-docs", "active", "build guides for DERO, TELA & Engram"),
+        ("dero-mcp-server", "active", "read-only MCP server over daemon RPC"),
+        ("DERO-Explorer-TELA", "active", "real-time explorer built on TELA"),
+    ]),
+    ("MINERS & NODES", "orange", [
+        ("tnn-miner", "active", "open-source AstroBWTv3 miner"),
+        ("Dirtybird-C-Miner", "active", "C++ AstroBWTv3 miner \u2014 no dev fee"),
+        ("dero-am/astrobwt-miner", "active", "community CPU miner (formerly astrominer)"),
+        ("dero-c-miner", "active", "DERO miner written in C"),
     ]),
     ("DAPPS & SITES", "orange", [
         ("Hologram (DHEBP)", "active", "explore the DERO decentralized web"),
@@ -239,8 +248,14 @@ ECO = [
         ("civilware/tela", "active", "TELA: Decentralized Web Standard"),
         ("DHEBP/DeroPay", "active", "complete payment stack for accepting DERO"),
         ("DHEBP/DeroAuth", "active", "log in to sites with your DERO wallet"),
+        ("HOLOGRAM (DHEBP)", "active", "explore the DERO decentralized web"),
         ("SovereignSearch", "active", "local discovery & navigation for TELA sites"),
-        ("PureWolf extension", "active", "browser extension \u2194 local TELA services"),
+        ("PureWolf ext / HyperWolf", "active", "browser extension + desktop TELA client"),
+        ("tela-gateway", "active", "public HTTP gateway for on-chain TELA apps"),
+    ]),
+    ("CROWD MINING & MEDIA", "purple", [
+        ("EPOCH (civilware)", "active", "Crowd Mining \u2014 users\u2019 interactions mine rewards for creators"),
+        ("DeroBeats (KalinaLux)", "active", "decentralized music \u2014 IPFS tracks, EPOCH mining to artists, tips"),
     ]),
     ("NFTs / ASSETS / BRIDGES", "teal", [
         ("Artificer NFA standard", "active", "civilware\u2019s NFT/asset standard"),

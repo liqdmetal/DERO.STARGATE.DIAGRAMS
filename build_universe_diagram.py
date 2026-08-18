@@ -18,7 +18,7 @@ ZONE_COLORS = {
     "born":     ("#F9A825", "#FFF8E1", "4 \u00b7 WHAT CAN BE BORN \u2014 END-WORLD RESULTS (HYPOTHETICAL)"),
     "spec":     ("#8E24AA", "#F3E5F5", "5 \u00b7 SPECULATION \u2014 NEW RAILS (NOT BUILT YET)"),
 }
-W, H = 2600, 1720
+W, H = 2600, 1960
 
 ENGINE = [
     ("Encrypted ledger", "homomorphic balances, 66 B/account, never decrypted"),
@@ -32,23 +32,32 @@ ENGINE = [
 ]
 REPOS = [
     ("DEROFDN/derohe", "community-maintained node \u2014 active dev home"),
+    ("DHEBP/dhebp", "Layer 1 private dApp platform"),
     ("DEROFDN/Engram", "smart wallet + TELA browser"),
     ("g45w", "universal wallet, mobile UI"),
-    ("dero-am/astrobwt-miner", "community CPU miner"),
-    ("dSlate (dMulti-c)", "visual dApp builder & tester"),
-    ("Gnomon (civilware)", "local chain indexer"),
-    ("dvm-basic-vscode", "DVM-BASIC language support"),
-    ("dero-rpc-bridge", "safe wallet\u2194website bridge (Chrome)"),
-    ("xswd-api (JS/Go)", "XSWD protocol clients"),
-    ("DERO-SC-Standards", "community contract standards"),
     ("civilware/tela", "TELA \u2014 Decentralized Web Standard"),
+    ("civilware/epoch", "Crowd Mining \u2014 interactions mine rewards"),
+    ("DHEBP/HOLOGRAM", "explore the decentralized web"),
     ("DHEBP/DeroPay", "accept DERO \u2014 payment stack"),
     ("DHEBP/DeroAuth", "log in with your DERO wallet"),
-    ("DHEBP/HOLOGRAM", "explore the decentralized web"),
+    ("dReams (dReam-dApps)", "suite of on-chain services"),
+    ("cldex / dero_swap", "decentralized exchange"),
+    ("dSlate (dMulti-c)", "visual dApp builder & tester"),
+    ("Gnomon / HyperGnomon", "chain indexers \u2014 find all TELA apps"),
     ("SovereignSearch", "local TELA site discovery"),
-    ("PureWolf ext", "browser \u2194 local TELA services"),
+    ("PureWolf / HyperWolf", "browser + desktop TELA clients"),
+    ("DeroBeats", "decentralized music + EPOCH mining"),
+    ("tnn-miner", "open-source AstroBWTv3 miner"),
+    ("Dirtybird-C-Miner", "C++ AstroBWTv3 miner, no dev fee"),
+    ("dero-am/astrobwt-miner", "community CPU miner"),
+    ("xswd-api (JS/Go)", "XSWD protocol clients"),
+    ("tela-gateway", "public HTTP gateway for TELA"),
+    ("dero-docs / MCP server", "build guides + AI access"),
+    ("DERO-Explorer-TELA", "explorer built on TELA"),
+    ("DERO-SC-Standards", "community contract standards"),
+    ("dvm-basic-vscode", "DVM-BASIC language support"),
+    ("dero-rpc-bridge", "safe wallet\u2194website bridge (Chrome)"),
     ("TELATOMIC Swaps", "DERO \u2194 PulseChain atomic swaps"),
-    ("dReam-dApps/dReams", "suite of on-chain services"),
 ]
 USECASES = [
     ("Private payments", "send DERO \u2014 amount & identity hidden"),
@@ -59,6 +68,9 @@ USECASES = [
     ("Sign-in & pay", "DeroAuth \u00b7 DeroPay \u00b7 no passwords"),
     ("Marketplaces & assets", "ORED asset manager \u00b7 deronfts"),
     ("Data & analytics", "Gnomon \u00b7 derohist \u00b7 derostats"),
+    ("Crowd mining", "EPOCH \u2014 app use mines rewards, ads-free"),
+    ("Music streaming", "DeroBeats \u2014 IPFS tracks, EPOCH tips to artists"),
+    ("Web access", "tela-gateway \u2014 TELA apps over plain HTTP"),
 ]
 BORN = [
     ("Private banking for the unbanked", "self-custody money \u2014 no gatekeeper, no freeze, no KYC wall"),
@@ -83,10 +95,10 @@ SPEC = [
 
 ZONES = [
     ("engine",   60,   150, 1060, 430, 2, ENGINE),
-    ("repos",    1160, 150, 1380, 430, 3, REPOS),
-    ("usecases", 60,   640, 2480, 300, 4, USECASES),
-    ("born",     60,   1020, 1260, 560, 2, BORN),
-    ("spec",     1380, 1020, 1160, 560, 2, SPEC),
+    ("repos",    1160, 150, 1380, 780, 4, REPOS),
+    ("usecases", 60,   990, 2480, 340, 4, USECASES),
+    ("born",     60,   1390, 1260, 500, 2, BORN),
+    ("spec",     1380, 1390, 1160, 500, 2, SPEC),
 ]
 
 def esc(s):
@@ -128,7 +140,7 @@ def wrap(text, width_px, font_px, factor=0.55):
         lines.append(cur)
     return lines
 
-CHIP_W, CHIP_H = 235, 92
+CHIP_W, CHIP_H = 235, 80
 
 def chip_positions(zone, count):
     key, zx, zy, zw, zh, cols, _ = zone
@@ -164,9 +176,9 @@ def build_page1():
         db = "dashed=1;" if dashed else ""
         add(f'<mxCell id="{eid}" value="{esc(label)}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={TITLE_COLOR};strokeWidth=3;{db}fontSize=12;fontStyle=1;fontColor={TITLE_COLOR};labelBackgroundColor=#FFFFFF;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{p1[0]}" y="{p1[1]}" as="sourcePoint"/><mxPoint x="{p2[0]}" y="{p2[1]}" as="targetPoint"/><Array as="points">{""}</Array></mxGeometry></mxCell>')
     arrow("u-a1", (700, 580), (1200, 580), "built by the community")          # engine -> repos
-    arrow("u-a2", (2000, 580), (2000, 640), "enable")                          # repos -> use cases
-    arrow("u-a3", (700, 940), (700, 1020), "grow into")                        # use cases -> born
-    arrow("u-a4", (2000, 940), (2000, 1020), "could lead to", dashed=True)     # use cases -> spec
+    arrow("u-a2", (2000, 930), (2000, 990), "enable")                          # repos -> use cases
+    arrow("u-a3", (700, 1330), (700, 1390), "grow into")                       # use cases -> born
+    arrow("u-a4", (2000, 1330), (2000, 1390), "could lead to", dashed=True)    # use cases -> spec
     return f'<mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="{H}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 def build_svg():
@@ -193,12 +205,12 @@ def build_svg():
     # arrows
     A(f'<line x1="700" y1="580" x2="1160" y2="580" stroke="{TITLE_COLOR}" stroke-width="3" marker-end="url(#uar)"/>')
     A(f'<text x="930" y="566" text-anchor="middle" font-size="12" font-weight="600" fill="{TITLE_COLOR}" stroke="#FFF" stroke-width="3" paint-order="stroke">built by the community</text>')
-    A(f'<line x1="2000" y1="580" x2="2000" y2="640" stroke="{TITLE_COLOR}" stroke-width="3" marker-end="url(#uar)"/>')
-    A(f'<text x="2040" y="616" font-size="12" font-weight="600" fill="{TITLE_COLOR}" stroke="#FFF" stroke-width="3" paint-order="stroke">enable</text>')
-    A(f'<line x1="700" y1="940" x2="700" y2="1020" stroke="{TITLE_COLOR}" stroke-width="3" marker-end="url(#uar)"/>')
-    A(f'<text x="740" y="986" font-size="12" font-weight="600" fill="{TITLE_COLOR}" stroke="#FFF" stroke-width="3" paint-order="stroke">grow into</text>')
-    A(f'<line x1="2000" y1="940" x2="2000" y2="1020" stroke="{TITLE_COLOR}" stroke-width="3" stroke-dasharray="10 7" marker-end="url(#uar)"/>')
-    A(f'<text x="2040" y="986" font-size="12" font-weight="600" fill="{TITLE_COLOR}" stroke="#FFF" stroke-width="3" paint-order="stroke">could lead to</text>')
+    A(f'<line x1="2000" y1="930" x2="2000" y2="990" stroke="{TITLE_COLOR}" stroke-width="3" marker-end="url(#uar)"/>')
+    A(f'<text x="2040" y="966" font-size="12" font-weight="600" fill="{TITLE_COLOR}" stroke="#FFF" stroke-width="3" paint-order="stroke">enable</text>')
+    A(f'<line x1="700" y1="1330" x2="700" y2="1390" stroke="{TITLE_COLOR}" stroke-width="3" marker-end="url(#uar)"/>')
+    A(f'<text x="740" y="1366" font-size="12" font-weight="600" fill="{TITLE_COLOR}" stroke="#FFF" stroke-width="3" paint-order="stroke">grow into</text>')
+    A(f'<line x1="2000" y1="1330" x2="2000" y2="1390" stroke="{TITLE_COLOR}" stroke-width="3" stroke-dasharray="10 7" marker-end="url(#uar)"/>')
+    A(f'<text x="2040" y="1366" font-size="12" font-weight="600" fill="{TITLE_COLOR}" stroke="#FFF" stroke-width="3" paint-order="stroke">could lead to</text>')
     A('</svg>')
     return "\n".join(out)
 
