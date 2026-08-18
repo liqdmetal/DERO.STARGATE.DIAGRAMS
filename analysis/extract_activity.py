@@ -94,11 +94,12 @@ def extract_block(endpoint: str, height: int):
     if not tx_hashes:
         return rows
     txs = get_txs(endpoint, tx_hashes)
-    by_hash = {t.get("tx_hash"): t for t in txs if t.get("tx_hash")}
-    for txid in tx_hashes:
-        t = by_hash.get(txid)
-        if not t:
+    # NOTE: daemon returns empty tx_hash in Tx_Related_Info on some nodes —
+    # match by position (gettransactions returns txs in request order).
+    for i, txid in enumerate(tx_hashes):
+        if i >= len(txs):
             continue
+        t = txs[i]
         ring_payloads = t.get("ring") or []
         for pi, ring in enumerate(ring_payloads):
             rows.append((height, txid, pi, len(ring), ring))
@@ -113,6 +114,8 @@ def main():
     ap.add_argument("--outdir", default="./data")
     ap.add_argument("--format", choices=["csv", "parquet"], default="csv")
     ap.add_argument("--sleep", type=float, default=0.0, help="per-block throttle (s)")
+    ap.add_argument("--workers", type=int, default=1, help="parallel RPC workers")
+    ap.add_argument("--resume", action="store_true", help="skip heights already in outdir/ring_members.csv")
     args = ap.parse_args()
 
     os.makedirs(args.outdir, exist_ok=True)
@@ -120,40 +123,74 @@ def main():
     end = args.end if args.end is not None else get_topoheight(args.rpc)
     print(f"scanning heights {args.start}..{end} via {args.rpc}", file=sys.stderr)
 
+    # resume support: skip heights already in ring_members.csv
+    done_heights = set()
+    csv_path = os.path.join(args.outdir, "ring_members.csv")
+    if args.resume and os.path.exists(csv_path):
+        with open(csv_path) as f:
+            for row in csv.DictReader(f):
+                done_heights.add(int(row["height"]))
+        print(f"resume: {len(done_heights)} heights already scanned", file=sys.stderr)
+
+    import concurrent.futures as cf
+
     ring_rows = []      # (height, txid, payload_idx, ringsize, pos, account)
     account_app = {}    # account -> list of heights
     t0 = time.time()
+    pending = [h for h in range(args.start, end + 1) if h not in done_heights]
 
-    for h in range(args.start, end + 1):
+    def work(h):
         try:
-            rows = extract_block(args.rpc, h)
+            return extract_block(args.rpc, h)
         except Exception as e:
             print(f"  height {h}: FAILED {e}", file=sys.stderr)
-            continue
-        for height, txid, pi, ringsize, ring in rows:
-            for pos, acc in enumerate(ring):
-                ring_rows.append((height, txid, pi, ringsize, pos, acc))
-                account_app.setdefault(acc, []).append(height)
-        if h % 100 == 0:
-            dt = time.time() - t0
-            rate = (h - args.start + 1) / max(dt, 1e-9)
-            print(f"  {h}/{end} ({rate:.1f} blk/s, {len(account_app)} accounts)",
-                  file=sys.stderr)
+            return []
+
+    n_done = 0
+    with cf.ThreadPoolExecutor(max_workers=args.workers) as ex:
+        for rows in ex.map(work, pending):
+            n_done += 1
+            for height, txid, pi, ringsize, ring in rows:
+                for pos, acc in enumerate(ring):
+                    ring_rows.append((height, txid, pi, ringsize, pos, acc))
+                    account_app.setdefault(acc, []).append(height)
+            if n_done % 500 == 0:
+                dt = time.time() - t0
+                rate = n_done / max(dt, 1e-9)
+                print(f"  {n_done}/{len(pending)} ({rate:.1f} blk/s, {len(account_app)} accounts)",
+                      file=sys.stderr)
+                _checkpoint(args, ring_rows, _account_rows(account_app))
         if args.sleep:
             time.sleep(args.sleep)
 
     # per-account aggregation
-    account_rows = []
+    account_rows = _account_rows(account_app)
+    account_rows.sort(key=lambda r: r["first_seen_height"])
+
+    _write_outputs(args, ring_rows, account_rows)
+
+    print(f"done: {len(ring_rows)} ring-member rows, {len(account_rows)} accounts "
+          f"-> {args.outdir}", file=sys.stderr)
+
+
+def _account_rows(account_app):
+    rows = []
     for acc, heights in account_app.items():
-        account_rows.append({
+        rows.append({
             "account": acc,
             "first_seen_height": min(heights),
             "last_seen_height": max(heights),
             "n_appearances": len(heights),
             "appearance_heights": json.dumps(sorted(heights)),
         })
-    account_rows.sort(key=lambda r: r["first_seen_height"])
+    return rows
 
+
+def _checkpoint(args, ring_rows, account_rows):
+    _write_outputs(args, ring_rows, account_rows)
+
+
+def _write_outputs(args, ring_rows, account_rows):
     if args.format == "parquet" and HAS_PANDAS:
         pd.DataFrame(ring_rows, columns=[
             "height", "txid", "payload_idx", "ringsize", "ring_pos", "account"
@@ -170,9 +207,6 @@ def main():
                                 "n_appearances", "appearance_heights"])
             w.writeheader()
             w.writerows(account_rows)
-
-    print(f"done: {len(ring_rows)} ring-member rows, {len(account_rows)} accounts "
-          f"-> {args.outdir}", file=sys.stderr)
 
 
 if __name__ == "__main__":
