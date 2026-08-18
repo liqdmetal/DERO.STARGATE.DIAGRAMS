@@ -2,14 +2,15 @@
 <rect x="0" y="0" width="1920" height="1420" fill="#FFFFFF"/>
 <text x="960.0" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#4277BB">REAL-WORLD USE CASES — THE EXPERIMENTAL FIELD GUIDE</text>
 <text x="960.0" y="84" text-anchor="middle" font-size="13.5" fill="#5A6B7A">Twelve ways DERO could work in the real world — what problem each solves, which primitives fit, and where you can start building today.  Status: 🟢 live · 🟡 partial · 🔴 experimental.</text>
-<rect x="40" y="130" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#C62828" stroke-width="2"/>
-<circle cx="40" cy="130" r="15" fill="#C62828" stroke="#FFFFFF" stroke-width="2"/>
+<rect x="40" y="130" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+<circle cx="40" cy="130" r="15" fill="#2E7D32" stroke="#FFFFFF" stroke-width="2"/>
 <text x="40" y="135" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">1</text>
 <text x="54" y="156" font-size="12.5" font-weight="700" fill="#22303C">🎰 Provably-fair gambling</text>
-<text x="54" y="176" font-size="10.5" font-weight="700" fill="#C62828">🔴 EXPERIMENTAL — PROTOTYPE IT</text>
+<text x="54" y="176" font-size="10.5" font-weight="700" fill="#2E7D32">🟢 LIVE — USE IT TODAY</text>
 <text x="54" y="198" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Can you trust the casino’s dice?</text>
 <text x="54" y="215" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>DVM on-chain RANDOM() + private bets, hidden until reveal</text>
 <text x="54" y="232" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Fork SixofClubsss/Dero-Baccarat or the lottery.bas tutorial</text>
+<text x="54" y="249" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">FILLED BY: </tspan><tspan font-weight="700" fill="#2E7D32">dreamtables (baccarat, poker) · dero_lotto · Dero-Baccarat</tspan></text>
 <rect x="700" y="130" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
 <circle cx="700" cy="130" r="15" fill="#2E7D32" stroke="#FFFFFF" stroke-width="2"/>
 <text x="700" y="135" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">2</text>
@@ -18,6 +19,7 @@
 <text x="714" y="198" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Streaming pays artists cents; platforms sell your data</text>
 <text x="714" y="215" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>DeroBeats: EPOCH mining to artists + instant DERO tips</text>
 <text x="714" y="232" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Use DeroBeats; register your own track on-chain</text>
+<text x="714" y="249" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">FILLED BY: </tspan><tspan font-weight="700" fill="#2E7D32">DeroBeats (KalinaLux/derobeats)</tspan></text>
 <rect x="1360" y="130" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#C62828" stroke-width="2"/>
 <circle cx="1360" cy="130" r="15" fill="#C62828" stroke="#FFFFFF" stroke-width="2"/>
 <text x="1360" y="135" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">3</text>
@@ -26,6 +28,7 @@
 <text x="1374" y="198" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Public ballots leak, get coerced, or get bought</text>
 <text x="1374" y="215" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>Encrypted SC state — votes hidden, counts verifiable</text>
 <text x="1374" y="232" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Prototype: STORE votes + SIGNER(), reveal by threshold</text>
+<text x="1374" y="249" font-size="10.5" font-style="italic" fill="#66727E">not filled yet — greenfield</text>
 <rect x="40" y="430" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#C62828" stroke-width="2"/>
 <circle cx="40" cy="430" r="15" fill="#C62828" stroke="#FFFFFF" stroke-width="2"/>
 <text x="40" y="435" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">4</text>
@@ -34,6 +37,7 @@
 <text x="54" y="498" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Aave-style lending exposes your whole position</text>
 <text x="54" y="515" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>Hidden collateral, encrypted positions, DVM escrow</text>
 <text x="54" y="532" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Build a collateralized-loan SC on the simulator</text>
+<text x="54" y="549" font-size="10.5" font-style="italic" fill="#66727E">not filled yet — greenfield</text>
 <rect x="700" y="430" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#F9A825" stroke-width="2"/>
 <circle cx="700" cy="430" r="15" fill="#F9A825" stroke="#FFFFFF" stroke-width="2"/>
 <text x="700" y="435" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">5</text>
@@ -41,7 +45,8 @@
 <text x="714" y="476" font-size="10.5" font-weight="700" fill="#F9A825">🟡 PARTIAL — BUILD ON IT</text>
 <text x="714" y="498" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Marketplaces know every buyer, seller, and price</text>
 <text x="714" y="515" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>Private payments + TELA storefront + SC escrow</text>
-<text x="714" y="532" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Peppinux marketplace SC or wizard-grok/ORED</text>
+<text x="714" y="532" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Fork the marketplace SC; wire an ORED-style asset store</text>
+<text x="714" y="549" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">FILLED BY: </tspan><tspan font-weight="700" fill="#2E7D32">Peppinux/dero-marketplace · wizard-grok/ORED</tspan></text>
 <rect x="1360" y="430" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#C62828" stroke-width="2"/>
 <circle cx="1360" cy="430" r="15" fill="#C62828" stroke="#FFFFFF" stroke-width="2"/>
 <text x="1360" y="435" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">6</text>
@@ -50,6 +55,7 @@
 <text x="1374" y="498" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Proving ‘this is genuine’ reveals your whole supplier network</text>
 <text x="1374" y="515" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>Reveal only what a buyer needs, prove it in math</text>
 <text x="1374" y="532" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Sketch a provenance SC: STORE batch, signer proofs</text>
+<text x="1374" y="549" font-size="10.5" font-style="italic" fill="#66727E">not filled yet — greenfield</text>
 <rect x="40" y="730" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#F9A825" stroke-width="2"/>
 <circle cx="40" cy="730" r="15" fill="#F9A825" stroke="#FFFFFF" stroke-width="2"/>
 <text x="40" y="735" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">7</text>
@@ -58,6 +64,7 @@
 <text x="54" y="798" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Platforms deplatform; posts vanish</text>
 <text x="54" y="815" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>TELA hosting (no server) + DEchan boards + Hologram</text>
 <text x="54" y="832" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Open DEchan; publish your own TELA page</text>
+<text x="54" y="849" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">FILLED BY: </tspan><tspan font-weight="700" fill="#2E7D32">DEchan (Skyclad0bserver) · Hologram (DHEBP)</tspan></text>
 <rect x="700" y="730" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#C62828" stroke-width="2"/>
 <circle cx="700" cy="730" r="15" fill="#C62828" stroke="#FFFFFF" stroke-width="2"/>
 <text x="700" y="735" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">8</text>
@@ -66,6 +73,7 @@
 <text x="714" y="798" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>No rails for devices paying devices (vending, EV, IoT)</text>
 <text x="714" y="815" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>18 s finality, ~2.5 KB txs, dust-friendly</text>
 <text x="714" y="832" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Wallet RPC in a Pi script — auto-pay per use</text>
+<text x="714" y="849" font-size="10.5" font-style="italic" fill="#66727E">not filled yet — greenfield</text>
 <rect x="1360" y="730" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#F9A825" stroke-width="2"/>
 <circle cx="1360" cy="730" r="15" fill="#F9A825" stroke="#FFFFFF" stroke-width="2"/>
 <text x="1360" y="735" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">9</text>
@@ -74,6 +82,7 @@
 <text x="1374" y="798" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Diplomas and IDs are forged; verification is slow</text>
 <text x="1374" y="815" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>DeroAuth + Name Service + signed claims on-chain</text>
 <text x="1374" y="832" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Sign a credential claim; verify with DeroAuth</text>
+<text x="1374" y="849" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">FILLED BY: </tspan><tspan font-weight="700" fill="#2E7D32">DeroAuth (DHEBP) · Name Service (DVM)</tspan></text>
 <rect x="40" y="1030" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#F9A825" stroke-width="2"/>
 <circle cx="40" cy="1030" r="15" fill="#F9A825" stroke="#FFFFFF" stroke-width="2"/>
 <text x="40" y="1035" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">10</text>
@@ -82,6 +91,7 @@
 <text x="54" y="1098" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Cross-border costs 5–10% and can be frozen</text>
 <text x="54" y="1115" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>Private ~1-min transfers, near-zero fees</text>
 <text x="54" y="1132" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Send DERO wallet-to-wallet — no bank in the middle</text>
+<text x="54" y="1149" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">FILLED BY: </tspan><tspan font-weight="700" fill="#2E7D32">core DHEBP transfers (live since 2017)</tspan></text>
 <rect x="700" y="1030" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#C62828" stroke-width="2"/>
 <circle cx="700" cy="1030" r="15" fill="#C62828" stroke="#FFFFFF" stroke-width="2"/>
 <text x="700" y="1035" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">11</text>
@@ -90,6 +100,7 @@
 <text x="714" y="1098" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Claims need adjusters; payouts are slow and disputed</text>
 <text x="714" y="1115" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>DVM pays out by code when conditions are met (oracle)</text>
 <text x="714" y="1132" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Model a flight-delay SC with an oracle entrypoint</text>
+<text x="714" y="1149" font-size="10.5" font-style="italic" fill="#66727E">not filled yet — greenfield</text>
 <rect x="1360" y="1030" width="640" height="280" rx="10" fill="#FFFFFF" stroke="#C62828" stroke-width="2"/>
 <circle cx="1360" cy="1030" r="15" fill="#C62828" stroke="#FFFFFF" stroke-width="2"/>
 <text x="1360" y="1035" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">12</text>
@@ -98,6 +109,7 @@
 <text x="1374" y="1098" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">PROBLEM: </tspan>Game economies leak: exploits, sniping, bots</text>
 <text x="1374" y="1115" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">DERO: </tspan>Encrypted game state — items &amp; balances private</text>
 <text x="1374" y="1132" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">TRY: </tspan>Extend Dero-Baccarat with a private item registry</text>
+<text x="1374" y="1149" font-size="10.5" fill="#22303C"><tspan font-weight="700" fill="#5A6B7A">FILLED BY: </tspan><tspan font-weight="700" fill="#2E7D32">dreamtables (partial — no hidden inventory yet)</tspan></text>
 <rect x="40" y="1330" width="1840" height="56" rx="10" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
 <text x="960" y="1360" text-anchor="middle" font-size="12" fill="#5A6B7A">Nothing here is a product claim — statuses are best-effort reads of what exists in the repos vs what is still an idea. The point is to give experiments a starting line.</text>
 <rect x="18" y="1376" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/><text x="208" y="1398" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">⚠️ DRAFT — community draft: not verified, reviewed, or audited</text></svg>
