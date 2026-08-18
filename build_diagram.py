@@ -187,6 +187,23 @@ def val(s):
     rendered as HTML by drawio when html=1). Entities are left untouched."""
     return s.replace("<", "&lt;").replace(">", "&gt;")
 
+import re
+def _draft_cell(h):
+    return ('<mxCell id="draft" value="&#9888;&#65039; DRAFT &#8212; community draft \u2014 not verified, reviewed, or audited" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=2;fontSize=11;fontStyle=1;fontColor=#C62828;align=center;verticalAlign=middle;" vertex="1" parent="1">'
+            f'<mxGeometry x="18" y="{h-44}" width="380" height="34" as="geometry"/></mxCell>')
+
+def inject_draft(model):
+    m = re.search(r'pageHeight="(\d+)"', model)
+    h = int(m.group(1)) if m else 1400
+    return model.replace('<mxCell id="1" parent="0"/>', '<mxCell id="1" parent="0"/>' + _draft_cell(h), 1)
+
+def inject_draft_svg(svg):
+    m = re.search(r'height="(\d+)"', svg)
+    h = int(m.group(1)) if m else 1400
+    chip = (f'<rect x="18" y="{h-44}" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/>'
+            f'<text x="208" y="{h-22}" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">\u26A0\uFE0F DRAFT \u2014 community draft: not verified, reviewed, or audited</text>')
+    return svg.replace('</svg>', chip + '</svg>')
+
 def step_value(b):
     acc = ACCENT[b["lane"]]
     parts = [f'<font color=&quot;{acc}&quot;><b>{b["num"]} \u00b7 {esc(b["title"])}</b></font>']
@@ -334,8 +351,8 @@ def build_drawio():
     return (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device">\n'
-        f'  <diagram id="journey" name="The Journey of One Transaction">\n{build_page1()}\n  </diagram>\n'
-        f'  <diagram id="translation" name="Plain-Language Translation">\n{build_page2()}\n  </diagram>\n'
+        f'  <diagram id="journey" name="The Journey of One Transaction">\n{inject_draft(build_page1())}\n  </diagram>\n'
+        f'  <diagram id="translation" name="Plain-Language Translation">\n{inject_draft(build_page2())}\n  </diagram>\n'
         '</mxfile>\n'
     )
 
@@ -457,13 +474,13 @@ if __name__ == "__main__":
     with open(os.path.join(d, "DERO.PROCESS.COMPLETE.drawio"), "w", encoding="utf-8") as f:
         f.write(build_drawio())
     with open(os.path.join(d, "preview_page1.svg"), "w", encoding="utf-8") as f:
-        f.write(build_svg())
+        f.write(inject_draft_svg(build_svg()))
     with open(os.path.join(d, "preview_page2.svg"), "w", encoding="utf-8") as f:
-        f.write(build_svg_page2())
+        f.write(inject_draft_svg(build_svg_page2()))
     with open(os.path.join(d, "preview_page1.html"), "w", encoding="utf-8") as f:
-        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{build_svg()}</body></html>')
+        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{inject_draft_svg(build_svg())}</body></html>')
     with open(os.path.join(d, "preview_page2.html"), "w", encoding="utf-8") as f:
-        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{build_svg_page2()}</body></html>')
+        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{inject_draft_svg(build_svg_page2())}</body></html>')
     print("written OK")
     # report geometry stats
     for b in BOXES:

@@ -28,6 +28,23 @@ def esc(s):
 def val(s):
     return s.replace("<", "&lt;").replace(">", "&gt;")
 
+import re
+def _draft_cell(h):
+    return ('<mxCell id="draft" value="&#9888;&#65039; DRAFT &#8212; community draft \u2014 not verified, reviewed, or audited" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=2;fontSize=11;fontStyle=1;fontColor=#C62828;align=center;verticalAlign=middle;" vertex="1" parent="1">'
+            f'<mxGeometry x="18" y="{h-44}" width="380" height="34" as="geometry"/></mxCell>')
+
+def inject_draft(model):
+    m = re.search(r'pageHeight="(\d+)"', model)
+    h = int(m.group(1)) if m else 1400
+    return model.replace('<mxCell id="1" parent="0"/>', '<mxCell id="1" parent="0"/>' + _draft_cell(h), 1)
+
+def inject_draft_svg(svg):
+    m = re.search(r'height="(\d+)"', svg)
+    h = int(m.group(1)) if m else 1400
+    chip = (f'<rect x="18" y="{h-44}" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/>'
+            f'<text x="208" y="{h-22}" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">\u26A0\uFE0F DRAFT \u2014 community draft: not verified, reviewed, or audited</text>')
+    return svg.replace('</svg>', chip + '</svg>')
+
 def svg_esc(s):
     return html.escape(s)
 
@@ -402,7 +419,7 @@ def build_drawio(diagrams):
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     body = ""
     for did, name, cells in diagrams:
-        body += f'  <diagram id="{did}" name="{esc(name)}">\n{cells}\n  </diagram>\n'
+        body += f'  <diagram id="{did}" name="{esc(name)}">\n{inject_draft(cells)}\n  </diagram>\n'
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
             f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device">\n'
             + body + '</mxfile>\n')
@@ -431,12 +448,12 @@ if __name__ == "__main__":
         f.write(build_drawio(tela_diagrams))
     for name, fn in [("preview_mining1.svg", svg_mining_p1), ("preview_tela1.svg", svg_tela_p1)]:
         with open(os.path.join(d, name), "w", encoding="utf-8") as f:
-            f.write(fn())
+            f.write(inject_draft_svg(fn()))
         with open(os.path.join(d, name.replace(".svg", ".html")), "w", encoding="utf-8") as f:
-            f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{fn()}</body></html>')
+            f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{inject_draft_svg(fn())}</body></html>')
     svg3, h3 = svg_tela_p3()
     with open(os.path.join(d, "preview_tela3.svg"), "w", encoding="utf-8") as f:
-        f.write(svg3)
+        f.write(inject_draft_svg(svg3))
     with open(os.path.join(d, "preview_tela3.html"), "w", encoding="utf-8") as f:
-        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{svg3}</body></html>')
+        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{inject_draft_svg(svg3)}</body></html>')
     print("written OK")

@@ -115,4 +115,4 @@
 <rect x="40" y="1128" width="1810" height="96" rx="10" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
 <text x="60" y="1162" font-size="13.5" fill="#22303C">Money, deals, data, apps, identity — the modern world runs them on banks, clouds and platforms. DERO runs them on one shared, private,</text>
 <text x="60" y="1184" font-size="13.5" fill="#22303C">tamper-proof network: every node does the job, and none of them can see your business.</text>
-</svg>
+<rect x="18" y="1356" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/><text x="208" y="1378" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">⚠️ DRAFT — community draft: not verified, reviewed, or audited</text></svg>
