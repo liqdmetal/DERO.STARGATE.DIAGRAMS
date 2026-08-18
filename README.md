@@ -1,5 +1,16 @@
 # DERO.STARGATE.DIAGRAMS
 
+> ## ⚠️ DRAFT — NOT VERIFIED OR AUDITED
+>
+> These diagrams are a **community draft, work in progress**. They have **not**
+> been technically verified, reviewed, or audited — not by the DERO team, not
+> by auditors, and not by the community at large. Treat every figure as
+> *"probably roughly right"* and **verify anything important against the
+> primary sources** — [derod.org](https://derod.org) docs, the
+> [deroproject/derohe](https://github.com/deroproject/derohe) source, and the
+> projects' own repos — before relying on it. Dashed-border zones are
+> explicitly hypothetical. Corrections and pull requests are very welcome.
+
 Plain-language process diagrams explaining how DERO (DHEBP / Stargate) works —
 from a single transaction, to the network's place in the modern world, to the
 community ecosystem building on it today and what it can grow into.
