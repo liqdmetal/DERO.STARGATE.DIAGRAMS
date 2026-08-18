@@ -110,6 +110,7 @@ MINE_FAQ = [
     ("When do I get paid?", "Rewards are distributed every block (~18 s) to the \u03a3-block winners, proportional to their work."),
     ("What is the integrator bonus?", "Run a daemon with --integrator-address: you get 10% of every block you integrate + 1.6% if you run your own pool."),
     ("How do I start?", "Download derod + dero-miner from derod.org, sync the chain, set --integrator-address and --wallet-address, mine."),
+    ("What is crowd mining (EPOCH)?", "EPOCH lets apps turn user engagement into mining hashes submitted to a DERO node \u2014 developers get rewarded without ads or selling data (see DeroBeats)."),
 ]
 
 def mining_p1_cells():

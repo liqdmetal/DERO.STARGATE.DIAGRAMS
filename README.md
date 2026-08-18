@@ -63,10 +63,12 @@ Facts are grounded in **derod.org** (full documentation corpus), the
   transaction, hard cap ≈20.89M DERO.
 - Ecosystem index (page 3 of `DERO.TELA.drawio`) covers the active community
   repos: **DEROFDN/derohe** (current dev home), DEROFDN/Engram, g45w,
-  astrobwt-miner, dSlate, Gnomon, civilware/tela, xswd-api, DeroPay,
-  DeroAuth, **Hologram**, **dReams**, cldex/dero_swap, dero_lotto,
-  dreamtables (baccarat & poker), deronfts, ORED, SovereignSearch,
-  PureWolf, Dero Seals, Artificer NFA, Deroscapes, derobridge and more.
+  astrobwt-miner, tnn-miner, Dirtybird-C-Miner, dSlate, Gnomon/HyperGnomon,
+  civilware/tela, **civilware/epoch** (crowd mining), xswd-api, DeroPay,
+  DeroAuth, **Hologram**, **dReams**, **DeroBeats** (music), cldex/dero_swap,
+  dero_lotto, dreamtables (baccarat & poker), deronfts, ORED, SovereignSearch,
+  PureWolf/HyperWolf, tela-gateway, Dero Seals, Artificer NFA, Deroscapes,
+  derobridge, DERO-Explorer-TELA and more.
 
 ## Mission
 
