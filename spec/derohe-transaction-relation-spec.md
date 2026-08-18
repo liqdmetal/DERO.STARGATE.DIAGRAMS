@@ -461,6 +461,59 @@ against these requirements.
 
 ## 9. Known privacy issues discovered during spec extraction
 
+### K0 — RING-SIZE-2 DOMINANCE: the primary on-chain leak (empirical, 2026-08)
+
+**Finding (from the first mainnet activity scan, ~3.6k blocks ending
+7,493,595, `analysis/data_mainnet/report.md`):**
+
+| Ring size | Share of txs | Signer extractable? |
+|---|---|---|
+| 2 | **59.7%** | ✅ **8/8 sampled — YES** |
+| 16 | 24.7% | ❌ 0/4 |
+| 32 | 15.6% | ❌ (not sampled) |
+
+**Mechanism (code-verified):** the DVM requires `ringsize == 2` for
+`SIGNER()` to be defined (`dvm` docs; `wallet_transfer.go` SC-invocation
+path). At ringsize 2 the ring *is* the two participants — there are zero
+decoys (`wallet_transfer.go:343-360`: the decoy loop only runs while
+`ringsize != 2`) — and the daemon's `gettransactions` response exposes the
+`signer` field for exactly this class (verified: 8/8 ringsize-2 txs carry
+a signer, 0/4 ringsize-16 txs do). The dominant tx class on mainnet is
+therefore **sender-identifiable by any node operator**, with no anonymity
+set at all.
+
+**Why this outranks K1–K4:** the decoy-distribution issues (K1) affect
+only the *residual* anonymity of rings ≥ 4; K0 eliminates anonymity
+entirely for the majority of txs. On current mainnet, "privacy by
+default" is not what ships: default ringsize is 16 (`wallet.go:175`) but
+the dominant *real* usage is ringsize 2.
+
+**Fix directions (see `decoy-selection-batch-rpc.md` §6 for the SC
+case):**
+1. **SC invocations without SIGNER need** — make ringsize ≥ 4 the
+   documented default for SC calls that do not require the signer
+   identity (most do not; only owner-gated entrypoints do).
+2. **SIGNER() alternative** — for owner-gated contracts, replace
+   on-chain `SIGNER()` with a signature-check primitive that does not
+   require ringsize 2 (e.g., a dedicated auth field proved inside the
+   one-out-of-many, or a view-key-based owner proof). This is a DVM
+   language/consensus extension — research, not a config change.
+3. **Minimum-ring enforcement (consensus)** — reject ringsize-2 NORMAL
+   txs above a threshold (they are indistinguishable from SC calls
+   without an explicit SC payload; see G9/G10 interaction). Requires a
+   hard fork; the cleanest long-term fix is "ringsize 2 only when
+   scdata present".
+4. **Wallet UX** — `set ringsize` guidance + warnings when a transfer
+   would ship ringsize 2 (currently `prompt.go:493` displays the value
+   with no warning).
+
+**Audit implication:** the Zether-diff (G2) and this finding interact —
+DERO's hidden-receiver extension is only meaningful for rings ≥ 4; at
+ringsize 2 the protocol degenerates to a plain signed transfer. Any
+privacy claim MUST be scoped to ringsize ≥ 4 until K0 is addressed.
+
+---
+
 | ID | Issue | Fix direction |
 |---|---|---|
 | K1 | **Activity-based narrowing (corrected mechanism)**: daemon decoy selection excludes accounts whose ciphertext changed in the last 5 blocks (`rpc_dero_getrandomaddress.go:88-95`). Because *all* ring members are re-randomized (see P7 note), "changed" ⇔ "appeared in any ring" — so decoys are guaranteed **not seen in any ring for 5 blocks**, and any ring member that *was* in a ring recently is, with high probability, sender or receiver. This is the OSPEAD-style posterior skew, DERO-flavored. **Note: the naive ciphertext-diff attack (observe the 2 changed members) does NOT work — re-randomization changes every ring member's ciphertext.** | Remove/weaken filter; activity-matched sampling (see `decoy-activity-distribution.md`); wallet-side selection from a batch |
