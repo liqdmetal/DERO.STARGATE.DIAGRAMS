@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="846" viewBox="0 0 1920 846" font-family="Segoe UI, Arial, sans-serif">
+<rect x="0" y="0" width="1920" height="846" fill="#FFFFFF"/>
+<text x="960" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="#4277BB">THE SWAP TABLE</text>
+<text x="960" y="82" text-anchor="middle" font-size="13.5" fill="#5A6B7A">Every centralized service you use today has a DERO-native replacement. Same job, no middleman.</text>
+<rect x="60" y="110" width="640" height="34" rx="8" fill="#EAF2FB" stroke="#4277BB" stroke-width="2"/>
+<text x="380.0" y="131" text-anchor="middle" font-size="13" font-weight="700" fill="#4277BB">CENTRALIZED SERVICE TODAY</text>
+<rect x="720" y="110" width="640" height="34" rx="8" fill="#EAF2FB" stroke="#4277BB" stroke-width="2"/>
+<text x="1040.0" y="131" text-anchor="middle" font-size="13" font-weight="700" fill="#4277BB">DERO REPLACEMENT</text>
+<rect x="1380" y="110" width="480" height="34" rx="8" fill="#EAF2FB" stroke="#4277BB" stroke-width="2"/>
+<text x="1620.0" y="131" text-anchor="middle" font-size="13" font-weight="700" fill="#4277BB">WHAT CHANGES FOR YOU</text>
+<rect x="60" y="152" width="640" height="64" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="380.0" y="189" text-anchor="middle" font-size="12" fill="#22303C">Bank transfer / payment app</text>
+<rect x="720" y="152" width="640" height="64" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="1040.0" y="189" text-anchor="middle" font-size="12" fill="#22303C">DERO transfer (DHEBP)</text>
+<rect x="1380" y="152" width="480" height="64" rx="8" fill="#E0F7FA" stroke="#00838F" stroke-width="1.5"/>
+<text x="1620.0" y="189" text-anchor="middle" font-size="12" fill="#22303C">Private, uncensorable, ~1 min settle</text>
+<rect x="60" y="224" width="640" height="64" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="380.0" y="261" text-anchor="middle" font-size="12" fill="#22303C">Escrow / notary / legal fees</text>
+<rect x="720" y="224" width="640" height="64" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="1040.0" y="261" text-anchor="middle" font-size="12" fill="#22303C">DVM smart contract (DeroScript)</text>
+<rect x="1380" y="224" width="480" height="64" rx="8" fill="#E0F7FA" stroke="#00838F" stroke-width="1.5"/>
+<text x="1620.0" y="261" text-anchor="middle" font-size="12" fill="#22303C">Automatic escrow, unbreakable rules</text>
+<rect x="60" y="296" width="640" height="64" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="380.0" y="333" text-anchor="middle" font-size="12" fill="#22303C">Cloud database (AWS, Google…)</text>
+<rect x="720" y="296" width="640" height="64" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="1040.0" y="333" text-anchor="middle" font-size="12" fill="#22303C">Encrypted ledger + GravitonDB</text>
+<rect x="1380" y="296" width="480" height="64" rx="8" fill="#E0F7FA" stroke="#00838F" stroke-width="1.5"/>
+<text x="1620.0" y="333" text-anchor="middle" font-size="12" fill="#22303C">Encrypted, provable, 66 B per account</text>
+<rect x="60" y="368" width="640" height="64" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="380.0" y="405" text-anchor="middle" font-size="12" fill="#22303C">Web hosting + domain</text>
+<rect x="720" y="368" width="640" height="64" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="1040.0" y="405" text-anchor="middle" font-size="12" fill="#22303C">TELA on-chain web</text>
+<rect x="1380" y="368" width="480" height="64" rx="8" fill="#E0F7FA" stroke="#00838F" stroke-width="1.5"/>
+<text x="1620.0" y="405" text-anchor="middle" font-size="12" fill="#22303C">No server to hack or censor</text>
+<rect x="60" y="440" width="640" height="64" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="380.0" y="477" text-anchor="middle" font-size="12" fill="#22303C">Login / identity system</text>
+<rect x="720" y="440" width="640" height="64" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="1040.0" y="477" text-anchor="middle" font-size="12" fill="#22303C">Wallet + DeroAuth + Name Service</text>
+<rect x="1380" y="440" width="480" height="64" rx="8" fill="#E0F7FA" stroke="#00838F" stroke-width="1.5"/>
+<text x="1620.0" y="477" text-anchor="middle" font-size="12" fill="#22303C">Prove only what’s needed</text>
+<rect x="60" y="512" width="640" height="64" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="380.0" y="549" text-anchor="middle" font-size="12" fill="#22303C">Exchange / auction / lottery</text>
+<rect x="720" y="512" width="640" height="64" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="1040.0" y="549" text-anchor="middle" font-size="12" fill="#22303C">DVM tokens &amp; contracts</text>
+<rect x="1380" y="512" width="480" height="64" rx="8" fill="#E0F7FA" stroke="#00838F" stroke-width="1.5"/>
+<text x="1620.0" y="549" text-anchor="middle" font-size="12" fill="#22303C">Transparent rules, private state</text>
+<rect x="60" y="584" width="640" height="64" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="380.0" y="621" text-anchor="middle" font-size="12" fill="#22303C">Auditing &amp; compliance</text>
+<rect x="720" y="584" width="640" height="64" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="1040.0" y="621" text-anchor="middle" font-size="12" fill="#22303C">Zero-knowledge proofs + public supply</text>
+<rect x="1380" y="584" width="480" height="64" rx="8" fill="#E0F7FA" stroke="#00838F" stroke-width="1.5"/>
+<text x="1620.0" y="621" text-anchor="middle" font-size="12" fill="#22303C">Verify without revealing secrets</text>
+<text x="960" y="696" text-anchor="middle" font-size="12" font-weight="700" fill="#4277BB">DERO is a general-purpose, private, decentralized application platform — the DHEBP stack, end to end.</text>
+</svg>
