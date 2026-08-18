@@ -228,7 +228,7 @@ def build_page1():
 
     # title banner
     add(f'<mxCell id="t1" value="THE JOURNEY OF ONE DERO TRANSACTION" style="text;html=1;align=center;fontSize=30;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="42" as="geometry"/></mxCell>')
-    add(f'<mxCell id="t2" value="From your wallet \u2192 through the network \u2192 into the encrypted ledger (DLT) \u2192 confirmation back to you.  Follow the numbers 1 \u2192 14." style="text;html=1;align=center;fontSize=14;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
+    add(f'<mxCell id="t2" value="From your wallet \u2192 through the network \u2192 into the encrypted ledger (DLT) \u2192 confirmation back to you.  Follow the numbers 1 \u2192 14 \u00b7 \U0001F4A1 lines = plain talk \u00b7 green arrows = confirmation back to you." style="text;html=1;align=center;fontSize=14;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
     add(f'<mxCell id="t3" value="DERO \u00b7 DHEBP (Stargate) \u00b7 Layer 1" style="rounded=1;html=1;fillColor=#EAF2FB;strokeColor={TITLE_COLOR};fontColor={TITLE_COLOR};fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="1600" y="66" width="290" height="30" as="geometry"/></mxCell>')
 
     # lanes

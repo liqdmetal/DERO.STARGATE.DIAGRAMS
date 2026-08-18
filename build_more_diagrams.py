@@ -117,7 +117,7 @@ def mining_p1_cells():
     cells = []
     add = cells.append
     add(f'<mxCell id="m-t1" value="HOW DERO MINING WORKS \u2014 THE \u03a3-BLOCK LOOP" style="text;html=1;align=center;fontSize=30;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="42" as="geometry"/></mxCell>')
-    add(f'<mxCell id="m-t2" value="The network is the pool: every CPU miner earns \u2014 no pools, no ASICs, no trust.  (\u03a3-block = Sigma block = mini-block)" style="text;html=1;align=center;fontSize=14;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
+    add(f'<mxCell id="m-t2" value="The network is the pool: every CPU miner earns \u2014 no pools, no ASICs, no trust.  (\u03a3-block = Sigma block = mini-block) \u00b7 read 1 \u2192 5, then the numbers card" style="text;html=1;align=center;fontSize=14;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
     # steps: snake layout 3 top + 2 bottom
     xs = [60, 520, 980, 300, 760]
     ys = [150, 150, 150, 620, 620]
@@ -270,7 +270,7 @@ def tela_p1_cells():
     cells = []
     add = cells.append
     add(f'<mxCell id="t-t1" value="FROM IDEA TO ON-CHAIN APP" style="text;html=1;align=center;fontSize=30;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="42" as="geometry"/></mxCell>')
-    add(f'<mxCell id="t-t2" value="Build a dApp on DERO: DVM smart contract + TELA front-end + XSWD wallet bridge \u2014 no server, no middleman, full privacy." style="text;html=1;align=center;fontSize=14;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
+    add(f'<mxCell id="t-t2" value="Build a dApp on DERO: DVM smart contract + TELA front-end + XSWD wallet bridge \u2014 no server, no middleman, full privacy.  \u00b7 read 1 \u2192 6" style="text;html=1;align=center;fontSize=14;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
     # 6 steps in 2 rows of 3
     xs = [60, 700, 1340]
     ys = [150, 640]

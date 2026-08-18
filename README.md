@@ -28,7 +28,7 @@ line under every step.
 | **`DERO.WORLD.drawio`** | **DERO's Place in the Modern World** — 5 everyday needs (paying, deals, data, apps, identity): centralized old world vs the DERO world. 2 pages: comparison + swap table. |
 | **`DERO.MINING.drawio`** | **How DERO Mining Works — the Σ-block loop** — the network-is-the-pool design: ~2 s Σ-blocks, 18 s blocks, 9+1 mini-blocks, reward split, solo mining. 2 pages: loop + key numbers & FAQ. |
 | **`DERO.TELA.drawio`** | **From Idea to On-Chain App** — building a dApp: DVM smart contract → `install_sc` → XSWD wallet bridge → TELA. 3 pages: flow + the dApp stack + **the community ecosystem index**. |
-| **`DERO.UNIVERSE.drawio`** | **The DERO Universe** — one large surfable map: the live DHEBP engine → the community's repos today → live use cases → **what can be born** (hypothetical end-world results) and **speculation on new rails**. Solid borders = live now, dashed = hypothetical. |
+| **`DERO.UNIVERSE.drawio`** | **The DERO Universe** — one surfable map with a reading path: numbered zones (① engine → ② curated repos → ③ live use cases → ④ what can be born → ⑤ speculation), a "how to read" strip, and a 30-second TL;DR. Curated chips + pointers to the deep dives (full repo index lives on TELA p3). Solid borders = live now, dashed = hypothetical. |
 | `Stargate.High.Level` | Original high-level sketch (Layer 1 PoW → DVM). |
 | `DERO.CLOUD.drawio` | Original cloud-architecture sketch. |
 
