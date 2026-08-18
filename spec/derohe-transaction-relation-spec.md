@@ -248,6 +248,69 @@ From `proof_verify.go:98-150` (verifier recomputes):
 folds; this is the "transcript order" an auditor must verify against the
 prover to rule out malleability.
 
+### 5.7 COMPLETE transcript (G1 resolved — extraction level)
+
+The full Fiat–Shamir challenge chain, in exact order, as executed by
+`Proof.Verify` (`proof_verify.go:98-456`) and mirrored by `GenerateProof`
+(`proof_generate.go:453+`). All points use `Marshal()` (uncompressed,
+64-byte) in the transcript; `ConvertBigIntToByte` is the fixed-width scalar
+encoding used by `reducedhash` inputs. **This is the byte-order contract an
+auditor must check; it is now written down for the first time.**
+
+Let $H$ denote `reducedhash` (SHA3-256-based, reduced mod $q$).
+
+**Challenges (in order):**
+
+1. $\texttt{statementhash} = H(\texttt{txid}_{32B})$
+2. $v = H(\texttt{statementhash} \,\|\, BA \,\|\, BS \,\|\, A \,\|\, B)$
+   — all points 64B uncompressed
+3. $w = H(v \,\|\, \big\|_i CLnG_i \,\|\, \big\|_i CRnG_i \,\|\,
+   \big\|_i C\_0G_i \,\|\, \big\|_i DG_i \,\|\, \big\|_i y\_0G_i \,\|\,
+   \big\|_i gG_i \,\|\, \big\|_i C\_XG_i \,\|\, \big\|_i y\_XG_i)$
+   — the 8 point-vectors of length $m$ each, in that exact order
+   (`hashmash1`, `proof_generate.go:406-430`); **the generator also writes
+   a matching "whash" block with identical order**
+   (`proof_generate.go:764-796`) — the transcript is self-consistent
+   between prover and verifier.
+4. $\texttt{parity condition}$: accept iff $w = f_0$ or $w = f_m$
+   (`proof_verify.go:137-145`)
+5. $y = H(w)$; $\mathbf{y} = (1, y, y^2, \dots, y^{127})$
+   (`proof_verify.go:283-293`)
+6. $z = H(y)$; $\mathbf{z} = (z^2, z^3)$
+   (`proof_verify.go:295-297`)
+7. $x = H(z \,\|\, T_1 \,\|\, T_2)$ (`proof_verify.go:331-339`)
+8. $c = H(x \,\|\, A_y \,\|\, A_D \,\|\, A_b \,\|\, A_X \,\|\, A_t \,\|\,
+   A_u)$ (`proof_verify.go:422-436`) — the six sigma-protocol
+   commitments, in that exact order
+9. $o = H(c)$ (`proof_verify.go:429`) — final inner-product challenge
+
+**Witness responses (prover-side scalars, all bound into $c$):**
+$s_{sk}, s_r, s_b, s_{\tau}, \hat{t}, \mu$ (`Proof` struct,
+`proof_generate.go:34-57`).
+
+**Non-transcript bindings:**
+- $\texttt{u}$ point: derived from `PROTOCOL_CONSTANT ‖ Roothash ‖ scid ‖
+  scid_index` via `HashToPoint(HashtoNumber(·))` (`proof_verify.go:399-407`)
+  — binds the proof to the asset SCID and the balance-tree root.
+- Inner-product verify: `proof.ip.Verify(hPrimes, u_x, P, o, gparams)`
+  with $h'_i = H_i^{y_i^{-1}}$ and $u_x = H^o$
+  (`proof_verify.go:430-456`).
+
+**Protocol lineage (G2 partially resolved):** the verifier's internal
+names — `AnonSupport`, `ProtocolSupport`, `SigmaSupport`, and the
+`zetherAuxiliaries`/`sigmaAuxiliaries` references in the commented
+reference line at `proof_verify.go:366-368` — identify this as a
+**Zether-style construction** (Bünz, Agrawal, Zamani, Boneh: "Zether:
+Towards Privacy in a Smart Contract World", FC 2020): account-based
+ElGamal + one-out-of-many membership + Bulletproofs range proof, extended
+so that **both** sender and receiver indices are hidden in the ring via
+the 2m-bit index encoding and the parity trick. The audit mapping is
+therefore: DERO's proof = Zether Σ-protocol + packed 128-bit range +
+2-index one-out-of-many. **This gives the auditor a published reference
+construction with a security proof to diff against — a significant
+reduction in review burden, and the correct starting point for the
+formal-soundness argument.**
+
 ---
 
 ## 6. Verification predicates (what consensus checks)
@@ -309,12 +372,82 @@ Non-negativity is guaranteed by P6 (the 128-bit packed range proof).
 
 ---
 
-## 7. Known deviations and gaps (must be resolved before formalization)
+## 7. Normative requirements (the "must" contract)
+
+The previous sections are *descriptive*: they document what Release 151
+does. This section is *prescriptive*: it states what any consensus-compatible
+implementation MUST do, and what any future change MUST NOT break. A
+conformance test suite (test vectors, §9.1) validates an implementation
+against these requirements.
+
+### N1 — State model (MUST)
+- Account balances MUST be stored as ElGamal ciphertexts over bn256
+  (66-byte serialization: 33B left + 33B right), keyed by 33-byte
+  compressed public key, in the graviton balance tree.
+- Every balance record MUST carry `NonceHeight` (plaintext) plus the
+  encrypted balance.
+- Balance updates MUST be homomorphic additions of the form
+  $\mathrm{ElGamal}(C_i, D)$ to **every** ring member
+  (`transaction_execute.go:238-241`); decoys receive $\Delta_i = 0$ but
+  MUST still be re-randomized (their ciphertext MUST change).
+
+### N2 — Ring construction (MUST)
+- Ring size MUST be a power of two in [2, 128].
+- The ring MUST contain the sender and the receiver at distinct,
+  opposite-parity positions, with all other members being decoys.
+- The statement MUST reference ring members by truncated hash pointers
+  (`Bytes_per_publickey` bytes each) resolvable against the balance tree
+  at the transaction's state root.
+- Decoy selection is NOT consensus-enforced: the chain MUST accept any
+  valid ring. (This is what makes the batch-RPC and distribution fixes
+  hard-fork-free.)
+
+### N3 — Proof system (MUST)
+- The proof MUST be bound to `txid` (via `statementhash`), the balance
+  tree `Roothash`, the asset `scid` and `scid_index` (via the `u` point).
+- The Fiat–Shamir challenge chain MUST follow §5.7 exactly, in order:
+  $v \to w \to y \to z \to x \to c \to o$.
+- The verifier MUST reject if: parity condition fails; the
+  $B^w \cdot A$ recovery fails; the $c$ recomputation fails; the inner
+  product fails; overflow guards trip.
+- The 128-bit range proof MUST cover `TransferAmount | Balance<<64` (low
+  64 bits = amount, high 64 bits = post-transfer balance).
+
+### N4 — Consensus integration (MUST)
+- Balance changes MUST sum to zero across the ring (sender loses
+  amount+fees+burn, receiver gains amount, others zero).
+- Fees MUST be plaintext in the statement and paid by the sender's change.
+- NonceHeight MUST be updated exactly for members where
+  `(i%2 == 0) == parity` — and this rule MUST NOT change without a hard
+  fork (it is observable state).
+
+### N5 — Privacy invariants (MUST NOT)
+- No consensus path MUST reveal which ring member is the sender or
+  receiver (no amount, no index, no balance value in plaintext beyond
+  fees).
+- No change MUST ship that re-introduces a ciphertext-diff distinguisher
+  (e.g., skipping re-randomization for decoys would be a privacy-breaking
+  regression).
+- The daemon's decoy-sampling behavior is NOT part of consensus but IS
+  part of the privacy surface: changes MUST be reviewed against the
+  activity-distribution analysis (`decoy-activity-distribution.md`).
+
+### N6 — Change control (MUST)
+- Any change to the transcript order, the parity rule, the range packing,
+  or the balance-update rule is a **consensus-breaking change** requiring
+  a hard fork and MUST be reflected in this spec before merge.
+- Exceptional consensus states (e.g., the HF3 affected-tx whitelist) MUST
+  be modeled explicitly and audited as consensus code, not as wallet
+  behavior.
+
+---
+
+## 8. Known deviations and gaps (must be resolved before formalization)
 
 | ID | Issue | Severity | Where |
 |---|---|---|---|
-| G1 | Exact transcript byte-order for `hashmash1`, `v`, `y`, `z` folds not written down anywhere except code | High | `proof_generate.go:406-450, 828-840` |
-| G2 | Whether the anon-set proof is one combined 2-index statement or two; the parity trick's formal role | High | `proof_generate.go:516-560` |
+| G1 | ~~Exact transcript byte-order~~ **RESOLVED (extraction level)** — full challenge chain written down in §5.7; remaining work: independent re-derivation + test-vector conformance | High→verify | §5.7 |
+| G2 | ~~Whether the anon-set proof is one combined 2-index statement or two~~ **PARTIALLY RESOLVED** — identified as Zether-lineage (FC'20) with 2m-bit index encoding + parity trick (§5.7); remaining work: exact diff against the Zether paper's Σ-protocol and its security proof | High→verify | §5.7 |
 | G3 | NUMS claim for generators must be argued from `HashToPoint` construction | Medium | `generatorparams.go` |
 | G4 | Security of deterministic $r$ (harvest-now-decrypt-later) | Medium | `transaction_build.go:123-130` |
 | G5 | HF3 affected-tx whitelist (`hardfork_fixes.go`) — hard-coded parity overrides for ~17 txids; formal spec must model "exceptional" consensus states or the whitelist must be shown to be a pure bug-fix (no semantic change) | High | `blockchain/hardfork_fixes.go` |
@@ -326,7 +459,7 @@ Non-negativity is guaranteed by P6 (the 128-bit packed range proof).
 
 ---
 
-## 8. Known privacy issues discovered during spec extraction
+## 9. Known privacy issues discovered during spec extraction
 
 | ID | Issue | Fix direction |
 |---|---|---|
@@ -337,18 +470,43 @@ Non-negativity is guaranteed by P6 (the 128-bit packed range proof).
 
 ---
 
-## 9. What "done" looks like (definition of completion for this spec)
+## 10. What "done" looks like (definition of completion for this spec)
 
 1. Every predicate in §6 written as a formal statement (LaTeX/Coq-ready
-   notation) with **exact** byte-level transcript definitions (resolves G1).
-2. The anon-set statement pinned down (resolves G2) and matched against the
-   Groth–Bootle / Bulletproofs literature.
+   notation) with **exact** byte-level transcript definitions (G1
+   extraction-level resolution exists in §5.7; formalization remains).
+2. The anon-set statement pinned down (G2 partially resolved: Zether
+   lineage identified) and diffed against the Zether FC'20 Σ-protocol and
+   its security proof.
 3. Soundness & zero-knowledge claims *stated* per component, with
    assumptions listed (DDH for ElGamal, DL for membership, etc.).
 4. G5–G10 resolved or explicitly deferred with rationale.
 5. Cross-checked against a second reading of the code by an independent
    reviewer; then and only then, the DRAFT stamp is removed and an audit is
    scoped.
+
+### 10.1 Conformance test vectors (the executable spec)
+
+The single highest-value next artifact: a **known-answer test-vector
+suite** generated from the reference implementation, encoding §5.7's
+transcript and §6's predicates as concrete (statement, proof, expected
+verdict) tuples. Contents:
+
+- **Valid vectors**: real txs extracted from mainnet (via the D1
+  `extract_activity.py` pipeline), each with `(txid, statement bytes,
+  proof bytes, verdict=accept)`.
+- **Invalid vectors**: bit-flipped proofs (flip one byte of `f`, of `C`,
+  of `c`, of the transcript), mutated rings (wrong parity, wrong size),
+  overflow edges (fees+burn near 2^64), HF3-whitelist boundary cases —
+  each with `verdict=reject`.
+- **Determinism check**: same input → same proof acceptance across
+  rebuilds (catches the G8 `retry_count` loop's distributional effects and
+  any nondeterministic serialization).
+
+Purpose: (a) makes this spec executable — any implementation (including a
+future Rust port, XELIS-derived or not) is conformant iff it accepts
+exactly the accept-vectors and rejects exactly the reject-vectors;
+(b) turns G1 from "written down" into "machine-checked".
 
 ---
 
