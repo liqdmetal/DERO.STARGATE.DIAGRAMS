@@ -285,10 +285,21 @@ Let $N = 2^m$ ring size.
 ### P7 — Balance conservation (consensus-level, `transaction_execute.go:214-241`)
 For each ring member $i$: resolve key pointer → balance tree entry,
 $b_i' = b_i + \mathrm{ElGamal}(C_i, D)$ (homomorphic add). **All ring
-members' balances are updated** — decoys get change 0, which is
-indistinguishable from real changes of zero (this is the cryptographic
-heart of "no one knows who moved"). The sender's $b_i'$ is the new
-encrypted balance; non-negativity is guaranteed by P6.
+members' balances are updated** — and crucially, every ring member's
+ciphertext is **re-randomized** even when the change is zero: the wallet
+builds $C_i = G^{\Delta_i} \cdot P_i^{r}$ for *every* member
+(`transaction_build.go:200-204`, where decoys get $\Delta_i = 0$ but still
+receive $P_i^r$), with $D = G^r$. So the serialized balance of every ring
+member changes on every appearance, and an observer **cannot** distinguish
+"real participant" from "decoy" by comparing per-block ciphertext diffs.
+This is a genuine privacy feature of the design — it defeats the naive
+"which 2 members changed?" attack — and it has a second-order consequence:
+the daemon's 5-block filter in `GetRandomAddress` (which compares
+serialized ciphertexts) treats "appeared in any ring" as "touched", so the
+decoy pool is effectively "accounts not seen in any ring for 5 blocks"
+(see K1).
+
+Non-negativity is guaranteed by P6 (the 128-bit packed range proof).
 
 ### P8 — State binding
 - `Roothash` in the statement must match the balance-tree top hash at the
@@ -319,7 +330,7 @@ encrypted balance; non-negativity is guaranteed by P6.
 
 | ID | Issue | Fix direction |
 |---|---|---|
-| K1 | **Active-account narrowing**: daemon decoy selection excludes accounts touched in last 5 blocks (`rpc_dero_getrandomaddress.go:88-95`) → recently-touched ring members are likely sender/receiver. | Remove filter; wallet-side selection from a batch |
+| K1 | **Activity-based narrowing (corrected mechanism)**: daemon decoy selection excludes accounts whose ciphertext changed in the last 5 blocks (`rpc_dero_getrandomaddress.go:88-95`). Because *all* ring members are re-randomized (see P7 note), "changed" ⇔ "appeared in any ring" — so decoys are guaranteed **not seen in any ring for 5 blocks**, and any ring member that *was* in a ring recently is, with high probability, sender or receiver. This is the OSPEAD-style posterior skew, DERO-flavored. **Note: the naive ciphertext-diff attack (observe the 2 changed members) does NOT work — re-randomization changes every ring member's ciphertext.** | Remove/weaken filter; activity-matched sampling (see `decoy-activity-distribution.md`); wallet-side selection from a batch |
 | K2 | **Daemon learns the ring**: wallet queries `DERO.GetEncryptedBalance` per candidate, in the clear (`daemon_communication.go:404-410`) → daemon can reconstruct the ring and often infer sender/receiver. | Batch balance RPC (`GetRandomAddressBatch` returning encrypted balances), wallet picks subset client-side |
 | K3 | **Single-daemon trust**: decoys come from one daemon; a malicious node controls the candidate pool. | Multi-daemon sampling + client-side CSPRNG selection |
 | K4 | **Bounded ring** (default 16, max 128) — no full-chain membership. | Research: membership against the graviton tree (the accumulator already exists) |
