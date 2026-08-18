@@ -18,7 +18,7 @@ ZONE_COLORS = {
     "born":     ("#F9A825", "#FFF8E1", "4 \u00b7 WHAT CAN BE BORN \u2014 END-WORLD RESULTS (HYPOTHETICAL)"),
     "spec":     ("#8E24AA", "#F3E5F5", "5 \u00b7 SPECULATION \u2014 NEW RAILS (NOT BUILT YET)"),
 }
-W, H = 2600, 1960
+W, H = 2600, 2000
 
 ENGINE = [
     ("Encrypted ledger", "homomorphic balances, 66 B/account, never decrypted"),
@@ -81,6 +81,7 @@ BORN = [
     ("Tokenized real-world assets", "ownership on-chain, private, transferable"),
     ("Machine-to-machine payments", "agents & IoT paying each other in DERO"),
     ("Instant global remittances", "private, near-free, no correspondent banks"),
+    ("Engagement economy", "EPOCH crowd mining at scale \u2014 apps funded by usage, users rewarded, no ads"),
 ]
 SPEC = [
     ("DERO-QR", "quantum-resistant upgrade \u2014 Captain\u2019s stated plan; GravitonDB as migration substrate"),
@@ -91,14 +92,15 @@ SPEC = [
     ("TELA social networks", "web3 social at wallet scale, no ads surveillance"),
     ("IoT micropayments", "machines transacting dust amounts, automatically"),
     ("Encrypted AI marketplaces", "private data in, private models out"),
+    ("Universal crowd mining", "EPOCH as default monetization rail \u2014 use-to-earn across the whole network"),
 ]
 
 ZONES = [
     ("engine",   60,   150, 1060, 430, 2, ENGINE),
     ("repos",    1160, 150, 1380, 780, 4, REPOS),
     ("usecases", 60,   990, 2480, 340, 4, USECASES),
-    ("born",     60,   1390, 1260, 500, 2, BORN),
-    ("spec",     1380, 1390, 1160, 500, 2, SPEC),
+    ("born",     60,   1390, 1260, 560, 2, BORN),
+    ("spec",     1380, 1390, 1160, 560, 2, SPEC),
 ]
 
 def esc(s):

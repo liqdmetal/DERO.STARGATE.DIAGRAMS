@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1960" viewBox="0 0 2600 1960" font-family="Segoe UI, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="2000" viewBox="0 0 2600 2000" font-family="Segoe UI, Arial, sans-serif">
 <defs><marker id="uar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4277BB"/></marker></defs>
-<rect x="0" y="0" width="2600" height="1960" fill="#FFFFFF"/>
+<rect x="0" y="0" width="2600" height="2000" fill="#FFFFFF"/>
 <text x="1300.0" y="60" text-anchor="middle" font-size="34" font-weight="700" fill="#4277BB">THE DERO UNIVERSE — ONE NETWORK, EVERYTHING ON IT</text>
 <text x="1300.0" y="92" text-anchor="middle" font-size="14.5" fill="#5A6B7A">From the DHEBP engine, through the community’s repos today, to the world they can grow into.  Solid borders = live now · dashed borders = hypothetical / speculation.  Grounded in derod.org + the derohe repos.</text>
 <rect x="60" y="150" width="1060" height="430" rx="14" fill="#E3F2FD" fill-opacity="0.35" stroke="#1E88E5" stroke-width="2.5" />
@@ -156,7 +156,7 @@
 <rect x="1550" y="1224" width="235" height="80" rx="9" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.8" />
 <text x="1667.5" y="1248" text-anchor="middle" font-size="10.5" font-weight="700" fill="#2E7D32">Web access</text>
 <text x="1667.5" y="1266" text-anchor="middle" font-size="9.5" fill="#66727E">tela-gateway — TELA apps over plain HTTP</text>
-<rect x="60" y="1390" width="1260" height="500" rx="14" fill="#FFF8E1" fill-opacity="0.35" stroke="#F9A825" stroke-width="2.5" stroke-dasharray="10 7"/>
+<rect x="60" y="1390" width="1260" height="560" rx="14" fill="#FFF8E1" fill-opacity="0.35" stroke="#F9A825" stroke-width="2.5" stroke-dasharray="10 7"/>
 <text x="78" y="1422" font-size="16" font-weight="700" fill="#F9A825">4 · WHAT CAN BE BORN — END-WORLD RESULTS (HYPOTHETICAL)</text>
 <rect x="80" y="1436" width="235" height="80" rx="9" fill="#FFFFFF" stroke="#F9A825" stroke-width="1.8" stroke-dasharray="10 7"/>
 <text x="197.5" y="1460" text-anchor="middle" font-size="10.5" font-weight="700" fill="#F9A825">Private banking for the unbanked</text>
@@ -188,7 +188,11 @@
 <text x="1182.5" y="1742" text-anchor="middle" font-size="10.5" font-weight="700" fill="#F9A825">Instant global remittances</text>
 <text x="1182.5" y="1760" text-anchor="middle" font-size="9.5" fill="#66727E">private, near-free, no correspondent</text>
 <text x="1182.5" y="1774" text-anchor="middle" font-size="9.5" fill="#66727E">banks</text>
-<rect x="1380" y="1390" width="1160" height="500" rx="14" fill="#F3E5F5" fill-opacity="0.35" stroke="#8E24AA" stroke-width="2.5" stroke-dasharray="10 7"/>
+<rect x="80" y="1812" width="235" height="80" rx="9" fill="#FFFFFF" stroke="#F9A825" stroke-width="1.8" stroke-dasharray="10 7"/>
+<text x="197.5" y="1836" text-anchor="middle" font-size="10.5" font-weight="700" fill="#F9A825">Engagement economy</text>
+<text x="197.5" y="1854" text-anchor="middle" font-size="9.5" fill="#66727E">EPOCH crowd mining at scale — apps funded</text>
+<text x="197.5" y="1868" text-anchor="middle" font-size="9.5" fill="#66727E">by usage, users rewarded, no ads</text>
+<rect x="1380" y="1390" width="1160" height="560" rx="14" fill="#F3E5F5" fill-opacity="0.35" stroke="#8E24AA" stroke-width="2.5" stroke-dasharray="10 7"/>
 <text x="1398" y="1422" font-size="16" font-weight="700" fill="#8E24AA">5 · SPECULATION — NEW RAILS (NOT BUILT YET)</text>
 <rect x="1400" y="1436" width="235" height="80" rx="9" fill="#FFFFFF" stroke="#8E24AA" stroke-width="1.8" stroke-dasharray="10 7"/>
 <text x="1517.5" y="1460" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8E24AA">DERO-QR</text>
@@ -222,6 +226,10 @@
 <rect x="2285" y="1718" width="235" height="80" rx="9" fill="#FFFFFF" stroke="#8E24AA" stroke-width="1.8" stroke-dasharray="10 7"/>
 <text x="2402.5" y="1742" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8E24AA">Encrypted AI marketplaces</text>
 <text x="2402.5" y="1760" text-anchor="middle" font-size="9.5" fill="#66727E">private data in, private models out</text>
+<rect x="1400" y="1812" width="235" height="80" rx="9" fill="#FFFFFF" stroke="#8E24AA" stroke-width="1.8" stroke-dasharray="10 7"/>
+<text x="1517.5" y="1836" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8E24AA">Universal crowd mining</text>
+<text x="1517.5" y="1854" text-anchor="middle" font-size="9.5" fill="#66727E">EPOCH as default monetization rail —</text>
+<text x="1517.5" y="1868" text-anchor="middle" font-size="9.5" fill="#66727E">use-to-earn across the whole network</text>
 <line x1="700" y1="580" x2="1160" y2="580" stroke="#4277BB" stroke-width="3" marker-end="url(#uar)"/>
 <text x="930" y="566" text-anchor="middle" font-size="12" font-weight="600" fill="#4277BB" stroke="#FFF" stroke-width="3" paint-order="stroke">built by the community</text>
 <line x1="2000" y1="930" x2="2000" y2="990" stroke="#4277BB" stroke-width="3" marker-end="url(#uar)"/>
@@ -230,4 +238,4 @@
 <text x="740" y="1366" font-size="12" font-weight="600" fill="#4277BB" stroke="#FFF" stroke-width="3" paint-order="stroke">grow into</text>
 <line x1="2000" y1="1330" x2="2000" y2="1390" stroke="#4277BB" stroke-width="3" stroke-dasharray="10 7" marker-end="url(#uar)"/>
 <text x="2040" y="1366" font-size="12" font-weight="600" fill="#4277BB" stroke="#FFF" stroke-width="3" paint-order="stroke">could lead to</text>
-<rect x="18" y="1916" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/><text x="208" y="1938" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">⚠️ DRAFT — community draft: not verified, reviewed, or audited</text></svg>
+<rect x="18" y="1956" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/><text x="208" y="1978" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">⚠️ DRAFT — community draft: not verified, reviewed, or audited</text></svg>
