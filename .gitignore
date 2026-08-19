@@ -1,2 +1,6 @@
-data_test/
-data_mainnet/
+# Repo policy: GitHub contains DRAWINGS ONLY.
+# Specs, analysis tooling, and data live locally (never pushed).
+spec/
+analysis/
+__pycache__/
+data_mainnet*/
