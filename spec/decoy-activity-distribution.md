@@ -139,21 +139,36 @@ ring data are in the retained state.)
 ### 4.2 Estimating $p(x)$ (participant density)
 
 We do **not** know which ring members are real — but we do know exactly
-**two per ring are real** (sender + receiver) and $N-2$ are decoys. So
-$p$ can be estimated by *deconvolution*: the observed mixture density over
-all ring appearances is
+**two per ring are real** (sender + receiver) and $N-2$ are decoys. Two
+estimators were implemented and validated (`analysis/mixture_deconv.py`,
+`analysis/validate_deconv.py`):
 
-$$f_{\text{obs}} = \frac{2}{N} p + \frac{N-2}{N} d$$
+- **Naive mixture deconvolution (REJECTED by D4):** solve
+  $f_{obs} = \frac{2}{N}p + \frac{N-2}{N}d$ for $p$ per ring size.
+  **D4 validation FAILED this estimator:** the $(N-2)/2$ amplification
+  factor makes it numerically unstable — KL ≈ 2.9 vs the true $p$ even at
+  8,000 txs (pass threshold 0.1). Negative densities appear and get
+  clipped; results do not converge with data.
+- **Direct estimator (ACCEPTED by D4):** at **ringsize 2, both members
+  are real participants** (zero decoys — the decoy loop only runs while
+  `ringsize != 2`, `wallet_transfer.go:343`). Therefore $p$ is estimated
+  **directly from the histogram of ringsize-2 members' features**, with
+  no deconvolution and no noise amplification. **D4 convergence PASS:**
+  KL = 0.035 and mean bin error = 0.024 at 2,000 txs (pass: KL < 0.1,
+  err < 0.05 at the two largest dataset sizes; small-sample noise at
+  n=100 is expected).
 
-Given $d$ (known — it's the deployed sampler, or the candidate sampler in
-simulation) and $f_{\text{obs}}$ (measured), solve for $p$. With two
-distinct ring sizes (e.g., 16 and 32), the system is over-determined and
-$p$ is identifiable. Validate with synthetic ground truth (§4.4).
+**Deliverable D2:** `analysis/mixture_deconv.py` — direct estimator +
+deployed-sampler density $d$ + per-ring effective-anonymity posterior.
+**Deliverable D4:** `analysis/validate_deconv.py` — synthetic ground-truth
+harness with materialized history events (the `hist_` txid convention)
+so measured gaps match drawn distributions.
 
-**Deliverable D2:** `analysis/estimate_p.py` — mixture-deconvolution
-estimator, outputting the fitted participant density $p$ (as a
-parameterized family: e.g., log-normal / gamma inter-appearance
-distribution, age distribution, regularity features).
+**First real-data result (3.6k-block scan, `data_mainnet/d2_report.md`):**
+participants skew heavily toward recent activity (13.6% in 0–5 blocks,
+24.7% in 5–10) while the deployed decoy pool is guaranteed-dormant
+(d(0–5) = 0) — p/d ratios of ∞ in bin 0–5 and 4.39 in 500+
+(first-seen boundary artifact, to be resolved by the 50k-block scan).
 
 ### 4.3 Quantifying the current leak
 
@@ -252,20 +267,18 @@ dataset.
 
 | # | Artifact | Depends on | Est. effort |
 |---|---|---|---|
-| D1 | `extract_activity.py` (chain → activity dataset) | synced node | 3–5 days |
-| D2 | `estimate_p.py` (mixture deconvolution) | D1 | 1–2 weeks |
-| D3 | `measure_leak.py` (current $N_{\text{eff}}$ report) | D1, D2 | 3–5 days |
-| D4 | simulator validation harness + bias report | D2, D3 | 1–2 weeks |
+| D1 | `extract_activity.py` (chain → activity dataset) ✅ | synced node | done — 10.9 blk/s parallel, resume, checkpoint |
+| D2 | `mixture_deconv.py` (direct estimator from ringsize-2 members) ✅ | D1 | done — D4-validated |
+| D3 | `activity_leak_report.py` (ring-size + gap + activity report) ✅ | D1 | done (first report: `data_mainnet/report.md`) |
+| D4 | `validate_deconv.py` (synthetic ground-truth harness) ✅ | D2, D3 | done — direct estimator PASS, naive deconv FAIL documented |
 | D5 | activity-matched sampler (wallet, client-side) | D2, batch RPC | 1–2 weeks |
 | D6 | canonical model publication (epoch-cadenced dataset) | D2 | ongoing |
 
-Total: ~1–2 months of focused work for D1–D4 (the measurement + honesty
-gate), before any production sampler (D5) is justified.
-
-**Sequencing rule:** D5 is gated on D4 showing estimator bias within
-tolerance on synthetic ground truth. The batch RPC (companion doc) can
-ship independently and in parallel — it strictly improves the current
-state even with uniform sampling.
+**Sequencing rule (updated):** D5 is gated on the 50k-block scan
+confirming the D2 direct-estimator result at scale (first-seen boundary
+artifact resolved). The batch RPC (companion doc) can ship independently
+and in parallel — it strictly improves the current state even with uniform
+sampling. **The naive deconvolution is rejected and must not be used.**
 
 ---
 
