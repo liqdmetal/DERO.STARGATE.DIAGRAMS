@@ -1,0 +1,65 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;}</style></head><body><svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1250" viewBox="0 0 1920 1250" font-family="Segoe UI, Arial, sans-serif">
+<defs><marker id="s2a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0076BE"/></marker></defs>
+<rect x="0" y="0" width="1920" height="1250" fill="#FFFFFF"/>
+<text x="960.0" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#4277BB">DERO SYSTEMS REFERENCE — NETWORK TOPOLOGY &amp; PORTS</text>
+<text x="960.0" y="82" text-anchor="middle" font-size="13.5" fill="#5A6B7A">Who connects to whom, over which port, and what to keep private.  Mainnet defaults · testnet = +30300.</text>
+<rect x="760" y="300" width="400" height="120" rx="12" fill="#E3F2FD" stroke="#1E88E5" stroke-width="3"/>
+<text x="960" y="360" text-anchor="middle" font-size="16" font-weight="700" fill="#1E88E5">DEROD — YOUR FULL NODE</text>
+<rect x="120" y="120" width="360" height="130" rx="10" fill="#FFFFFF" stroke="#1E88E5" stroke-width="2"/>
+<text x="300" y="166" text-anchor="middle" font-size="12" font-weight="700" fill="#1E88E5">YOUR NODE</text>
+<text x="300" y="190" text-anchor="middle" font-size="10.5" fill="#66727E">derod · validates · stores · mines</text>
+<rect x="1380" y="120" width="360" height="130" rx="10" fill="#FFFFFF" stroke="#1E88E5" stroke-width="2"/>
+<text x="1560" y="166" text-anchor="middle" font-size="12" font-weight="700" fill="#1E88E5">PEER NODES × many</text>
+<text x="1560" y="190" text-anchor="middle" font-size="10.5" fill="#66727E">the rest of the network — same software</text>
+<rect x="120" y="420" width="360" height="130" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+<text x="300" y="466" text-anchor="middle" font-size="12" font-weight="700" fill="#2E7D32">YOUR WALLET</text>
+<text x="300" y="490" text-anchor="middle" font-size="10.5" fill="#66727E">Engram / CLI — signs locally</text>
+<rect x="1380" y="420" width="360" height="130" rx="10" fill="#FFFFFF" stroke="#FB8C00" stroke-width="2"/>
+<text x="1560" y="466" text-anchor="middle" font-size="12" font-weight="700" fill="#FB8C00">YOUR MINER</text>
+<text x="1560" y="490" text-anchor="middle" font-size="10.5" fill="#66727E">dero-miner / tnn-miner / Dirtybird</text>
+<rect x="120" y="720" width="360" height="130" rx="10" fill="#FFFFFF" stroke="#8E24AA" stroke-width="2"/>
+<text x="300" y="766" text-anchor="middle" font-size="12" font-weight="700" fill="#8E24AA">INDEXER / EXPLORER</text>
+<text x="300" y="790" text-anchor="middle" font-size="10.5" fill="#66727E">Gnomon · derohist · explorer.dero.io</text>
+<rect x="1380" y="720" width="360" height="130" rx="10" fill="#FFFFFF" stroke="#00838F" stroke-width="2"/>
+<text x="1560" y="766" text-anchor="middle" font-size="12" font-weight="700" fill="#00838F">dApp / TELA</text>
+<text x="1560" y="790" text-anchor="middle" font-size="10.5" fill="#66727E">on-chain web · talks via XSWD</text>
+<line x1="480" y1="180" x2="760" y2="340" stroke="#1E88E5" stroke-width="2.5" marker-end="url(#s2a)"/>
+<text x="600" y="240" font-size="10" font-weight="700" fill="#1E88E5">TLS P2P · 10101</text>
+<line x1="1380" y1="340" x2="1740" y2="180" stroke="#1E88E5" stroke-width="2.5" marker-end="url(#s2a)"/>
+<text x="1560" y="300" font-size="10" font-weight="700" fill="#1E88E5">TLS P2P · 10101</text>
+<line x1="480" y1="480" x2="760" y2="380" stroke="#2E7D32" stroke-width="2.5" marker-end="url(#s2a)"/>
+<text x="600" y="445" font-size="10" font-weight="700" fill="#2E7D32">RPC 10102/10103 (local)</text>
+<line x1="1380" y1="480" x2="1740" y2="480" stroke="#FB8C00" stroke-width="2.5" marker-end="url(#s2a)"/>
+<text x="1370" y="472" text-anchor="end" font-size="10" font-weight="700" fill="#FB8C00">GETWORK · 10100</text>
+<line x1="480" y1="770" x2="760" y2="420" stroke="#8E24AA" stroke-width="2.5" marker-end="url(#s2a)"/>
+<text x="600" y="600" font-size="10" font-weight="700" fill="#8E24AA">read RPC · 10102</text>
+<line x1="1380" y1="770" x2="1740" y2="420" stroke="#00838F" stroke-width="2.5" marker-end="url(#s2a)"/>
+<text x="1560" y="600" font-size="10" font-weight="700" fill="#00838F">XSWD ↔ wallet</text>
+<text x="40" y="918" font-size="14" font-weight="700" fill="#C62828">🛡️ SECURITY RULES</text>
+<rect x="40" y="930" width="900" height="120" rx="10" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="56" y="958" font-size="12" fill="#22303C">• Never expose the RPC port (10102) to the internet — local only</text>
+<text x="56" y="980" font-size="12" fill="#22303C">• P2P port is randomized; pin it and open the firewall for inbound peers</text>
+<text x="56" y="1002" font-size="12" fill="#22303C">• Wallet keys never leave the wallet process</text>
+<text x="56" y="1024" font-size="12" fill="#22303C">• For remote RPC, use a VPN / SSH tunnel</text>
+<text x="1000" y="918" font-size="14" font-weight="700" fill="#4277BB">PORT REFERENCE</text>
+<rect x="1000" y="932" width="880" height="54" rx="8" fill="#FFFFFF" stroke="#C9D6E3" stroke-width="1.5"/>
+<text x="1016" y="954" font-size="11.5" font-weight="700" fill="#4277BB">P2P</text>
+<text x="1063" y="954" font-size="11.5" fill="#5A6B7A">10101</text>
+<text x="1016" y="972" font-size="10.5" fill="#66727E">node ↔ node gossip + sync · <tspan font-style="italic">randomized at startup · pin with --p2p-bind</tspan></text>
+<rect x="1000" y="992" width="880" height="54" rx="8" fill="#FFFFFF" stroke="#C9D6E3" stroke-width="1.5"/>
+<text x="1016" y="1014" font-size="11.5" font-weight="700" fill="#4277BB">GETWORK</text>
+<text x="1107" y="1014" font-size="11.5" fill="#5A6B7A">10100</text>
+<text x="1016" y="1032" font-size="10.5" fill="#66727E">miner ↔ daemon work · <tspan font-style="italic">only if miners connect from outside</tspan></text>
+<rect x="1000" y="1052" width="880" height="54" rx="8" fill="#FFFFFF" stroke="#C9D6E3" stroke-width="1.5"/>
+<text x="1016" y="1074" font-size="11.5" font-weight="700" fill="#4277BB">RPC (daemon)</text>
+<text x="1162" y="1074" font-size="11.5" fill="#5A6B7A">10102</text>
+<text x="1016" y="1092" font-size="10.5" fill="#66727E">daemon JSON-RPC API · <tspan font-style="italic">keep local (127.0.0.1) — never expose</tspan></text>
+<rect x="1000" y="1112" width="880" height="54" rx="8" fill="#FFFFFF" stroke="#C9D6E3" stroke-width="1.5"/>
+<text x="1016" y="1134" font-size="11.5" font-weight="700" fill="#4277BB">Wallet RPC</text>
+<text x="1140" y="1134" font-size="11.5" fill="#5A6B7A">10103</text>
+<text x="1016" y="1152" font-size="10.5" fill="#66727E">wallet API for CLI/Engram · <tspan font-style="italic">local only · keys never leave wallet</tspan></text>
+<rect x="1000" y="1172" width="880" height="54" rx="8" fill="#FFFFFF" stroke="#C9D6E3" stroke-width="1.5"/>
+<text x="1016" y="1194" font-size="11.5" font-weight="700" fill="#4277BB">XSWD</text>
+<text x="1074" y="1194" font-size="11.5" fill="#5A6B7A">via wallet</text>
+<text x="1016" y="1212" font-size="10.5" fill="#66727E">dApp ↔ wallet WebSocket · <tspan font-style="italic">per-request ask / accept / deny</tspan></text>
+<rect x="18" y="1206" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/><text x="208" y="1228" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">⚠️ DRAFT — community draft: not verified, reviewed, or audited</text></svg></body></html>

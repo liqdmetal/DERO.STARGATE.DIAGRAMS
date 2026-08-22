@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="980" viewBox="0 0 1920 980" font-family="Segoe UI, Arial, sans-serif">
+<rect x="0" y="0" width="1920" height="980" fill="#FFFFFF"/>
+<text x="960.0" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#4277BB">DERO SYSTEMS REFERENCE — SOURCE-TREE MAP</text>
+<text x="960.0" y="82" text-anchor="middle" font-size="13.5" fill="#5A6B7A">The deroproject/derohe repository, mapped to what each package owns.  Where to look when you want to change a thing.</text>
+<rect x="60" y="130" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#1E88E5" stroke-width="2"/>
+<text x="80" y="182" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#1E88E5">cmd/</text>
+<text x="80" y="212" font-size="11.5" fill="#66727E">binaries — derod, dero-wallet-cli, dero-miner, explorer</text>
+<rect x="990" y="130" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#1E88E5" stroke-width="2"/>
+<text x="1010" y="182" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#1E88E5">config/</text>
+<text x="1010" y="212" font-size="11.5" fill="#66727E">constants — BLOCK_TIME=18, MINIBLOCK_HIGHDIFF=9, ports</text>
+<rect x="60" y="290" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#00838F" stroke-width="2"/>
+<text x="80" y="342" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#00838F">block/</text>
+<text x="80" y="372" font-size="11.5" fill="#66727E">block &amp; mini-block (Σ-block) structures, DAG collection</text>
+<rect x="990" y="290" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#00838F" stroke-width="2"/>
+<text x="1010" y="342" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#00838F">blockchain/</text>
+<text x="1010" y="372" font-size="11.5" fill="#66727E">consensus, validation, execution, rewards (transaction_execute.go)</text>
+<rect x="60" y="450" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#1E88E5" stroke-width="2"/>
+<text x="80" y="502" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#1E88E5">p2p/</text>
+<text x="80" y="532" font-size="11.5" fill="#66727E">TLS network, gossip, time-check (p2p/controller.go)</text>
+<rect x="990" y="450" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+<text x="1010" y="502" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#2E7D32">rpc/</text>
+<text x="1010" y="532" font-size="11.5" fill="#66727E">daemon JSON-RPC + GETWORK websocket (rpc_dero.go)</text>
+<rect x="60" y="610" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+<text x="80" y="662" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#2E7D32">walletapi/</text>
+<text x="80" y="692" font-size="11.5" fill="#66727E">wallet RPC + XSWD bridge (walletapi/xswd)</text>
+<rect x="990" y="610" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#C62828" stroke-width="2"/>
+<text x="1010" y="662" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#C62828">cryptography/</text>
+<text x="1010" y="692" font-size="11.5" fill="#66727E">bn256, homomorphic enc, ring sigs, bulletproofs</text>
+<rect x="60" y="770" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#8E24AA" stroke-width="2"/>
+<text x="80" y="822" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#8E24AA">dvm/</text>
+<text x="80" y="852" font-size="11.5" fill="#66727E">DeroScript / DVM-BASIC compiler + runtime</text>
+<rect x="990" y="770" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#FB8C00" stroke-width="2"/>
+<text x="1010" y="822" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#FB8C00">pow/ + astrobwt/</text>
+<text x="1010" y="852" font-size="11.5" fill="#66727E">PoW plumbing + AstroBWTv3 algorithm</text>
+<rect x="60" y="930" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#6E6F72" stroke-width="2"/>
+<text x="80" y="982" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#6E6F72">premine/ + proof/</text>
+<text x="80" y="1012" font-size="11.5" fill="#66727E">genesis/premine · transaction proof system</text>
+<rect x="990" y="930" width="890" height="130" rx="10" fill="#FFFFFF" stroke="#6E6F72" stroke-width="2"/>
+<text x="1010" y="982" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#6E6F72">metrics/ + glue/</text>
+<text x="1010" y="1012" font-size="11.5" fill="#66727E">observability · internal glue (rwc)</text>
+<rect x="60" y="860" width="1800" height="60" rx="10" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
+<text x="960" y="896" text-anchor="middle" font-size="12.5" fill="#5A6B7A">Active development lives at DEROFDN/derohe (community-dev). deroproject/derohe still hosts the released binaries (Release142). Both build the same consensus-compatible DERO.</text>
+<rect x="18" y="936" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/><text x="208" y="958" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">⚠️ DRAFT — community draft: not verified, reviewed, or audited</text></svg>

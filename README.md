@@ -30,6 +30,7 @@ line under every step.
 | **`DERO.TELA.drawio`** | **From Idea to On-Chain App** — building a dApp: DVM smart contract → `install_sc` → XSWD wallet bridge → TELA. 3 pages: flow + the dApp stack + **the community ecosystem index**. |
 | **`DERO.UNIVERSE.drawio`** | **The DERO Universe** — one surfable map with a reading path: numbered zones (① engine → ② curated repos → ③ live use cases → ④ what can be born → ⑤ speculation), a "how to read" strip, and a 30-second TL;DR. Curated chips + pointers to the deep dives (full repo index lives on TELA p3; experimental use cases on the field guide). Solid borders = live now, dashed = hypothetical. |
 | **`DERO.EXPERIMENTS.drawio`** | **Real-world use cases — the experimental field guide** — 12 use cases (gambling, patronage, DAO voting, private DeFi, marketplaces, supply chain, social, M2M payments, credentials, remittances, insurance, P2E) each with problem → DERO fit → status (live/partial/experimental) → FILLED BY (the real project in that slot, or "greenfield"). 3 pages: field guide + 5-step "run your own experiment" ramp + **deep dives: M2M payments & parametric insurance** (pattern, illustrative DVM-BASIC starter contract, honest blockers, simulator test path). |
+| **`DERO.SYSTEMS.drawio`** | **Systems reference — how the whole stack fits together** — 4 pages: **full-node architecture** (derod internals: P2P/TLS, mempool, consensus core, GravitonDB, DVM, JSON-RPC, GETWORK + attached wallets/miners/services with ports), **network topology & ports** (who connects to whom, P2P 10101 / GETWORK 10100 / RPC 10102 / wallet 10103, security rules), **the protocol stack** (cryptography → consensus → ledger → VM → interfaces → applications), and **the derohe source-tree map** (each repo package and what it owns). |
 | `Stargate.High.Level` | Original high-level sketch (Layer 1 PoW → DVM). |
 | `DERO.CLOUD.drawio` | Original cloud-architecture sketch. |
 
@@ -43,6 +44,8 @@ python build_diagram.py          # -> DERO.PROCESS.COMPLETE.drawio
 python build_world_diagram.py    # -> DERO.WORLD.drawio
 python build_more_diagrams.py    # -> DERO.MINING.drawio + DERO.TELA.drawio
 python build_universe_diagram.py # -> DERO.UNIVERSE.drawio
+python build_experiments_diagram.py # -> DERO.EXPERIMENTS.drawio
+python build_systems_diagram.py  # -> DERO.SYSTEMS.drawio
 ```
 
 PNG previews are rendered from the SVGs with headless Chromium/Edge.
