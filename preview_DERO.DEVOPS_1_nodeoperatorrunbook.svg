@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1020" viewBox="0 0 1800 1020" font-family="Segoe UI, Arial, sans-serif">
+<rect x="0" y="0" width="1800" height="1020" fill="#0B1220"/>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#38BDF8"/></marker></defs>
+<rect x="18.0" y="974.0" width="400.0" height="34.0" rx="10" fill="#2A1216" stroke="#F87171" stroke-width="1.5"/>
+<text x="30.0" y="996.0" font-size="12.5" font-weight="700" fill="#F87171">⚠️ DRAFT — community draft — not verified, reviewed, or audited</text>
+<rect x="40.0" y="24.0" width="1720.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="52.0" y="46.0" font-size="12.5" font-weight="700" fill="#26334D">NODE OPERATOR RUNBOOK</text>
+<rect x="40.0" y="66.0" width="1720.0" height="22.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="52.0" y="88.0" font-size="12.5" font-weight="700" fill="#26334D">From download to a healthy, updated full node.  Each step is a box — follow top to bottom.</text>
+<rect x="120.0" y="130.0" width="1560.0" height="62.0" rx="10" fill="#141E36" stroke="#38BDF8" stroke-width="1.4"/>
+<text x="132.0" y="152.0" font-size="12.5" font-weight="700" fill="#38BDF8">1 · Download</text>
+<text x="132.0" y="167.0" font-size="10.5" font-weight="400" fill="#5A6B7A">official release (DEROFDN/derohe) · verify sha512 + GPG signature</text>
+<rect x="120.0" y="208.0" width="1560.0" height="62.0" rx="10" fill="#141E36" stroke="#38BDF8" stroke-width="1.4"/>
+<text x="132.0" y="230.0" font-size="12.5" font-weight="700" fill="#38BDF8">2 · Configure</text>
+<text x="132.0" y="245.0" font-size="10.5" font-weight="400" fill="#5A6B7A">--p2p-bind=0.0.0.0:10101 (pin it) · keep RPC 10102 local</text>
+<rect x="120.0" y="286.0" width="1560.0" height="62.0" rx="10" fill="#141E36" stroke="#2DD4BF" stroke-width="1.4"/>
+<text x="132.0" y="308.0" font-size="12.5" font-weight="700" fill="#2DD4BF">3 · Sync</text>
+<text x="132.0" y="323.0" font-size="10.5" font-weight="400" fill="#5A6B7A">start derod · fast-sync with a recent snapshot · watch status</text>
+<rect x="120.0" y="364.0" width="1560.0" height="62.0" rx="10" fill="#141E36" stroke="#34D399" stroke-width="1.4"/>
+<text x="132.0" y="386.0" font-size="12.5" font-weight="700" fill="#34D399">4 · Serve</text>
+<text x="132.0" y="401.0" font-size="10.5" font-weight="400" fill="#5A6B7A">open only the P2P port in the firewall · never expose RPC</text>
+<rect x="120.0" y="442.0" width="1560.0" height="62.0" rx="10" fill="#141E36" stroke="#34D399" stroke-width="1.4"/>
+<text x="132.0" y="464.0" font-size="12.5" font-weight="700" fill="#34D399">5 · Monitor</text>
+<text x="132.0" y="479.0" font-size="10.5" font-weight="400" fill="#5A6B7A">derod status · chain height · peer count · disk usage</text>
+<rect x="120.0" y="520.0" width="1560.0" height="62.0" rx="10" fill="#141E36" stroke="#FBBF24" stroke-width="1.4"/>
+<text x="132.0" y="542.0" font-size="12.5" font-weight="700" fill="#FBBF24">6 · Update</text>
+<text x="132.0" y="557.0" font-size="10.5" font-weight="400" fill="#5A6B7A">new release → stop → backup data-dir → swap binary → restart</text>
+<rect x="120.0" y="598.0" width="1560.0" height="62.0" rx="10" fill="#141E36" stroke="#F87171" stroke-width="1.4"/>
+<text x="132.0" y="620.0" font-size="12.5" font-weight="700" fill="#F87171">7 · Troubleshoot</text>
+<text x="132.0" y="635.0" font-size="10.5" font-weight="400" fill="#5A6B7A">clock drift → install chrony · MBR rising → check miner + time sync</text>
+<rect x="120.0" y="676.0" width="1560.0" height="62.0" rx="10" fill="#141E36" stroke="#A78BFA" stroke-width="1.4"/>
+<text x="132.0" y="698.0" font-size="12.5" font-weight="700" fill="#A78BFA">8 · Backup</text>
+<text x="132.0" y="713.0" font-size="10.5" font-weight="400" fill="#5A6B7A">data-dir copy off-host · wallet seeds separate from node</text>
+</svg>

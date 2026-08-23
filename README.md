@@ -33,6 +33,9 @@ line under every step.
 | **`DERO.SYSTEMS.drawio`** | **Systems reference — how the whole stack fits together** — 4 pages: **full-node architecture** (derod internals: P2P/TLS, mempool, consensus core, GravitonDB, DVM, JSON-RPC, GETWORK + attached wallets/miners/services with ports), **network topology & ports** (who connects to whom, P2P 10101 / GETWORK 10100 / RPC 10102 / wallet 10103, security rules), **the protocol stack** (cryptography → consensus → ledger → VM → interfaces → applications), and **the derohe source-tree map** (each repo package and what it owns). |
 | **`DERO.STYLE.drawio`** | **Template system showcase** — the shared design language for all diagrams. Two themes: **DHEBP Night** (dark, glass, glow — for sharing/cyber) and **DHEBP Paper** (light, print-friendly). Every component shown: gradient headers, zone panels, chips, number badges, status pills, arrows, TL;DR, draft stamp. Powered by `dero_style.py` — one file, both themes. |
 | **`DERO.MASTER.drawio`** | **The DERO Universe (v2 skin)** — same content as DERO.UNIVERSE, rendered in the new template system. Generate dark or light with `python build_master_diagram.py dark|light`. |
+| **`DERO.GUIDES.drawio`** | **Onboarding & safety** (3 pages): *Where Do I Begin?* (one entry → branch to the right diagram) · *Choose Your Wallet* (decision tree: CLI / Engram / g45w → seed backup) · *Self-Custody Security Poster* (DO/DON'T + threat model — DERO has no recovery). |
+| **`DERO.PRIVACY.drawio`** | **Honest privacy & economics** (3 pages): *What 'Private' Actually Means* (hidden vs visible, honest limits — private ≠ anonymous) · *Privacy Scorecard* (DERO vs BTC vs Monero vs ETH, color-coded heuristic risk, DRAFT disclaimer) · *DERO Economics* (hard cap ~20.89M, emission, halving ~4yr, reward split — DRAFT numbers flagged). |
+| **`DERO.DEVOPS.drawio`** | **Operator & builder reference** (4 pages): *Node Operator Runbook* (8 steps: download→sync→monitor→update→backup) · *XSWD Permission Model* (dApp↔wallet, ask/accept-always/deny-always, security rules) · *DVM-BASIC Cheat-Sheet* (install_sc, RETURN 0, STORE/LOAD, signatures, gas) · *Bridges & Interop* (ETH↔DERO, cldex, honest risk map). |
 | `Stargate.High.Level` | Original high-level sketch (Layer 1 PoW → DVM). |
 | `DERO.CLOUD.drawio` | Original cloud-architecture sketch. |
 
@@ -48,6 +51,9 @@ python build_more_diagrams.py    # -> DERO.MINING.drawio + DERO.TELA.drawio
 python build_universe_diagram.py # -> DERO.UNIVERSE.drawio
 python build_experiments_diagram.py # -> DERO.EXPERIMENTS.drawio
 python build_systems_diagram.py  # -> DERO.SYSTEMS.drawio
+python build_guides_diagram.py   # -> DERO.GUIDES.drawio
+python build_privacy_diagram.py  # -> DERO.PRIVACY.drawio
+python build_devops_diagram.py   # -> DERO.DEVOPS.drawio
 ```
 
 PNG previews are rendered from the SVGs with headless Chromium/Edge.

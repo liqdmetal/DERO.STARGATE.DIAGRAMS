@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1020" viewBox="0 0 1800 1020" font-family="Segoe UI, Arial, sans-serif">
+<rect x="0" y="0" width="1800" height="1020" fill="#0B1220"/>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#38BDF8"/></marker></defs>
+<rect x="18.0" y="974.0" width="400.0" height="34.0" rx="10" fill="#2A1216" stroke="#F87171" stroke-width="1.5"/>
+<text x="30.0" y="996.0" font-size="12.5" font-weight="700" fill="#F87171">⚠️ DRAFT — community draft — not verified, reviewed, or audited</text>
+<rect x="40.0" y="24.0" width="1720.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="52.0" y="46.0" font-size="12.5" font-weight="700" fill="#26334D">XSWD — HOW dApps TALK TO YOUR WALLET</text>
+<rect x="40.0" y="66.0" width="1720.0" height="22.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="52.0" y="88.0" font-size="12.5" font-weight="700" fill="#26334D">Decentralized web apps get NO direct access to your keys — every interaction is a permissioned request through the wallet.</text>
+<rect x="120.0" y="140.0" width="340.0" height="90.0" rx="10" fill="#141E36" stroke="#A78BFA" stroke-width="1.4"/>
+<text x="132.0" y="162.0" font-size="12.5" font-weight="700" fill="#A78BFA">dApp / TELA page</text>
+<text x="132.0" y="177.0" font-size="10.5" font-weight="400" fill="#5A6B7A">wants to read balance, sign a tx, or call a smart contract</text>
+<rect x="720.0" y="140.0" width="340.0" height="90.0" rx="10" fill="#141E36" stroke="#2DD4BF" stroke-width="1.4"/>
+<text x="732.0" y="162.0" font-size="12.5" font-weight="700" fill="#2DD4BF">XSWD bridge</text>
+<text x="732.0" y="177.0" font-size="10.5" font-weight="400" fill="#5A6B7A">WebSocket · routes the request to your wallet · nothing else</text>
+<rect x="1320.0" y="140.0" width="340.0" height="90.0" rx="10" fill="#141E36" stroke="#34D399" stroke-width="1.4"/>
+<text x="1332.0" y="162.0" font-size="12.5" font-weight="700" fill="#34D399">Your wallet</text>
+<text x="1332.0" y="177.0" font-size="10.5" font-weight="400" fill="#5A6B7A">pops up a permission request — YOU decide</text>
+<rect x="120.0" y="320.0" width="1560.0" height="50.0" rx="10" fill="#141E36" stroke="#FBBF24" stroke-width="1.4"/>
+<text x="132.0" y="342.0" font-size="12.5" font-weight="700" fill="#FBBF24">You choose per request:  ASK  ·  ACCEPT ALWAYS  ·  DENY ALWAYS</text>
+<text x="132.0" y="357.0" font-size="10.5" font-weight="400" fill="#5A6B7A">never hand a dApp ‘accept always’ you don’t trust</text>
+<rect x="120.0" y="410.0" width="900.0" height="20.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="132.0" y="432.0" font-size="12.5" font-weight="700" fill="#26334D">WHAT XSWD CAN EXPOSE (methods you approve one by one)</text>
+<rect x="120.0" y="452.0" width="780.0" height="54.0" rx="10" fill="#141E36" stroke="#38BDF8" stroke-width="1.4"/>
+<text x="132.0" y="474.0" font-size="12.5" font-weight="700" fill="#38BDF8">get_info / get_balance</text>
+<text x="132.0" y="489.0" font-size="10.5" font-weight="400" fill="#5A6B7A">read balances &amp; chain info</text>
+<rect x="120.0" y="522.0" width="780.0" height="54.0" rx="10" fill="#141E36" stroke="#38BDF8" stroke-width="1.4"/>
+<text x="132.0" y="544.0" font-size="12.5" font-weight="700" fill="#38BDF8">transfer / sc_invoke</text>
+<text x="132.0" y="559.0" font-size="10.5" font-weight="400" fill="#5A6B7A">sign a transfer or smart-contract call</text>
+<rect x="120.0" y="592.0" width="780.0" height="54.0" rx="10" fill="#141E36" stroke="#38BDF8" stroke-width="1.4"/>
+<text x="132.0" y="614.0" font-size="12.5" font-weight="700" fill="#38BDF8">install_sc</text>
+<text x="132.0" y="629.0" font-size="10.5" font-weight="400" fill="#5A6B7A">deploy a new smart contract</text>
+<rect x="120.0" y="662.0" width="780.0" height="54.0" rx="10" fill="#141E36" stroke="#38BDF8" stroke-width="1.4"/>
+<text x="132.0" y="684.0" font-size="12.5" font-weight="700" fill="#38BDF8">register_address / name service</text>
+<text x="132.0" y="699.0" font-size="10.5" font-weight="400" fill="#5A6B7A">manage your DERO identity</text>
+<rect x="980.0" y="410.0" width="700.0" height="20.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="992.0" y="432.0" font-size="12.5" font-weight="700" fill="#26334D">SECURITY RULES</text>
+<rect x="980.0" y="452.0" width="700.0" height="54.0" rx="10" fill="#141E36" stroke="#F87171" stroke-width="1.4"/>
+<text x="992.0" y="474.0" font-size="12.5" font-weight="700" fill="#F87171">Only approve what you’re using</text>
+<text x="992.0" y="489.0" font-size="10.5" font-weight="400" fill="#5A6B7A">a dApp can only do what you allow</text>
+<rect x="980.0" y="522.0" width="700.0" height="54.0" rx="10" fill="#141E36" stroke="#F87171" stroke-width="1.4"/>
+<text x="992.0" y="544.0" font-size="12.5" font-weight="700" fill="#F87171">Prefer ASK over ACCEPT ALWAYS</text>
+<text x="992.0" y="559.0" font-size="10.5" font-weight="400" fill="#5A6B7A">one-time approval, not standing access</text>
+<rect x="980.0" y="592.0" width="700.0" height="54.0" rx="10" fill="#141E36" stroke="#F87171" stroke-width="1.4"/>
+<text x="992.0" y="614.0" font-size="12.5" font-weight="700" fill="#F87171">Check the method + SCID</text>
+<text x="992.0" y="629.0" font-size="10.5" font-weight="400" fill="#5A6B7A">make sure it’s the contract you expect</text>
+<rect x="980.0" y="662.0" width="700.0" height="54.0" rx="10" fill="#141E36" stroke="#F87171" stroke-width="1.4"/>
+<text x="992.0" y="684.0" font-size="12.5" font-weight="700" fill="#F87171">Revoke when done</text>
+<text x="992.0" y="699.0" font-size="10.5" font-weight="400" fill="#5A6B7A">most wallets let you clear permissions</text>
+</svg>
