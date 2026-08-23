@@ -126,6 +126,20 @@ def d_chip(cid, x, y, w, h, accent_key, title, desc=None, icon=None, dashed=Fals
     v = val("<br>".join(inner))
     return [f'<mxCell id="{cid}" value="{v}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={TH["panel"]};gradientColor={TH["panel2"]};gradientDirection=south;strokeColor={col};strokeWidth=1.2;{db}shadow=1;fontSize={font};fontColor={TH["ink"]};align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{w}" height="{h}" as="geometry"/></mxCell>']
 
+def d_zone_h(rows, chip_h=72, gap=12, header=56, pad=10):
+    """Auto-height for a zone from its chip grid (kills dead space)."""
+    return header + rows * chip_h + (rows - 1) * gap + pad * 2
+
+def d_chip_grid(zx, zy, zw, cols, count, chip_w=185, chip_h=72, gap_x=12, gap_y=12, top=50):
+    """Return (x, y) positions for a packed chip grid. Tighter than before."""
+    inner = zw - 24
+    gx = (inner - cols * chip_w) // (cols - 1) if cols > 1 else 0
+    pos = []
+    for i in range(count):
+        r, c = divmod(i, cols)
+        pos.append((zx + 12 + c * (chip_w + gx), zy + top + r * (chip_h + gap_y)))
+    return pos
+
 def d_pill(cid, x, y, accent_key, text, w=None, h=24):
     col, _ = accent(accent_key)
     return [f'<mxCell id="{cid}" value="{esc(text)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={col};strokeColor=none;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;shadow=1;" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{w or 36+9*len(text)}" height="{h}" as="geometry"/></mxCell>']
@@ -193,7 +207,8 @@ def svg_zone(x, y, w, h, accent_key, label, num=None, dashed=False, sub=None):
     out.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="16" fill="{TH["panel"]}" stroke="{col}" stroke-opacity="0.55" stroke-width="1.5" {dash} filter="url(#soft)"/>')
     out.append(f'<rect x="{x}" y="{y}" width="{w}" height="6" rx="3" fill="{col}" fill-opacity="0.9"/>')
     if num:
-        out.append(f'<circle cx="{x+38}" cy="{y+36}" r="20" fill="url(#titleGrad)" stroke="#0B1220" stroke-width="2" filter="url(#glow)"/>')
+        # solid accent fill (per-zone color) instead of shared gradient — pops on both themes
+        out.append(f'<circle cx="{x+38}" cy="{y+36}" r="20" fill="{col}" stroke="#0B1220" stroke-width="2" filter="url(#glow)"/>')
         out.append(f'<text x="{x+38}" y="{y+43}" text-anchor="middle" font-size="20" font-weight="800" fill="#FFFFFF">{num}</text>')
         lx = x + 70
     else:
@@ -207,17 +222,27 @@ def svg_chip(x, y, w, h, accent_key, title, desc=None, icon=None, dashed=False, 
     col, _ = accent(accent_key)
     dash = 'stroke-dasharray="6 5"' if dashed else ""
     out = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="12" fill="{TH["chip"]}" stroke="{col}" stroke-opacity="0.65" stroke-width="1.2" {dash}/>']
-    ty = y + 24
     line = ""
     if icon:
         line += icon + "  "
     line += title
-    out.append(f'<text x="{x+w/2}" y="{ty}" text-anchor="middle" font-size="{font}" font-weight="700" fill="{col}">{svg_esc(line)}</text>')
     if desc:
+        ty = y + 24
+        out.append(f'<text x="{x+w/2}" y="{ty}" text-anchor="middle" font-size="{font}" font-weight="700" fill="{col}">{svg_esc(line)}</text>')
         ty += 19
         for ln in wrap(desc, w - 18, font - 1):
             out.append(f'<text x="{x+w/2}" y="{ty}" text-anchor="middle" font-size="{font-1}" fill="{TH["muted"]}">{svg_esc(ln)}</text>')
             ty += 15
+    else:
+        # title-only: center vertically, bigger type
+        lines = wrap(line, w - 16, font + 2)
+        if len(lines) == 1:
+            out.append(f'<text x="{x+w/2}" y="{y+h/2+5}" text-anchor="middle" font-size="{font+2}" font-weight="700" fill="{col}">{svg_esc(line)}</text>')
+        else:
+            # two-line centered title for long labels
+            for li, ln in enumerate(lines[:2]):
+                y_off = (y + h/2 - (len(lines[:2])-1)*8 + li*16 + 5)
+                out.append(f'<text x="{x+w/2}" y="{y_off}" text-anchor="middle" font-size="{font}" font-weight="700" fill="{col}">{svg_esc(ln)}</text>')
     return out
 
 def svg_pill(x, y, accent_key, text, w=None, h=22):
