@@ -32,8 +32,8 @@
 <text x="972.0" y="482.0" font-size="12.5" font-weight="700" fill="#8B5CF6">rpc.Argument</text>
 <text x="972.0" y="497.0" font-size="10.5" font-weight="400" fill="#5A6B7A">uint64 literals need an explicit uint64() cast</text>
 <rect x="120.0" y="590.0" width="1560.0" height="56.0" rx="10" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.4"/>
-<text x="132.0" y="612.0" font-size="12.5" font-weight="700" fill="#F59E0B">GAS &amp; LIMITS — mainnet (Release153, post-HF3): 10M gas / ~11k evals per call · DRAFT — re-verify against Release153 source</text>
-<text x="132.0" y="627.0" font-size="10.5" font-weight="400" fill="#5A6B7A">no group arithmetic · hash commitments + HTLC preimage auth + block_height timelocks are the mainnet-native primitives</text>
+<text x="132.0" y="612.0" font-size="12.5" font-weight="700" fill="#F59E0B">GAS &amp; LIMITS — mainnet (Release153): 10M compute gas/call · line 5k · expr 800 · store 10k · ≈1.7k statements/call</text>
+<text x="132.0" y="627.0" font-size="10.5" font-weight="400" fill="#5A6B7A">verified dvm/sc.go:238 GasComputeLimit=10,000,000 · dvm.go:522/994 · dvm_functions.go (DRAFT: verify on next release)</text>
 <rect x="120.0" y="680.0" width="1560.0" height="170.0" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.4"/>
 <text x="132.0" y="702.0" font-size="12.5" font-weight="700" fill="#10B981">Function Initialize() Uint64   10 STORE(&quot;owner&quot;, SIGNER())   20 RETURN 0 Function Ping() Uint64   10 IF SIGNED_BY_ENTRYPOINT() == 0 THEN GOTO 40   20 STORE(&quot;last&quot;, block_height)   30 RETURN 0   40 RETURN 1  — rollback</text>
 </svg>

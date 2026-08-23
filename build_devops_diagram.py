@@ -104,8 +104,8 @@ def page3():
         y = 130 + (i % 4) * 110
         x = 120 + (i // 4) * 840
         box(cells, add, x, y, 800, 90, "purple", t, d, font=12.5)
-    # gas line
-    box(cells, add, 120, 590, 1560, 56, "amber", "GAS & LIMITS \u2014 mainnet (Release153, post-HF3): 10M gas / ~11k evals per call \u00b7 DRAFT \u2014 re-verify against Release153 source", "no group arithmetic \u00b7 hash commitments + HTLC preimage auth + block_height timelocks are the mainnet-native primitives")
+    # gas line — numbers RE-GROUNDED in Release153 source (dvm/sc.go:238, dvm.go:522/994, dvm_functions.go)
+    box(cells, add, 120, 590, 1560, 56, "amber", "GAS & LIMITS \u2014 mainnet (Release153): 10M compute gas/call \u00b7 line 5k \u00b7 expr 800 \u00b7 store 10k \u00b7 \u22481.7k statements/call", "verified dvm/sc.go:238 GasComputeLimit=10,000,000 \u00b7 dvm.go:522/994 \u00b7 dvm_functions.go (DRAFT: verify on next release)")
     # example
     ex = [
         "Function Initialize() Uint64",
