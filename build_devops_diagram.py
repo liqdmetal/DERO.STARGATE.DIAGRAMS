@@ -38,8 +38,9 @@ def page1():
         ("4 \u00b7 Serve", "open only the P2P port in the firewall \u00b7 never expose RPC", "green"),
         ("5 \u00b7 Monitor", "derod status \u00b7 chain height \u00b7 peer count \u00b7 disk usage", "green"),
         ("6 \u00b7 Update", "new release \u2192 stop \u2192 backup data-dir \u2192 swap binary \u2192 restart", "amber"),
-        ("7 \u00b7 Troubleshoot", "clock drift \u2192 install chrony \u00b7 MBR rising \u2192 check miner + time sync", "red"),
-        ("8 \u00b7 Backup", "data-dir copy off-host \u00b7 wallet seeds separate from node", "purple"),
+        ("7 \u00b7 Hard-Fork readiness", "HF3 activated at block 7,504,640 \u2014 run Release153+ to stay in sync (Release153 fixed false-parity sync)", "red"),
+        ("8 \u00b7 Troubleshoot", "clock drift \u2192 install chrony \u00b7 MBR rising \u2192 check miner + time sync", "red"),
+        ("9 \u00b7 Backup", "data-dir copy off-host \u00b7 wallet seeds separate from node", "purple"),
     ]
     for i, (t, d, acc) in enumerate(steps):
         y = 130 + i * 78
@@ -104,7 +105,7 @@ def page3():
         x = 120 + (i // 4) * 840
         box(cells, add, x, y, 800, 90, "purple", t, d, font=12.5)
     # gas line
-    box(cells, add, 120, 590, 1560, 56, "amber", "GAS & LIMITS \u2014 v151 mainnet: 10M gas / ~11k evals per call", "no group arithmetic on mainnet \u00b7 hash commitments + HTLC preimage auth + block_height timelocks are the v151-native primitives")
+    box(cells, add, 120, 590, 1560, 56, "amber", "GAS & LIMITS \u2014 mainnet (Release153, post-HF3): 10M gas / ~11k evals per call \u00b7 DRAFT \u2014 re-verify against Release153 source", "no group arithmetic \u00b7 hash commitments + HTLC preimage auth + block_height timelocks are the mainnet-native primitives")
     # example
     ex = [
         "Function Initialize() Uint64",

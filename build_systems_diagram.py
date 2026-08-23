@@ -231,7 +231,7 @@ def page4_cells():
         r, c = divmod(i, 2)
         x = 60 + c * 930; yy = y + r * 160
         add(f'<mxCell id="s4-{name.strip("/")}" value="{val(f"<font color=&quot;{color}&quot;><b>{esc(name)}</b></font> &#160;<font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={color};strokeWidth=2;fontSize=12;fontColor={INK};align=left;verticalAlign=middle;spacing=10;fontFamily=Courier New;" vertex="1" parent="1"><mxGeometry x="{x}" y="{yy}" width="890" height="130" as="geometry"/></mxCell>')
-    add(f'<mxCell id="s4-f" value="Active development lives at DEROFDN/derohe (community-dev). deroproject/derohe still hosts the released binaries (Release142). Both build the same consensus-compatible DERO." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12.5;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="860" width="1800" height="60" as="geometry"/></mxCell>')
+    add(f'<mxCell id="s4-f" value="DEROFDN/derohe is now the single home for both development and releases. Current release: Release153 (Hard-Fork 3 follow-up, 21 Aug 2026) \u2014 HF3 activated at block 7,504,640; run Release153+ to stay in sync. deroproject/derohe is the upstream archive." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12.5;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="860" width="1800" height="60" as="geometry"/></mxCell>')
     return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="980" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 # ============================================================ SVG p1 ========
@@ -370,7 +370,7 @@ def svg_p4():
         for ln in wrap(desc, 840, 11.5):
             A(f'<text x="{x+20}" y="{ty}" font-size="11.5" fill="#66727E">{svg_esc(ln)}</text>'); ty += 17
     A(f'<rect x="60" y="860" width="1800" height="60" rx="10" fill="#F4F8FC" stroke="{TITLE_COLOR}" stroke-width="1.5"/>')
-    A(f'<text x="960" y="896" text-anchor="middle" font-size="12.5" fill="{GRAY}">Active development lives at DEROFDN/derohe (community-dev). deroproject/derohe still hosts the released binaries (Release142). Both build the same consensus-compatible DERO.</text>')
+    A(f'<text x="960" y="896" text-anchor="middle" font-size="12.5" fill="{GRAY}">DEROFDN/derohe is now the single home for both development and releases. Current release: Release153 (Hard-Fork 3 follow-up, 21 Aug 2026) \u2014 HF3 activated at block 7,504,640; run Release153+ to stay in sync. deroproject/derohe is the upstream archive.</text>')
     A('</svg>')
     return "\n".join(out)
 

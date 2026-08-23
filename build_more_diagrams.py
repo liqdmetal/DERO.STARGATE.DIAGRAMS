@@ -212,7 +212,7 @@ STACK = [
 
 ECO = [
     ("CORE PROTOCOL & WALLETS", "green", [
-        ("DEROFDN/derohe", "active", "community-maintained node \u2014 where development lives"),
+        ("DEROFDN/derohe", "active", "community-maintained node \u2014 dev home + releases (current: Release153)"),
         ("DHEBP/dhebp", "active", "Layer 1 private decentralized application platform"),
         ("DEROFDN/Engram", "alpha", "smart wallet + TELA browser"),
         ("g45w (g45t345rt)", "active", "universal wallet with mobile UI"),

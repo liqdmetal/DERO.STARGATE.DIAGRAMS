@@ -39,5 +39,5 @@
 <text x="1010" y="982" font-size="14" font-family="Consolas, monospace" font-weight="700" fill="#6E6F72">metrics/ + glue/</text>
 <text x="1010" y="1012" font-size="11.5" fill="#66727E">observability · internal glue (rwc)</text>
 <rect x="60" y="860" width="1800" height="60" rx="10" fill="#F4F8FC" stroke="#4277BB" stroke-width="1.5"/>
-<text x="960" y="896" text-anchor="middle" font-size="12.5" fill="#5A6B7A">Active development lives at DEROFDN/derohe (community-dev). deroproject/derohe still hosts the released binaries (Release142). Both build the same consensus-compatible DERO.</text>
+<text x="960" y="896" text-anchor="middle" font-size="12.5" fill="#5A6B7A">DEROFDN/derohe is now the single home for both development and releases. Current release: Release153 (Hard-Fork 3 follow-up, 21 Aug 2026) — HF3 activated at block 7,504,640; run Release153+ to stay in sync. deroproject/derohe is the upstream archive.</text>
 <rect x="18" y="936" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/><text x="208" y="958" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">⚠️ DRAFT — community draft: not verified, reviewed, or audited</text></svg>
