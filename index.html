@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DERO Diagram Library — Index</title>
+<style>
+  :root{
+    --bg0:#0B1220; --bg1:#101A2E; --panel:#141E36; --panel2:#0F1930;
+    --border:#26334D; --ink:#E8EEF7; --muted:#8FA3BF;
+    --brand:#38BDF8; --amber:#FBBF24; --green:#34D399; --teal:#2DD4BF;
+    --purple:#A78BFA; --orange:#FB923C; --red:#F87171;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--ink);
+       background:linear-gradient(180deg,var(--bg0),var(--bg1));min-height:100vh}
+  .wrap{max-width:1320px;margin:0 auto;padding:36px 28px 80px}
+  header{text-align:center;margin-bottom:14px}
+  h1{font-size:40px;font-weight:800;letter-spacing:1px;margin:0 0 8px;
+     background:linear-gradient(90deg,var(--brand),var(--purple),var(--green));
+     -webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 6px}
+  .legend{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:14px 0 8px;font-size:12px;color:var(--muted)}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+  .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.4px}
+  .badge.draft{background:rgba(248,113,113,.12);color:var(--red);border:1px solid var(--red);margin-bottom:16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:22px;margin-top:18px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+        display:flex;flex-direction:column;transition:transform .15s ease,border-color .15s ease}
+  .card:hover{transform:translateY(-3px);border-color:var(--brand)}
+  .thumb{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--bg1);border-bottom:1px solid var(--border)}
+  .card-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+  .card-title{font-size:17px;font-weight:700;margin:0 0 4px}
+  .card-files{color:var(--muted);font-size:12px;margin-bottom:8px;font-family:Consolas,monospace}
+  .card-desc{color:var(--muted);font-size:12.5px;line-height:1.5;margin:0 0 12px;flex:1}
+  .pages{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .page{font-size:11px;color:var(--ink);background:var(--panel2);border:1px solid var(--border);
+        padding:3px 9px;border-radius:999px}
+  .links{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:12.5px;font-weight:600;
+       padding:8px 14px;border-radius:9px;transition:opacity .15s}
+  .btn:hover{opacity:.85}
+  .btn.primary{background:var(--brand);color:#04121f}
+  .btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--border)}
+  .btn.pink{background:var(--purple);color:#120a1e}
+  footer{text-align:center;margin-top:40px;color:var(--muted);font-size:12px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>THE DERO DIAGRAM LIBRARY</h1>
+    <p class="sub">Plain-language, editable draw.io diagrams of how DERO (DHEBP / Stargate) works — and what can be built on it.</p>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--green)"></span>Live now</span>
+      <span><span class="dot" style="background:var(--orange)"></span>Hypothetical</span>
+      <span><span class="dot" style="background:var(--purple)"></span>Speculation</span>
+      <span><span class="dot" style="background:var(--red)"></span>DRAFT — not verified/audited</span>
+    </div>
+    <span class="badge draft">⚠ Every diagram is a community draft — not verified, reviewed, or audited</span>
+  </header>
+
+  <div class="grid">
+
+    <!-- Where Do I Begin -->
+    <div class="card">
+      <img class="thumb" src="DERO.GUIDES.1.Where.png" alt="Where do I begin">
+      <div class="card-body">
+        <h3 class="card-title">🧭 Where Do I Begin?</h3>
+        <div class="card-files">DERO.GUIDES.drawio · page 1</div>
+        <p class="card-desc">One entry point → branch to the right diagram. The map for the whole library.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.GUIDES.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.GUIDES.1.Where.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.GUIDES.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Journey -->
+    <div class="card">
+      <img class="thumb" src="DERO.PROCESS.COMPLETE.png" alt="Journey of one transaction">
+      <div class="card-body">
+        <h3 class="card-title">📜 The Journey of One Transaction</h3>
+        <div class="card-files">DERO.PROCESS.COMPLETE.drawio · 2 pages</div>
+        <p class="card-desc">User → wallet → node → network → miners → encrypted ledger → confirmation back to you. The normie classic, numbered 1–14.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.PROCESS.COMPLETE.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.PROCESS.COMPLETE.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.PROCESS.COMPLETE.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- World -->
+    <div class="card">
+      <img class="thumb" src="DERO.WORLD.png" alt="DERO's place in the modern world">
+      <div class="card-body">
+        <h3 class="card-title">🌍 DERO's Place in the Modern World</h3>
+        <div class="card-files">DERO.WORLD.drawio · 2 pages</div>
+        <p class="card-desc">Same everyday needs — paying, deals, data, apps, identity — old world vs DERO world, plus the Swap Table.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.WORLD.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.WORLD.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.WORLD.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mining -->
+    <div class="card">
+      <img class="thumb" src="DERO.MINING.png" alt="Mining">
+      <div class="card-body">
+        <h3 class="card-title">⛏️ Mining: the Σ-block loop</h3>
+        <div class="card-files">DERO.MINING.drawio · 2 pages</div>
+        <p class="card-desc">The network IS the pool: ~2s mini-blocks, 18s blocks, 9+1, reward split, CPU-only AstroBWTv3 + mining FAQ.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.MINING.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.MINING.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.MINING.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TELA / dApps -->
+    <div class="card">
+      <img class="thumb" src="DERO.TELA.png" alt="TELA / dApps">
+      <div class="card-body">
+        <h3 class="card-title">🛠️ From Idea to On-Chain App</h3>
+        <div class="card-files">DERO.TELA.drawio · 3 pages</div>
+        <p class="card-desc">DVM-BASIC → install_sc → XSWD → TELA. The dApp stack + the full community ecosystem index (40+ repos).</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.TELA.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.TELA.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.TELA.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Universe -->
+    <div class="card">
+      <img class="thumb" src="DERO.MASTER.DARK.png" alt="The DERO Universe">
+      <div class="card-body">
+        <h3 class="card-title">🗺️ The DERO Universe</h3>
+        <div class="card-files">DERO.MASTER.drawio · 1 page (dark/light)</div>
+        <p class="card-desc">The big map: engine → repos → live use cases → what can be born → speculation. Glanceable titles, deep dives elsewhere.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.MASTER.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.MASTER.DARK.png" target="_blank">Dark PNG</a>
+          <a class="btn ghost" href="DERO.MASTER.LIGHT.png" target="_blank">Light PNG</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experiments -->
+    <div class="card">
+      <img class="thumb" src="DERO.EXPERIMENTS.png" alt="Experimental field guide">
+      <div class="card-body">
+        <h3 class="card-title">🧪 Real-World Use Cases</h3>
+        <div class="card-files">DERO.EXPERIMENTS.drawio · 3 pages</div>
+        <p class="card-desc">12 use cases with problem → DERO fit → status → FILLED BY. Plus the 5-step ramp and deep dives (M2M payments, parametric insurance).</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.EXPERIMENTS.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.EXPERIMENTS.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.EXPERIMENTS.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Systems -->
+    <div class="card">
+      <img class="thumb" src="DERO.SYSTEMS.NODE.png" alt="Systems reference">
+      <div class="card-body">
+        <h3 class="card-title">⚙️ Systems Reference</h3>
+        <div class="card-files">DERO.SYSTEMS.drawio · 4 pages</div>
+        <p class="card-desc">Full-node architecture, network topology &amp; ports, the protocol stack, and the derohe source-tree map.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.SYSTEMS.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.SYSTEMS.NODE.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.SYSTEMS.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy -->
+    <div class="card">
+      <img class="thumb" src="DERO.PRIVACY.1.Private.png" alt="What private actually means">
+      <div class="card-body">
+        <h3 class="card-title">🛡️ Honest Privacy &amp; Economics</h3>
+        <div class="card-files">DERO.PRIVACY.drawio · 3 pages</div>
+        <p class="card-desc">What "private" actually means (hidden vs visible, honest limits) · Privacy Scorecard (DERO vs BTC vs XMR vs ETH) · DERO Economics.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.PRIVACY.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.PRIVACY.1.Private.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.PRIVACY.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DevOps -->
+    <div class="card">
+      <img class="thumb" src="DERO.DEVOPS.1.Runbook.png" alt="Operator & builder reference">
+      <div class="card-body">
+        <h3 class="card-title">🖥️ Operator &amp; Builder Reference</h3>
+        <div class="card-files">DERO.DEVOPS.drawio · 4 pages</div>
+        <p class="card-desc">Node Operator Runbook · XSWD Permission Model · DVM-BASIC Cheat-Sheet (gas re-grounded in Release153) · Bridges &amp; Interop.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.DEVOPS.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.DEVOPS.1.Runbook.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.DEVOPS.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security / Wallet -->
+    <div class="card">
+      <img class="thumb" src="DERO.GUIDES.3.Security.png" alt="Self-custody security">
+      <div class="card-body">
+        <h3 class="card-title">🔐 Wallet &amp; Security</h3>
+        <div class="card-files">DERO.GUIDES.drawio · pages 2–3</div>
+        <p class="card-desc">Choose Your Wallet (decision tree) + the Self-Custody Security poster. DERO has no recovery — protect the seed.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.GUIDES.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.GUIDES.3.Security.png" target="_blank">PNG</a>
+          <a class="btn ghost" href="https://raw.githubusercontent.com/liqdmetal/DERO.STARGATE.DIAGRAMS/main/DERO.GUIDES.drawio" target="_blank">drawio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Style / Template -->
+    <div class="card">
+      <img class="thumb" src="DERO.STYLE.DARK.png" alt="Template system">
+      <div class="card-body">
+        <h3 class="card-title">🎨 The Template System</h3>
+        <div class="card-files">DERO.STYLE.drawio · 2 pages</div>
+        <p class="card-desc">The shared design language: DHEBP Night (dark) + DHEBP Paper (light). Every component — zones, chips, badges, pills, arrows.</p>
+        <div class="links">
+          <a class="btn primary" href="https://viewer.diagrams.net/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fliqdmetal%2FDERO.STARGATE.DIAGRAMS%2Fmain%2FDERO.STYLE.drawio" target="_blank">Open in drawio</a>
+          <a class="btn ghost" href="DERO.STYLE.DARK.png" target="_blank">Dark PNG</a>
+          <a class="btn ghost" href="DERO.STYLE.LIGHT.png" target="_blank">Light PNG</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    Repo: <a href="https://github.com/liqdmetal/DERO.STARGATE.DIAGRAMS" style="color:var(--brand)">github.com/liqdmetal/DERO.STARGATE.DIAGRAMS</a> ·
+    Regenerate with <code style="color:var(--muted)">python build_*.py light|dark</code> ·
+    Every diagram is a <span style="color:var(--red)">DRAFT</span> — not verified or audited.
+  </footer>
+</div>
+</body>
+</html>

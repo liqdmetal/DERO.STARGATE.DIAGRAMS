@@ -9,17 +9,23 @@ Page 4: derohe source-tree reference (repo layout mapped to roles)
 Sources: derod.org corpus (daemon, ports, mining), deroproject/derohe repo layout.
 """
 import xml.sax.saxutils as sax
+import sys
+import dero_style as S
+S.set_theme(sys.argv[1] if len(sys.argv) > 1 else "light")
+PANEL = S.TH["panel"]; PANEL2 = S.TH["panel2"]; BORDER = S.TH["border"]
+BG0 = S.TH["bg0"]; MUTED = S.TH["muted"]
 import datetime, html, re
+import sys
 
-TITLE_COLOR = "#4277BB"
-INK, GRAY = "#22303C", "#5A6B7A"
+TITLE_COLOR = S.TH["brand"]
+INK, GRAY = S.TH["ink"], S.TH["muted"]
 BLUE, BLUE_T = "#1E88E5", "#E3F2FD"
 TEAL, TEAL_T = "#00838F", "#E0F7FA"
 GREEN, GREEN_T = "#2E7D32", "#E8F5E9"
 PURPLE, PURPLE_T = "#8E24AA", "#F3E5F5"
 ORANGE, ORANGE_T = "#FB8C00", "#FFF3E0"
 RED, RED_T = "#C62828", "#FDECEA"
-GRAY_C = "#6E6F72"
+GRAY_C = S.accent("gray")[0]
 W, H = 1920, 1420
 
 def esc(s):
@@ -44,21 +50,8 @@ def wrap(text, width_px, font_px, factor=0.55):
         lines.append(cur)
     return lines
 
-def _draft_cell(h):
-    return ('<mxCell id="draft" value="&#9888;&#65039; DRAFT &#8212; community draft \u2014 not verified, reviewed, or audited" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=2;fontSize=11;fontStyle=1;fontColor=#C62828;align=center;verticalAlign=middle;" vertex="1" parent="1">'
-            f'<mxGeometry x="18" y="{h-44}" width="380" height="34" as="geometry"/></mxCell>')
-
-def inject_draft(model):
-    m = re.search(r'pageHeight="(\d+)"', model)
-    h = int(m.group(1)) if m else 1400
-    return model.replace('<mxCell id="1" parent="0"/>', '<mxCell id="1" parent="0"/>' + _draft_cell(h), 1)
-
-def inject_draft_svg(svg):
-    m = re.search(r'height="(\d+)"', svg)
-    h = int(m.group(1)) if m else 1400
-    chip = (f'<rect x="18" y="{h-44}" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/>'
-            f'<text x="208" y="{h-22}" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">\u26A0\uFE0F DRAFT \u2014 community draft: not verified, reviewed, or audited</text>')
-    return svg.replace('</svg>', chip + '</svg>')
+inject_draft = S.inject_draft
+inject_draft_svg = lambda s: s
 
 # ============================================================ PAGE 1 ========
 NODE_INTERNALS = [
@@ -94,26 +87,26 @@ def page1_cells():
     add(f'<mxCell id="s1-m1" value="{esc(ATTACHED[2][0])}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={ORANGE_T};strokeColor={ORANGE};strokeWidth=2;fontSize=12;fontStyle=1;fontColor={ORANGE};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="1520" y="130" width="360" height="60" as="geometry"/></mxCell>')
     add(f'<mxCell id="s1-m1d" value="{esc(ATTACHED[2][1])}" style="text;html=1;align=center;fontSize=10.5;fontColor={GRAY};whiteSpace=wrap;" vertex="1" parent="1"><mxGeometry x="1520" y="192" width="360" height="34" as="geometry"/></mxCell>')
     # daemon box
-    add(f'<mxCell id="s1-d" value="DEROD \u2014 THE NODE" style="swimlane;fontStyle=1;horizontal=1;collapsible=0;startSize=30;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=2.5;fontColor={TITLE_COLOR};fontSize=15;verticalAlign=top;align=center;" vertex="1" parent="1"><mxGeometry x="440" y="120" width="1040" height="760" as="geometry"/></mxCell>')
+    add(f'<mxCell id="s1-d" value="DEROD \u2014 THE NODE" style="swimlane;fontStyle=1;horizontal=1;collapsible=0;startSize=30;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=2.5;fontColor={TITLE_COLOR};fontSize=15;verticalAlign=top;align=center;" vertex="1" parent="1"><mxGeometry x="440" y="120" width="1040" height="760" as="geometry"/></mxCell>')
     # internals as a 2-col grid inside
     ix = 460; iy = 165; iw = 490; ih = 120
     for i, (name, desc, color) in enumerate(NODE_INTERNALS):
         r, c = divmod(i, 2)
         x = ix + c * (iw + 20); y = iy + r * (ih + 16)
-        add(f'<mxCell id="s1-n{i}" value="{val(f"<font color=&quot;{color}&quot;><b>{esc(name)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={color};strokeWidth=1.8;fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{iw}" height="{ih}" as="geometry"/></mxCell>')
+        add(f'<mxCell id="s1-n{i}" value="{val(f"<font color=&quot;{color}&quot;><b>{esc(name)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={color};strokeWidth=1.8;fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{iw}" height="{ih}" as="geometry"/></mxCell>')
     # services bottom row
     sy = 920
     add(f'<mxCell id="s1-sh" value="ATTACHED SERVICES \u2014 what the ecosystem runs against the node" style="text;html=1;align=left;fontSize=14;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="40" y="{sy}" width="700" height="22" as="geometry"/></mxCell>')
     sx = 40; sw = 290; shh = 120
     for i, (name, desc, color) in enumerate(ATTACHED[3:]):
         x = sx + i * (sw + 12)
-        add(f'<mxCell id="s1-a{i}" value="{val(f"<font color=&quot;{color}&quot;><b>{esc(name)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={color};strokeWidth=1.8;fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{x}" y="{sy+28}" width="{sw}" height="{shh}" as="geometry"/></mxCell>')
+        add(f'<mxCell id="s1-a{i}" value="{val(f"<font color=&quot;{color}&quot;><b>{esc(name)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={color};strokeWidth=1.8;fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{x}" y="{sy+28}" width="{sw}" height="{shh}" as="geometry"/></mxCell>')
     # connectors (simple orthogonal)
     def line(eid, p1, p2, color="#0076BE", width=2.5, label=None, dashed=False):
         db = "dashed=1;" if dashed else ""
         lbl = ""
         if label:
-            lbl = (f'<mxCell id="{eid}-l" value="{esc(label)}" style="edgeLabel;html=1;align=center;verticalAlign=middle;labelBackgroundColor=#FFFFFF;fontSize=10.5;fontStyle=1;fontColor={color};" vertex="1" connectable="0"><mxGeometry x="0.5" y="0.5" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry></mxCell>')
+            lbl = (f'<mxCell id="{eid}-l" value="{esc(label)}" style="edgeLabel;html=1;align=center;verticalAlign=middle;labelBackgroundColor={PANEL};fontSize=10.5;fontStyle=1;fontColor={color};" vertex="1" connectable="0"><mxGeometry x="0.5" y="0.5" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry></mxCell>')
         add(f'<mxCell id="{eid}" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={color};strokeWidth={width};{db}fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{p1[0]}" y="{p1[1]}" as="sourcePoint"/><mxPoint x="{p2[0]}" y="{p2[1]}" as="targetPoint"/></mxGeometry>{lbl}</mxCell>')
     line("s1-l1", (400, 230), (440, 230), GREEN, 2.5, "local RPC 10102 / 10103")
     line("s1-l2", (400, 300), (440, 300), GREEN, 2.5)
@@ -123,7 +116,7 @@ def page1_cells():
     line("s1-l6", (185, 640), (440, 640), TEAL, 2.5, "via XSWD \u2194 wallet")
     # node-to-node
     line("s1-l7", (1480, 700), (1520, 700), BLUE, 3, "TLS P2P \u2192 other nodes (10101)")
-    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="1140" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="1140" background="{BG0}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 # ============================================================ PAGE 2 ========
 PORT_TABLE = [
@@ -156,10 +149,10 @@ def page2_cells():
         ("s2-p5", TOPO[4], 120, 720), ("s2-p6", TOPO[5], 1380, 720),
     ]
     for cid, (name, desc, color), x, y in pos:
-        add(f'<mxCell id="{cid}" value="{val(f"<font color=&quot;{color}&quot;><b>{esc(name)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={color};strokeWidth=2;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="360" height="130" as="geometry"/></mxCell>')
+        add(f'<mxCell id="{cid}" value="{val(f"<font color=&quot;{color}&quot;><b>{esc(name)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={color};strokeWidth=2;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="360" height="130" as="geometry"/></mxCell>')
     def line(eid, p1, p2, color, label, dashed=False):
         db = "dashed=1;" if dashed else ""
-        lbl = f'<mxCell id="{eid}-l" value="{esc(label)}" style="edgeLabel;html=1;align=center;verticalAlign=middle;labelBackgroundColor=#FFFFFF;fontSize=10.5;fontStyle=1;fontColor={color};" vertex="1" connectable="0"><mxGeometry x="0.5" y="0.5" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry></mxCell>'
+        lbl = f'<mxCell id="{eid}-l" value="{esc(label)}" style="edgeLabel;html=1;align=center;verticalAlign=middle;labelBackgroundColor={PANEL};fontSize=10.5;fontStyle=1;fontColor={color};" vertex="1" connectable="0"><mxGeometry x="0.5" y="0.5" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry></mxCell>'
         add(f'<mxCell id="{eid}" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={color};strokeWidth=2.5;{db}fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{p1[0]}" y="{p1[1]}" as="sourcePoint"/><mxPoint x="{p2[0]}" y="{p2[1]}" as="targetPoint"/></mxGeometry>{lbl}</mxCell>')
     line("s2-l1", (480, 185), (760, 340), BLUE, "TLS P2P \u00b7 10101")
     line("s2-l2", (1380, 340), (1740, 185), BLUE, "TLS P2P \u00b7 10101")
@@ -175,9 +168,9 @@ def page2_cells():
     py = 930
     for name, port, purpose, note in PORT_TABLE:
         port_html = f"<font color=&quot;{TITLE_COLOR}&quot;><b>{esc(name)}</b></font> <font color=&quot;{GRAY}&quot;>{esc(port)}</font> \u2014 <font color=&quot;#66727E&quot;>{esc(purpose)}</font><br><font color=&quot;#8A97A3&quot;><i>{esc(note)}</i></font>"
-        add(f'<mxCell id="s2-pt-{name}" value="{val(port_html)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C9D6E3;strokeWidth=1.5;fontSize=11;fontColor={INK};align=left;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="1000" y="{py}" width="880" height="56" as="geometry"/></mxCell>')
+        add(f'<mxCell id="s2-pt-{name}" value="{val(port_html)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={BORDER};strokeWidth=1.5;fontSize=11;fontColor={INK};align=left;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="1000" y="{py}" width="880" height="56" as="geometry"/></mxCell>')
         py += 64
-    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="1250" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="1250" background="{BG0}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 # ============================================================ PAGE 3 ========
 STACK = [
@@ -199,11 +192,11 @@ def page3_cells():
         safe = re.sub(r"[^A-Za-z0-9_]", "", name)
         add(f'<mxCell id="s3-{safe}" value="{esc(name)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={color};strokeColor=none;fontSize=15;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="300" height="150" as="geometry"/></mxCell>')
         items_html = val("<br>".join(esc(x) for x in items))
-        add(f'<mxCell id="s3-{safe}-b" value="{items_html}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={color};strokeWidth=2;fontSize=11;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="380" y="{y}" width="1480" height="150" as="geometry"/></mxCell>')
+        add(f'<mxCell id="s3-{safe}-b" value="{items_html}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={color};strokeWidth=2;fontSize=11;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="380" y="{y}" width="1480" height="150" as="geometry"/></mxCell>')
         add(f'<mxCell id="s3-{safe}-a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={TITLE_COLOR};strokeWidth=3;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{360}" y="{y+75}" as="sourcePoint"/><mxPoint x="380" y="{y+75}" as="targetPoint"/></mxGeometry></mxCell>')
         y += 166
-    add(f'<mxCell id="s3-f" value="Reading it bottom-up: the math (crypto) makes consensus honest \u2192 consensus writes a private ledger \u2192 the VM runs programs on it \u2192 interfaces expose it \u2192 applications use it." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12.5;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="{y+16}" width="1800" height="60" as="geometry"/></mxCell>')
-    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="{y + 110}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+    add(f'<mxCell id="s3-f" value="Reading it bottom-up: the math (crypto) makes consensus honest \u2192 consensus writes a private ledger \u2192 the VM runs programs on it \u2192 interfaces expose it \u2192 applications use it." style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12.5;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="{y+16}" width="1800" height="60" as="geometry"/></mxCell>')
+    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="{y + 110}" background="{BG0}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 # ============================================================ PAGE 4 ========
 SRC_TREE = [
@@ -230,9 +223,9 @@ def page4_cells():
     for i, (name, desc, color) in enumerate(SRC_TREE):
         r, c = divmod(i, 2)
         x = 60 + c * 930; yy = y + r * 160
-        add(f'<mxCell id="s4-{name.strip("/")}" value="{val(f"<font color=&quot;{color}&quot;><b>{esc(name)}</b></font> &#160;<font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={color};strokeWidth=2;fontSize=12;fontColor={INK};align=left;verticalAlign=middle;spacing=10;fontFamily=Courier New;" vertex="1" parent="1"><mxGeometry x="{x}" y="{yy}" width="890" height="130" as="geometry"/></mxCell>')
-    add(f'<mxCell id="s4-f" value="DEROFDN/derohe is now the single home for both development and releases. Current release: Release153 (Hard-Fork 3 follow-up, 21 Aug 2026) \u2014 HF3 activated at block 7,504,640; run Release153+ to stay in sync. deroproject/derohe is the upstream archive." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12.5;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="860" width="1800" height="60" as="geometry"/></mxCell>')
-    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="980" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+        add(f'<mxCell id="s4-{name.strip("/")}" value="{val(f"<font color=&quot;{color}&quot;><b>{esc(name)}</b></font> &#160;<font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={color};strokeWidth=2;fontSize=12;fontColor={INK};align=left;verticalAlign=middle;spacing=10;fontFamily=Courier New;" vertex="1" parent="1"><mxGeometry x="{x}" y="{yy}" width="890" height="130" as="geometry"/></mxCell>')
+    add(f'<mxCell id="s4-f" value="DEROFDN/derohe is now the single home for both development and releases. Current release: Release153 (Hard-Fork 3 follow-up, 21 Aug 2026) \u2014 HF3 activated at block 7,504,640; run Release153+ to stay in sync. deroproject/derohe is the upstream archive." style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12.5;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="860" width="1800" height="60" as="geometry"/></mxCell>')
+    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="980" background="{BG0}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 # ============================================================ SVG p1 ========
 def svg_p1():
@@ -377,10 +370,11 @@ def svg_p4():
 # ============================================================ main ==========
 if __name__ == "__main__":
     import os
+    theme = sys.argv[1] if len(sys.argv) > 1 else "light"
     d = os.path.dirname(os.path.abspath(__file__))
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-           f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device">\n'
+           f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device" background="{BG0}">\n'
            f'  <diagram id="node-arch" name="Full-Node Architecture">\n{inject_draft(page1_cells())}\n  </diagram>\n'
            f'  <diagram id="topology" name="Network Topology and Ports">\n{inject_draft(page2_cells())}\n  </diagram>\n'
            f'  <diagram id="stack" name="Protocol Stack">\n{inject_draft(page3_cells())}\n  </diagram>\n'
@@ -388,13 +382,4 @@ if __name__ == "__main__":
            '</mxfile>\n')
     with open(os.path.join(d, "DERO.SYSTEMS.drawio"), "w", encoding="utf-8") as f:
         f.write(xml)
-    svgs = [("preview_systems1.svg", inject_draft_svg(svg_p1())),
-            ("preview_systems2.svg", inject_draft_svg(svg_p2())),
-            ("preview_systems3.svg", inject_draft_svg(svg_p3())),
-            ("preview_systems4.svg", inject_draft_svg(svg_p4()))]
-    for name, svg in svgs:
-        with open(os.path.join(d, name), "w", encoding="utf-8") as f:
-            f.write(svg)
-        with open(os.path.join(d, name.replace(".svg", ".html")), "w", encoding="utf-8") as f:
-            f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{svg}</body></html>')
-    print("written OK")
+    print(f"written OK (theme={theme})")

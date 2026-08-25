@@ -8,16 +8,22 @@ Zones: 1 Engine (live) -> 2 Repos today -> 3 Live use cases
 Solid = live today. Dashed = hypothetical / speculation.
 """
 import xml.sax.saxutils as sax
+import sys
+import dero_style as S
+S.set_theme(sys.argv[1] if len(sys.argv) > 1 else "light")
+PANEL = S.TH["panel"]; PANEL2 = S.TH["panel2"]; BORDER = S.TH["border"]
+BG0 = S.TH["bg0"]; MUTED = S.TH["muted"]
 import datetime, html, re
+import sys
 
-TITLE_COLOR = "#4277BB"
-INK, GRAY = "#22303C", "#5A6B7A"
+TITLE_COLOR = S.TH["brand"]
+INK, GRAY = S.TH["ink"], S.TH["muted"]
 ZONE_COLORS = {
-    "engine":   ("#1E88E5", "#E3F2FD", "THE ENGINE \u2014 DHEBP LAYER 1 (LIVE)"),
-    "repos":    ("#00838F", "#E0F7FA", "THE REPOS TODAY \u2014 CURATED, FULL INDEX \u2192 DERO.TELA p3"),
-    "usecases": ("#2E7D32", "#E8F5E9", "LIVE USE CASES \u2014 WHAT YOU CAN DO TODAY"),
-    "born":     ("#F9A825", "#FFF8E1", "WHAT CAN BE BORN \u2014 END-WORLD RESULTS (HYPOTHETICAL)"),
-    "spec":     ("#8E24AA", "#F3E5F5", "SPECULATION \u2014 NEW RAILS (NOT BUILT YET)"),
+    "engine": (S.accent("blue")[0], S.TH["panel"], "THE ENGINE \u2014 DHEBP LAYER 1 (LIVE)"),
+    "repos": (S.accent("teal")[0], S.TH["panel"], "THE REPOS TODAY \u2014 CURATED, FULL INDEX \u2192 DERO.TELA p3"),
+    "usecases": (S.accent("green")[0], S.TH["panel"], "LIVE USE CASES \u2014 WHAT YOU CAN DO TODAY"),
+    "born": (S.accent("amber")[0], S.TH["panel"], "WHAT CAN BE BORN \u2014 END-WORLD RESULTS (HYPOTHETICAL)"),
+    "spec": (S.accent("purple")[0], S.TH["panel"], "SPECULATION \u2014 NEW RAILS (NOT BUILT YET)"),
 }
 W, H = 2600, 1580
 
@@ -119,21 +125,8 @@ def wrap(text, width_px, font_px, factor=0.55):
         lines.append(cur)
     return lines
 
-def _draft_cell(h):
-    return ('<mxCell id="draft" value="&#9888;&#65039; DRAFT &#8212; community draft \u2014 not verified, reviewed, or audited" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=2;fontSize=11;fontStyle=1;fontColor=#C62828;align=center;verticalAlign=middle;" vertex="1" parent="1">'
-            f'<mxGeometry x="18" y="{h-44}" width="380" height="34" as="geometry"/></mxCell>')
-
-def inject_draft(model):
-    m = re.search(r'pageHeight="(\d+)"', model)
-    h = int(m.group(1)) if m else 1400
-    return model.replace('<mxCell id="1" parent="0"/>', '<mxCell id="1" parent="0"/>' + _draft_cell(h), 1)
-
-def inject_draft_svg(svg):
-    m = re.search(r'height="(\d+)"', svg)
-    h = int(m.group(1)) if m else 1400
-    chip = (f'<rect x="18" y="{h-44}" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/>'
-            f'<text x="208" y="{h-22}" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">\u26A0\uFE0F DRAFT \u2014 community draft: not verified, reviewed, or audited</text>')
-    return svg.replace('</svg>', chip + '</svg>')
+inject_draft = S.inject_draft
+inject_draft_svg = lambda s: s
 
 def chip_positions(zx, zy, zw, cols, count):
     inner = zw - 40
@@ -152,7 +145,7 @@ def build_page1():
     cells = []
     add = cells.append
     add(f'<mxCell id="u-t1" value="THE DERO UNIVERSE \u2014 ONE NETWORK, EVERYTHING ON IT" style="text;html=1;align=center;fontSize=34;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="24" width="2560" height="46" as="geometry"/></mxCell>')
-    add(f'<mxCell id="u-read" value="\U0001F5FA\uFE0F HOW TO READ THIS MAP \u2014   \u2460 \u2461 \u2462 = what exists today (solid) \u00b7  \u2463 = what can be born from it \u00b7  \u2464 = rails that don&apos;t exist yet (dashed)   \u2014   deep dives: DERO.PROCESS.COMPLETE (tx) \u00b7 DERO.MINING (\u03a3-blocks) \u00b7 DERO.TELA p3 (full repo index)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=13;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="82" width="2480" height="44" as="geometry"/></mxCell>')
+    add(f'<mxCell id="u-read" value="\U0001F5FA\uFE0F HOW TO READ THIS MAP \u2014   \u2460 \u2461 \u2462 = what exists today (solid) \u00b7  \u2463 = what can be born from it \u00b7  \u2464 = rails that don&apos;t exist yet (dashed)   \u2014   deep dives: DERO.PROCESS.COMPLETE (tx) \u00b7 DERO.MINING (\u03a3-blocks) \u00b7 DERO.TELA p3 (full repo index)" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=13;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="82" width="2480" height="44" as="geometry"/></mxCell>')
 
     for key, zx, zy, zw, zh, cols, content in ZONES:
         acc, tint, label = ZONE_COLORS[key]
@@ -169,20 +162,20 @@ def build_page1():
                 add(f'<mxCell id="u-g-{gi}" value="{esc(gname)}" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor={acc};" vertex="1" parent="1"><mxGeometry x="{gx}" y="{zy+44}" width="{col_w}" height="20" as="geometry"/></mxCell>')
                 for ii, (name, desc) in enumerate(items):
                     cy = zy + 66 + ii * (CHIP_H + 12)
-                    add(f'<mxCell id="u-gc-{gi}-{ii}" value="{chip_value(name, desc, acc)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={acc};strokeWidth=1.8;fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{gx}" y="{cy}" width="{col_w}" height="{CHIP_H}" as="geometry"/></mxCell>')
-            add(f'<mxCell id="u-gmore" value="\U0001F4E6 40+ more projects \u2192 DERO.TELA.drawio \u00b7 page 3 (full index)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={acc};strokeWidth=1.8;dashed=1;fontSize=11;fontStyle=1;fontColor={acc};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="{zx+20}" y="{zy+zh-52}" width="{zw-40}" height="36" as="geometry"/></mxCell>')
+                    add(f'<mxCell id="u-gc-{gi}-{ii}" value="{chip_value(name, desc, acc)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={acc};strokeWidth=1.8;fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{gx}" y="{cy}" width="{col_w}" height="{CHIP_H}" as="geometry"/></mxCell>')
+            add(f'<mxCell id="u-gmore" value="\U0001F4E6 40+ more projects \u2192 DERO.TELA.drawio \u00b7 page 3 (full index)" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={acc};strokeWidth=1.8;dashed=1;fontSize=11;fontStyle=1;fontColor={acc};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="{zx+20}" y="{zy+zh-52}" width="{zw-40}" height="36" as="geometry"/></mxCell>')
         elif key == "born":
-            add(f'<mxCell id="u-bornmore" value="\U0001F9EA 12 experimental use cases + how to build them \u2192 DERO.EXPERIMENTS.drawio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={acc};strokeWidth=1.8;dashed=1;fontSize=11;fontStyle=1;fontColor={acc};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="{zx+20}" y="{zy+zh-52}" width="{zw-40}" height="36" as="geometry"/></mxCell>')
+            add(f'<mxCell id="u-bornmore" value="\U0001F9EA 12 experimental use cases + how to build them \u2192 DERO.EXPERIMENTS.drawio" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={acc};strokeWidth=1.8;dashed=1;fontSize=11;fontStyle=1;fontColor={acc};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="{zx+20}" y="{zy+zh-52}" width="{zw-40}" height="36" as="geometry"/></mxCell>')
         else:
             for i, (name, desc) in enumerate(content):
                 cx, cy = chip_positions(zx, zy, zw, cols, len(content))[i]
                 db = "dashed=1;" if key in ("born", "spec") else ""
-                add(f'<mxCell id="u-c-{key}-{i}" value="{chip_value(name, desc, acc)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={acc};strokeWidth=1.8;{db}fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{cx}" y="{cy}" width="{CHIP_W}" height="{CHIP_H}" as="geometry"/></mxCell>')
+                add(f'<mxCell id="u-c-{key}-{i}" value="{chip_value(name, desc, acc)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={acc};strokeWidth=1.8;{db}fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{cx}" y="{cy}" width="{CHIP_W}" height="{CHIP_H}" as="geometry"/></mxCell>')
 
     # arrows
     def arrow(eid, p1, p2, label, dashed=False):
         db = "dashed=1;" if dashed else ""
-        add(f'<mxCell id="{eid}" value="{esc(label)}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={TITLE_COLOR};strokeWidth=3;{db}fontSize=12;fontStyle=1;fontColor={TITLE_COLOR};labelBackgroundColor=#FFFFFF;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{p1[0]}" y="{p1[1]}" as="sourcePoint"/><mxPoint x="{p2[0]}" y="{p2[1]}" as="targetPoint"/></mxGeometry></mxCell>')
+        add(f'<mxCell id="{eid}" value="{esc(label)}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={TITLE_COLOR};strokeWidth=3;{db}fontSize=12;fontStyle=1;fontColor={TITLE_COLOR};labelBackgroundColor={PANEL};" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{p1[0]}" y="{p1[1]}" as="sourcePoint"/><mxPoint x="{p2[0]}" y="{p2[1]}" as="targetPoint"/></mxGeometry></mxCell>')
     arrow("u-a1", (700, 580), (1160, 580), "built by the community")
     arrow("u-a2", (2000, 580), (2000, 650), "enable")
     arrow("u-a3", (700, 950), (700, 1010), "grow into")
@@ -190,9 +183,9 @@ def build_page1():
 
     # TL;DR
     add(f'<mxCell id="u-tldr" value="THE 30-SECOND VERSION" style="text;html=1;align=left;fontSize=15;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="60" y="1485" width="300" height="22" as="geometry"/></mxCell>')
-    add(f'<mxCell id="u-tldr2" value="One encrypted ledger runs money, contracts and apps. The network mines itself (\u03a3-blocks, CPU-only). Apps live on-chain (TELA) and wallets approve every interaction (XSWD). EPOCH turns app usage into funding. Everything private \u2014 nothing to take down." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=14;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="1512" width="2480" height="52" as="geometry"/></mxCell>')
+    add(f'<mxCell id="u-tldr2" value="One encrypted ledger runs money, contracts and apps. The network mines itself (\u03a3-blocks, CPU-only). Apps live on-chain (TELA) and wallets approve every interaction (XSWD). EPOCH turns app usage into funding. Everything private \u2014 nothing to take down." style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=14;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="60" y="1512" width="2480" height="52" as="geometry"/></mxCell>')
 
-    return f'<mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="{H}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+    return f'<mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="{H}" background="{BG0}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 def build_svg():
     out = []
@@ -249,17 +242,13 @@ def build_svg():
 
 if __name__ == "__main__":
     import os
+    theme = sys.argv[1] if len(sys.argv) > 1 else "light"
     d = os.path.dirname(os.path.abspath(__file__))
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-           f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device">\n'
+           f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device" background="{BG0}">\n'
            f'  <diagram id="universe" name="The DERO Universe">\n{inject_draft(build_page1())}\n  </diagram>\n'
            '</mxfile>\n')
     with open(os.path.join(d, "DERO.UNIVERSE.drawio"), "w", encoding="utf-8") as f:
         f.write(xml)
-    svg = inject_draft_svg(build_svg())
-    with open(os.path.join(d, "preview_universe.svg"), "w", encoding="utf-8") as f:
-        f.write(svg)
-    with open(os.path.join(d, "preview_universe.html"), "w", encoding="utf-8") as f:
-        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{svg}</body></html>')
-    print("written OK")
+    print(f"written OK (theme={theme})")

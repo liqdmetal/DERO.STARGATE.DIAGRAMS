@@ -8,16 +8,19 @@ Emits draw.io XML + SVG previews from one data model.
 Sources: derod.org corpus, derofoundation.org, DEROFDN/derohe + community repos.
 """
 import xml.sax.saxutils as sax
+import sys
+import dero_style as S
+S.set_theme(sys.argv[1] if len(sys.argv) > 1 else "light")
+PANEL = S.TH["panel"]; PANEL2 = S.TH["panel2"]; BORDER = S.TH["border"]
+BG0 = S.TH["bg0"]; MUTED = S.TH["muted"]
 import datetime, html
 
-TITLE_COLOR = "#4277BB"
-INK, GRAY = "#22303C", "#5A6B7A"
-ACCENTS = {"user": "#F9A825", "green": "#2E7D32", "blue": "#1E88E5",
-           "purple": "#8E24AA", "orange": "#FB8C00", "teal": "#00838F",
-           "red": "#C62828", "gray": "#6E6F72"}
-TINTS = {"user": "#FFF8E1", "green": "#E8F5E9", "blue": "#E3F2FD",
-         "purple": "#F3E5F5", "orange": "#FFF3E0", "teal": "#E0F7FA",
-         "red": "#FDECEA", "gray": "#F0F2F5"}
+TITLE_COLOR = S.TH["brand"]
+INK, GRAY = S.TH["ink"], S.TH["muted"]
+ACCENTS = {"user": S.accent("amber")[0], "green": S.accent("green")[0], "blue": S.accent("blue")[0],
+           "purple": S.accent("purple")[0], "orange": S.accent("orange")[0], "teal": S.accent("teal")[0],
+           "red": S.accent("red")[0], "gray": S.accent("gray")[0]}
+TINTS = {k: S.TH["panel2"] for k in ["user","green","blue","purple","orange","teal","red","gray"]}
 STATUS_COLORS = {"active": "#2E7D32", "developing": "#F9A825", "alpha": "#8E24AA",
                  "stale": "#6E6F72", "paused": "#C62828", "beta": "#1E88E5"}
 W, H = 1920, 1400
@@ -29,21 +32,9 @@ def val(s):
     return s.replace("<", "&lt;").replace(">", "&gt;")
 
 import re
-def _draft_cell(h):
-    return ('<mxCell id="draft" value="&#9888;&#65039; DRAFT &#8212; community draft \u2014 not verified, reviewed, or audited" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=2;fontSize=11;fontStyle=1;fontColor=#C62828;align=center;verticalAlign=middle;" vertex="1" parent="1">'
-            f'<mxGeometry x="18" y="{h-44}" width="380" height="34" as="geometry"/></mxCell>')
-
-def inject_draft(model):
-    m = re.search(r'pageHeight="(\d+)"', model)
-    h = int(m.group(1)) if m else 1400
-    return model.replace('<mxCell id="1" parent="0"/>', '<mxCell id="1" parent="0"/>' + _draft_cell(h), 1)
-
-def inject_draft_svg(svg):
-    m = re.search(r'height="(\d+)"', svg)
-    h = int(m.group(1)) if m else 1400
-    chip = (f'<rect x="18" y="{h-44}" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/>'
-            f'<text x="208" y="{h-22}" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">\u26A0\uFE0F DRAFT \u2014 community draft: not verified, reviewed, or audited</text>')
-    return svg.replace('</svg>', chip + '</svg>')
+import sys
+inject_draft = S.inject_draft
+inject_draft_svg = lambda s: s
 
 def svg_esc(s):
     return html.escape(s)
@@ -128,11 +119,11 @@ def mining_p1_cells():
         b = wrap(" ".join(s["body"]), ws - 24, 11.0)
         p = wrap(s["plain"], ws - 24, 10.5)
         step_title = f"{s['n']} \u00b7 {s['title']}"
-        add(f'<mxCell id="m-s{i}" value="{html_cell(step_title, ACCENTS[s["acc"]], b, p)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={ACCENTS[s["acc"]]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=18;fontSize=11;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{ws}" height="{hs}" as="geometry"/></mxCell>')
+        add(f'<mxCell id="m-s{i}" value="{html_cell(step_title, ACCENTS[s["acc"]], b, p)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={ACCENTS[s["acc"]]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=18;fontSize=11;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{ws}" height="{hs}" as="geometry"/></mxCell>')
         add(f'<mxCell id="m-bd{i}" value="{s["n"]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor={ACCENTS[s["acc"]]};strokeColor=#FFFFFF;strokeWidth=2;fontColor=#FFFFFF;fontSize=15;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="{x-17}" y="{y-17}" width="34" height="34" as="geometry"/></mxCell>')
     # arrows
     def arrow(eid, p1, p2, label=None):
-        add(f'<mxCell id="{eid}" value="{esc(label) if label else ""}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={EDGE_BLUE};strokeWidth=2.5;fontSize=10.5;fontStyle=1;fontColor={EDGE_BLUE};labelBackgroundColor=#FFFFFF;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{p1[0]}" y="{p1[1]}" as="sourcePoint"/><mxPoint x="{p2[0]}" y="{p2[1]}" as="targetPoint"/></mxGeometry></mxCell>')
+        add(f'<mxCell id="{eid}" value="{esc(label) if label else ""}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={EDGE_BLUE};strokeWidth=2.5;fontSize=10.5;fontStyle=1;fontColor={EDGE_BLUE};labelBackgroundColor={PANEL};" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{p1[0]}" y="{p1[1]}" as="sourcePoint"/><mxPoint x="{p2[0]}" y="{p2[1]}" as="targetPoint"/></mxGeometry></mxCell>')
     arrow("m-a1", (460, 315), (520, 315))                     # 1->2
     arrow("m-a2", (920, 315), (980, 315))                     # 2->3
     arrow("m-a3", (1380, 340), (1380, 600), "the block settles")  # 3 down
@@ -144,11 +135,11 @@ def mining_p1_cells():
     add(f'<mxCell id="m-num" value="THE MATH OF \u03a3-BLOCKS" style="text;html=1;align=left;fontSize=14;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="1440" y="150" width="300" height="22" as="geometry"/></mxCell>')
     ny = 180
     for num, desc in MINE_NUMBERS:
-        add(f'<mxCell id="m-n-{num[:6]}" value="{val(f"<font color=&quot;{TITLE_COLOR}&quot;><b>{esc(num)}</b></font>  <font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=11.5;fontColor={INK};align=left;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="1440" y="{ny}" width="430" height="56" as="geometry"/></mxCell>')
+        add(f'<mxCell id="m-n-{num[:6]}" value="{val(f"<font color=&quot;{TITLE_COLOR}&quot;><b>{esc(num)}</b></font>  <font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=11.5;fontColor={INK};align=left;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="1440" y="{ny}" width="430" height="56" as="geometry"/></mxCell>')
         ny += 64
     # bottom band
     add(f'<mxCell id="m-f1" value="WHY IT MATTERS" style="text;html=1;align=left;fontSize=15;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="40" y="1095" width="260" height="22" as="geometry"/></mxCell>')
-    add(f'<mxCell id="m-f2" value="Old mining: small miners earn nothing, pools take 2\u20135% and centralize power. DERO: your hashrate share of ~48,000 daily \u03a3-blocks pays you proportionally \u2014 solo, trustless, fair." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=13.5;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1120" width="1830" height="96" as="geometry"/></mxCell>')
+    add(f'<mxCell id="m-f2" value="Old mining: small miners earn nothing, pools take 2\u20135% and centralize power. DERO: your hashrate share of ~48,000 daily \u03a3-blocks pays you proportionally \u2014 solo, trustless, fair." style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=13.5;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1120" width="1830" height="96" as="geometry"/></mxCell>')
     return cells
 
 EDGE_BLUE = "#0076BE"
@@ -162,11 +153,11 @@ def mining_p2_cells():
     add(f'<mxCell id="mq-h2" value="FREQUENTLY ASKED (PLAIN SPEAK)" style="text;html=1;align=left;fontSize=17;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="1000" y="115" width="600" height="26" as="geometry"/></mxCell>')
     y = 150
     for i, (num, desc) in enumerate(MINE_NUMBERS):
-        add(f'<mxCell id="mq-n{i}" value="{val(f"<font color=&quot;{TITLE_COLOR}&quot;><b>{esc(num)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="880" height="56" as="geometry"/></mxCell>')
+        add(f'<mxCell id="mq-n{i}" value="{val(f"<font color=&quot;{TITLE_COLOR}&quot;><b>{esc(num)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="880" height="56" as="geometry"/></mxCell>')
         y += 64
     y2 = 150
     for i, (q, a) in enumerate(MINE_FAQ):
-        add(f'<mxCell id="mq-f{i}" value="{val(f"<b>{esc(q)}</b><br><font color=&quot;#66727E&quot;>{esc(a)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C9D6E3;strokeWidth=1.5;fontSize=12;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="1000" y="{y2}" width="860" height="70" as="geometry"/></mxCell>')
+        add(f'<mxCell id="mq-f{i}" value="{val(f"<b>{esc(q)}</b><br><font color=&quot;#66727E&quot;>{esc(a)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={BORDER};strokeWidth=1.5;fontSize=12;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="1000" y="{y2}" width="860" height="70" as="geometry"/></mxCell>')
         y2 += 78
     return cells, max(y, y2)
 
@@ -281,10 +272,10 @@ def tela_p1_cells():
         b = wrap(" ".join(s["body"]), ws - 24, 11.0)
         p = wrap(s["plain"], ws - 24, 10.5)
         step_title = f"{s['n']} \u00b7 {s['title']}"
-        add(f'<mxCell id="t-s{i}" value="{html_cell(step_title, ACCENTS[s["acc"]], b, p)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={ACCENTS[s["acc"]]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=18;fontSize=11;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{ws}" height="{hs}" as="geometry"/></mxCell>')
+        add(f'<mxCell id="t-s{i}" value="{html_cell(step_title, ACCENTS[s["acc"]], b, p)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={ACCENTS[s["acc"]]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=18;fontSize=11;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{ws}" height="{hs}" as="geometry"/></mxCell>')
         add(f'<mxCell id="t-bd{i}" value="{s["n"]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor={ACCENTS[s["acc"]]};strokeColor=#FFFFFF;strokeWidth=2;fontColor=#FFFFFF;fontSize=15;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="{x-17}" y="{y-17}" width="34" height="34" as="geometry"/></mxCell>')
     def arrow(eid, p1, p2, label=None):
-        add(f'<mxCell id="{eid}" value="{esc(label) if label else ""}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={EDGE_BLUE};strokeWidth=2.5;fontSize=10.5;fontStyle=1;fontColor={EDGE_BLUE};labelBackgroundColor=#FFFFFF;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{p1[0]}" y="{p1[1]}" as="sourcePoint"/><mxPoint x="{p2[0]}" y="{p2[1]}" as="targetPoint"/></mxGeometry></mxCell>')
+        add(f'<mxCell id="{eid}" value="{esc(label) if label else ""}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={EDGE_BLUE};strokeWidth=2.5;fontSize=10.5;fontStyle=1;fontColor={EDGE_BLUE};labelBackgroundColor={PANEL};" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{p1[0]}" y="{p1[1]}" as="sourcePoint"/><mxPoint x="{p2[0]}" y="{p2[1]}" as="targetPoint"/></mxGeometry></mxCell>')
     arrow("t-a1", (600, 340), (700, 340))
     arrow("t-a2", (1240, 340), (1340, 340))
     arrow("t-a3", (1610, 530), (1610, 640), "deployed & live")
@@ -293,7 +284,7 @@ def tela_p1_cells():
     arrow("t-a6", (1610, 1020), (1610, 1090), "users in the wallet")
     # bottom band
     add(f'<mxCell id="t-f1" value="THE RESULT" style="text;html=1;align=left;fontSize=15;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="40" y="1105" width="260" height="22" as="geometry"/></mxCell>')
-    add(f'<mxCell id="t-f2" value="A web app that cannot be taken down, whose users log in with their wallet, whose data is encrypted \u2014 hosted by the network itself. That is TELA." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=13.5;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1130" width="1830" height="96" as="geometry"/></mxCell>')
+    add(f'<mxCell id="t-f2" value="A web app that cannot be taken down, whose users log in with their wallet, whose data is encrypted \u2014 hosted by the network itself. That is TELA." style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=13.5;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1130" width="1830" height="96" as="geometry"/></mxCell>')
     return cells
 
 def tela_p2_cells():
@@ -307,8 +298,8 @@ def tela_p2_cells():
     y = 148
     for i, (name, what, does) in enumerate(STACK):
         add(f'<mxCell id="st-r{i}c0" value="{esc(name)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F7FA;strokeColor={ACCENTS["teal"]};strokeWidth=1.5;fontSize=12;fontStyle=1;fontColor={ACCENTS["teal"]};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="320" height="64" as="geometry"/></mxCell>')
-        add(f'<mxCell id="st-r{i}c1" value="{esc(what)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C9D6E3;strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="400" y="{y}" width="620" height="64" as="geometry"/></mxCell>')
-        add(f'<mxCell id="st-r{i}c2" value="{esc(does)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="1040" y="{y}" width="820" height="64" as="geometry"/></mxCell>')
+        add(f'<mxCell id="st-r{i}c1" value="{esc(what)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={BORDER};strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="400" y="{y}" width="620" height="64" as="geometry"/></mxCell>')
+        add(f'<mxCell id="st-r{i}c2" value="{esc(does)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="1040" y="{y}" width="820" height="64" as="geometry"/></mxCell>')
         y += 72
     return cells, y + 40
 
@@ -323,7 +314,7 @@ def tela_p3_cells():
         y += 32
         for name, status, desc in items:
             sc = STATUS_COLORS.get(status, "#6E6F72")
-            add(f'<mxCell id="e-i{gi}-{esc(name[:10])}" value="{val(f"<font color=&quot;{INK}&quot;><b>{esc(name)}</b></font> <font color=&quot;{sc}&quot;>[{esc(status)}]</font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C9D6E3;strokeWidth=1.5;fontSize=11;fontColor={INK};align=left;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="580" height="58" as="geometry"/></mxCell>')
+            add(f'<mxCell id="e-i{gi}-{esc(name[:10])}" value="{val(f"<font color=&quot;{INK}&quot;><b>{esc(name)}</b></font> <font color=&quot;{sc}&quot;>[{esc(status)}]</font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={BORDER};strokeWidth=1.5;fontSize=11;fontColor={INK};align=left;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="580" height="58" as="geometry"/></mxCell>')
         y += 66
     H3 = y + 30
     return cells, H3
@@ -441,10 +432,11 @@ def build_drawio(diagrams):
             + body + '</mxfile>\n')
 
 def wrap_graph(cells, w=W, h=H):
-    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{w}" pageHeight="{h}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{w}" pageHeight="{h}" background="{BG0}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 if __name__ == "__main__":
     import os
+    theme = sys.argv[1] if len(sys.argv) > 1 else "light"
     d = os.path.dirname(os.path.abspath(__file__))
     mp2, mp2h = mining_p2_cells()
     tp2, tp2h = tela_p2_cells()
@@ -462,14 +454,4 @@ if __name__ == "__main__":
         f.write(build_drawio(mining_diagrams))
     with open(os.path.join(d, "DERO.TELA.drawio"), "w", encoding="utf-8") as f:
         f.write(build_drawio(tela_diagrams))
-    for name, fn in [("preview_mining1.svg", svg_mining_p1), ("preview_tela1.svg", svg_tela_p1)]:
-        with open(os.path.join(d, name), "w", encoding="utf-8") as f:
-            f.write(inject_draft_svg(fn()))
-        with open(os.path.join(d, name.replace(".svg", ".html")), "w", encoding="utf-8") as f:
-            f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{inject_draft_svg(fn())}</body></html>')
-    svg3, h3 = svg_tela_p3()
-    with open(os.path.join(d, "preview_tela3.svg"), "w", encoding="utf-8") as f:
-        f.write(inject_draft_svg(svg3))
-    with open(os.path.join(d, "preview_tela3.html"), "w", encoding="utf-8") as f:
-        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{inject_draft_svg(svg3)}</body></html>')
-    print("written OK")
+    print(f"written OK (theme={theme})")

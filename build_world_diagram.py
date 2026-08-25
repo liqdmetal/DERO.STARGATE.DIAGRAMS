@@ -1,24 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-DERO World diagram generator.
-Page 1: DERO's Place in the Modern World  (old world vs DERO world, by user need)
-Page 2: The Swap Table (centralized service -> DERO replacement -> what changes)
-Emits draw.io XML + SVG previews from one data model.
-"""
-import xml.sax.saxutils as sax
-import datetime, html
+"""DERO.WORLD.drawio — DERO's place in the modern world (new template).
 
-# palette (same family as journey diagram)
-NEED_A, NEED_T = "#F9A825", "#FFF8E1"     # amber   - what you need
-OLD_A,  OLD_T  = "#C62828", "#FDECEA"     # red     - old world
-DERO_A, DERO_T = "#2E7D32", "#E8F5E9"     # green   - DERO world
-TOOL_A, TOOL_T = "#00838F", "#E0F7FA"     # teal    - toolbox
-TITLE_COLOR = "#4277BB"
-INK, GRAY = "#22303C", "#5A6B7A"
-EDGE_GREEN = "#2E7D32"
+Page 1: old world vs DERO world, by user need.
+Page 2: The Swap Table.
+Tight dero_style template - light + dark via argv. Previews via render_drawio_svg.
+"""
+import datetime, os, sys
+import dero_style as S
 
-W, H = 1920, 1400
+PAGE_W, PAGE_H = 1920, 1400
 
 ROWS = [
     dict(num=1, need_title="PAYING SOMEONE", need="Send money to anyone, anywhere",
@@ -68,122 +59,6 @@ TOOLBOX = [
     ("Name Service", "human usernames on-chain"),
 ]
 
-# ------------------------------------------------------------- geometry -----
-ROW_Y = [132, 316, 500, 684, 868]
-ROW_H = 176
-NEED_X, NEED_W = 30, 330
-OLD_X, OLD_W = 390, 560
-DERO_X, DERO_W = 980, 630
-TOOL_X, TOOL_W = 1640, 250
-
-def wrap(text, width_px, font_px, factor=0.55):
-    cap = max(8, int(width_px / (font_px * factor)))
-    words, lines, cur = text.split(), [], ""
-    for w_ in words:
-        cand = (cur + " " + w_).strip()
-        if len(cand) <= cap or not cur:
-            cur = cand
-        else:
-            lines.append(cur); cur = w_
-    if cur:
-        lines.append(cur)
-    return lines
-
-def cell_lines(step, key, w):
-    t = [step[key + "_title"]]
-    b = wrap(step[key], w - 24, 11.0)
-    p = wrap(step[key + "_plain"], w - 24, 10.5)
-    return t, b, p
-
-def cell_h(t, b, p):
-    return 24 + 17 + len(b) * 16 + 6 + len(p) * 15 + 10
-
-# ============================================================ draw.io XML ====
-def esc(s):
-    return sax.escape(s, {"'": "&apos;"})
-
-def val(s):
-    return s.replace("<", "&lt;").replace(">", "&gt;")
-
-import re
-def _draft_cell(h):
-    return ('<mxCell id="draft" value="&#9888;&#65039; DRAFT &#8212; community draft \u2014 not verified, reviewed, or audited" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=2;fontSize=11;fontStyle=1;fontColor=#C62828;align=center;verticalAlign=middle;" vertex="1" parent="1">'
-            f'<mxGeometry x="18" y="{h-44}" width="380" height="34" as="geometry"/></mxCell>')
-
-def inject_draft(model):
-    m = re.search(r'pageHeight="(\d+)"', model)
-    h = int(m.group(1)) if m else 1400
-    return model.replace('<mxCell id="1" parent="0"/>', '<mxCell id="1" parent="0"/>' + _draft_cell(h), 1)
-
-def inject_draft_svg(svg):
-    m = re.search(r'height="(\d+)"', svg)
-    h = int(m.group(1)) if m else 1400
-    chip = (f'<rect x="18" y="{h-44}" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/>'
-            f'<text x="208" y="{h-22}" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">\u26A0\uFE0F DRAFT \u2014 community draft: not verified, reviewed, or audited</text>')
-    return svg.replace('</svg>', chip + '</svg>')
-
-def hbox(parts, accent):
-    return val("<br>".join(
-        [f'<font color=&quot;{accent}&quot;><b>{esc(parts[0])}</b></font>']
-        + [esc(x) for x in parts[1:-1]] if False else
-        [f'<font color=&quot;{accent}&quot;><b>{esc(parts[0])}</b></font>']
-        + [esc(x) for x in parts[1:-1]]))
-
-def build_page1():
-    cells = []
-    def add(x):
-        cells.append(x)
-    # title
-    add(f'<mxCell id="w-t1" value="DERO&apos;S PLACE IN THE MODERN WORLD" style="text;html=1;align=center;fontSize=30;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="42" as="geometry"/></mxCell>')
-    add(f'<mxCell id="w-t2" value="Same everyday needs. Completely different plumbing. \u2014 How the DHEBP stack replaces banks, clouds and middlemen." style="text;html=1;align=center;fontSize=14;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
-    add(f'<mxCell id="w-t3" value="DERO \u00b7 DHEBP (Stargate) \u00b7 Layer 1 \u2192 2" style="rounded=1;html=1;fillColor=#EAF2FB;strokeColor={TITLE_COLOR};fontColor={TITLE_COLOR};fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="1600" y="66" width="290" height="30" as="geometry"/></mxCell>')
-    # legend strip
-    add(f'<mxCell id="w-lg1" value="" style="rounded=1;html=1;fillColor={NEED_T};strokeColor={NEED_A};strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="60" y="102" width="20" height="12" as="geometry"/></mxCell>')
-    add(f'<mxCell id="w-lg1t" value="what you need" style="text;html=1;align=left;fontSize=11;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="86" y="98" width="130" height="18" as="geometry"/></mxCell>')
-    add(f'<mxCell id="w-lg2" value="" style="rounded=1;html=1;fillColor={OLD_T};strokeColor={OLD_A};strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="240" y="102" width="20" height="12" as="geometry"/></mxCell>')
-    add(f'<mxCell id="w-lg2t" value="old world \u2014 centralized" style="text;html=1;align=left;fontSize=11;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="266" y="98" width="190" height="18" as="geometry"/></mxCell>')
-    add(f'<mxCell id="w-lg3" value="" style="rounded=1;html=1;fillColor={DERO_T};strokeColor={DERO_A};strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="480" y="102" width="20" height="12" as="geometry"/></mxCell>')
-    add(f'<mxCell id="w-lg3t" value="DERO world \u2014 decentralized &amp; private" style="text;html=1;align=left;fontSize=11;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="506" y="98" width="280" height="18" as="geometry"/></mxCell>')
-    add(f'<mxCell id="w-lg4" value="\u2192 replaced by" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor={EDGE_GREEN};" vertex="1" parent="1"><mxGeometry x="790" y="98" width="120" height="18" as="geometry"/></mxCell>')
-
-    for i, r in enumerate(ROWS):
-        y = ROW_Y[i]
-        # need cell
-        need_value = val(f"<font color=&quot;{NEED_A}&quot;><b>{r['num']} \u00b7 {esc(r['need_title'])}</b></font><br>{esc(r['need'])}")
-        add(f'<mxCell id="w-n{i}" value="{need_value}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={NEED_T};strokeColor={NEED_A};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=16;fontSize=11.5;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{NEED_X}" y="{y}" width="{NEED_W}" height="{ROW_H}" as="geometry"/></mxCell>')
-        # old cell
-        ot, ob, op = cell_lines(r, "old", OLD_W)
-        plain_old = ["\U0001F4A1 " + esc(x) for x in op]
-        ovals = [f'<font color=&quot;{OLD_A}&quot;><b>{esc(ot[0])}</b></font>'] + [esc(x) for x in ob] + ["<br>"] + [f'<font color=&quot;#66727E&quot;><i>{p}</i></font>' for p in plain_old]
-        old_value = val("<br>".join(ovals))
-        add(f'<mxCell id="w-o{i}" value="{old_value}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={OLD_T};strokeColor={OLD_A};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=16;fontSize=11;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{OLD_X}" y="{y}" width="{OLD_W}" height="{ROW_H}" as="geometry"/></mxCell>')
-        # dero cell
-        dt, db, dp = cell_lines(r, "dero", DERO_W)
-        plain_dero = ["\U0001F4A1 " + esc(x) for x in dp]
-        dvals = [f'<font color=&quot;{DERO_A}&quot;><b>{esc(dt[0])}</b></font>'] + [esc(x) for x in db] + ["<br>"] + [f'<font color=&quot;#66727E&quot;><i>{p}</i></font>' for p in plain_dero]
-        dero_value = val("<br>".join(dvals))
-        add(f'<mxCell id="w-d{i}" value="{dero_value}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={DERO_T};strokeColor={DERO_A};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=16;fontSize=11;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{DERO_X}" y="{y}" width="{DERO_W}" height="{ROW_H}" as="geometry"/></mxCell>')
-        # swap arrow old -> dero
-        midy = y + ROW_H / 2
-        add(f'<mxCell id="w-a{i}" value="{esc("replaced by")}" style="edgeStyle=none;rounded=0;html=1;endArrow=classicThin;endFill=1;strokeColor={EDGE_GREEN};strokeWidth=3;fontSize=11;fontStyle=1;fontColor={EDGE_GREEN};labelBackgroundColor=#FFFFFF;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="{OLD_X+OLD_W}" y="{midy}" as="sourcePoint"/><mxPoint x="{DERO_X}" y="{midy}" as="targetPoint"/></mxGeometry><mxCell id="w-a{i}l" value="{esc("replaced by")}" style="edgeLabel;html=1;align=center;verticalAlign=middle;labelBackgroundColor=#FFFFFF;fontSize=11;fontStyle=1;fontColor={EDGE_GREEN};" vertex="1" connectable="0"><mxGeometry x="-0.5" y="0" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry></mxCell></mxCell>')
-        # subtle row separator
-        if i > 0:
-            add(f'<mxCell id="w-sep{i}" value="" style="line;strokeWidth=1;strokeColor=#D8E2EC;html=1;" vertex="1" parent="1"><mxGeometry x="30" y="{y-8}" width="1880" height="1" as="geometry"/></mxCell>')
-
-    # toolbox column
-    add(f'<mxCell id="w-tool" value="THE DERO TOOLBOX" style="text;html=1;align=left;fontSize=14;fontStyle=1;fontColor={TOOL_A};" vertex="1" parent="1"><mxGeometry x="{TOOL_X+6}" y="140" width="220" height="22" as="geometry"/></mxCell>')
-    ty = 170
-    for name, desc in TOOLBOX:
-        add(f'<mxCell id="w-tb-{name[:3]}" value="{val(f"<font color=&quot;{TOOL_A}&quot;><b>{esc(name)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={TOOL_T};strokeColor={TOOL_A};strokeWidth=1.5;fontSize=10.5;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{TOOL_X}" y="{ty}" width="{TOOL_W}" height="62" as="geometry"/></mxCell>')
-        ty += 70
-
-    # bottom band
-    add(f'<mxCell id="w-f1" value="THE SAME JOB \u2014 NO MIDDLEMAN" style="text;html=1;align=left;fontSize=15;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="40" y="1095" width="420" height="22" as="geometry"/></mxCell>')
-    add(f'<mxCell id="w-f2" value="Money, deals, data, apps, identity \u2014 the modern world runs them on banks, clouds and platforms. DERO runs them on one shared, private, tamper-proof network: every node does the job, and none of them can see your business." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=13.5;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1120" width="1810" height="96" as="geometry"/></mxCell>')
-
-    return f'<mxGraphModel dx="1500" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="{H}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
-
-# ------------------------------------------------------------ page 2 ---------
 SWAPS = [
     ("Bank transfer / payment app", "DERO transfer (DHEBP)", "Private, uncensorable, ~1 min settle"),
     ("Escrow / notary / legal fees", "DVM smart contract (DeroScript)", "Automatic escrow, unbreakable rules"),
@@ -194,159 +69,94 @@ SWAPS = [
     ("Auditing & compliance", "Zero-knowledge proofs + public supply", "Verify without revealing secrets"),
 ]
 
+def card(cells, add, x, y, w, h, acc, title, body_lines, plain_lines, align="left"):
+    v = f"<font color=&quot;{S.accent(acc)[0]}&quot;><b>{S.esc(title)}</b></font><br>"
+    v += "<br>".join(S.esc(l) for l in body_lines)
+    if plain_lines:
+        v += "<br>" + "<br>".join(f'<font color=&quot;{S.TH["muted"]}&quot;><i>\U0001F4A1 {S.esc(p)}</i></font>' for p in plain_lines)
+    add(f'<mxCell id="c-{len(cells)}" value="{S.val(v)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={S.TH["panel"]};gradientColor={S.TH["panel2"]};gradientDirection=south;strokeColor={S.accent(acc)[0]};strokeWidth=1.5;shadow=1;fontSize=11.5;fontColor={S.TH["ink"]};align={align};verticalAlign=top;spacing=10;spacingTop=14;" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{w}" height="{h}" as="geometry"/></mxCell>')
+
+def wrap_plain(text, width_px, font_px=11.0):
+    return S.wrap(text, width_px, font_px)
+
+def build_page1():
+    cells = []
+    add = cells.append
+    for c in S.d_header("w-t", 20, 22, PAGE_W-40, "DERO\u2019S PLACE IN THE MODERN WORLD",
+                        "Same everyday needs \u00b7 completely different plumbing \u2014 how the DHEBP stack replaces banks, clouds and middlemen.", font=28):
+        add(c)
+    # legend
+    ly = 102
+    for i, (acc, label) in enumerate([("amber", "what you need"), ("red", "old world \u2014 centralized"), ("green", "DERO world \u2014 private"), ("brand", "\u2192 replaced by")]):
+        x = 60 + i * 360
+        add(f'<mxCell id="lg{i}" value="{S.esc(label)}" style="text;html=1;align=left;fontSize=11.5;fontStyle=1;fontColor={S.accent(acc)[0]};" vertex="1" parent="1"><mxGeometry x="{x}" y="{ly}" width="320" height="18" as="geometry"/></mxCell>')
+    ROW_Y = [132, 316, 500, 684, 868]
+    ROW_H = 176
+    NEED_X, NEED_W = 30, 330
+    OLD_X, OLD_W = 390, 560
+    DERO_X, DERO_W = 980, 630
+    TOOL_X, TOOL_W = 1640, 250
+    for i, r in enumerate(ROWS):
+        y = ROW_Y[i]
+        need_lines = wrap_plain(r["need"], NEED_W - 24)
+        card(cells, add, NEED_X, y, NEED_W, ROW_H, "amber", f"{r['num']} \u00b7 {r['need_title']}", need_lines, [])
+        old_lines = wrap_plain(r["old"], OLD_W - 24)
+        old_plain = wrap_plain(r["old_plain"], OLD_W - 24, 10.5)
+        card(cells, add, OLD_X, y, OLD_W, ROW_H, "red", r["old_title"], old_lines, old_plain)
+        dero_lines = wrap_plain(r["dero"], DERO_W - 24)
+        dero_plain = wrap_plain(r["dero_plain"], DERO_W - 24, 10.5)
+        card(cells, add, DERO_X, y, DERO_W, ROW_H, "green", r["dero_title"], dero_lines, dero_plain)
+        midy = y + ROW_H // 2
+        for c in S.d_arrow(f"a{i}", [(OLD_X + OLD_W + 4, midy), (DERO_X - 4, midy)], accent_key="green", label="replaced by", width=3):
+            add(c)
+    # toolbox
+    add(f'<mxCell id="w-tool" value="{S.esc("THE DERO TOOLBOX")}" style="text;html=1;align=left;fontSize=15;fontStyle=1;fontColor={S.accent("teal")[0]};" vertex="1" parent="1"><mxGeometry x="{TOOL_X+6}" y="130" width="230" height="22" as="geometry"/></mxCell>')
+    ty = 158
+    for name, desc in TOOLBOX:
+        tb_html = f"<font color=&quot;{S.accent('teal')[0]}&quot;><b>{S.esc(name)}</b></font><br><font color=&quot;{S.TH['muted']}&quot;>{S.esc(desc)}</font>"
+        add(f'<mxCell id="tb-{name[:3]}" value="{S.val(tb_html)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={S.TH["panel"]};gradientColor={S.TH["panel2"]};gradientDirection=south;strokeColor={S.accent("teal")[0]};strokeWidth=1.4;shadow=1;fontSize=10.5;fontColor={S.TH["ink"]};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{TOOL_X}" y="{ty}" width="{TOOL_W}" height="62" as="geometry"/></mxCell>')
+        ty += 68
+    # bottom band
+    f1_txt = "THE SAME JOB \u2014 NO MIDDLEMAN"
+    add(f'<mxCell id="w-f1" value="{S.esc(f1_txt)}" style="text;html=1;align=left;fontSize=15;fontStyle=1;fontColor={S.accent("brand")[0]};" vertex="1" parent="1"><mxGeometry x="40" y="1095" width="420" height="22" as="geometry"/></mxCell>')
+    foot = "Money, deals, data, apps, identity \u2014 the modern world runs them on banks, clouds and platforms. DERO runs them on one shared, private, tamper-proof network: every node does the job, and none of them can see your business."
+    add(f'<mxCell id="w-f2" value="{S.esc(foot)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={S.TH["panel"]};gradientColor={S.TH["panel2"]};gradientDirection=south;strokeColor={S.accent("brand")[0]};strokeWidth=1.5;shadow=1;fontSize=13.5;fontColor={S.TH["ink"]};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1120" width="1810" height="96" as="geometry"/></mxCell>')
+    return S.d_graph(PAGE_W, PAGE_H, cells)
+
 def build_page2():
     cells = []
-    def add(x):
-        cells.append(x)
-    H2 = 150 + 8 * 72 + 120
-    add(f'<mxCell id="s-t1" value="THE SWAP TABLE" style="text;html=1;align=center;fontSize=28;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="40" as="geometry"/></mxCell>')
-    add(f'<mxCell id="s-t2" value="Every centralized service you use today has a DERO-native replacement. Same job, no middleman." style="text;html=1;align=center;fontSize=13.5;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
+    add = cells.append
+    H2 = 150 + 8 * 72 + 140
+    for c in S.d_header("s-t", 20, 22, PAGE_W-40, "THE SWAP TABLE",
+                        "Every centralized service you use today has a DERO-native replacement. Same job, no middleman.", font=28):
+        add(c)
     headers = ["CENTRALIZED SERVICE TODAY", "DERO REPLACEMENT", "WHAT CHANGES FOR YOU"]
     xs = [60, 720, 1380]
     ws = [640, 640, 480]
+    hacc = ["red", "green", "teal"]
     for j, htxt in enumerate(headers):
-        add(f'<mxCell id="s-h{j}" value="{esc(htxt)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FB;strokeColor={TITLE_COLOR};strokeWidth=2;fontSize=13;fontStyle=1;fontColor={TITLE_COLOR};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="{xs[j]}" y="110" width="{ws[j]}" height="34" as="geometry"/></mxCell>')
+        add(f'<mxCell id="s-h{j}" value="{S.esc(htxt)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={S.accent(hacc[j])[0]};strokeColor=none;fontSize=13;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;shadow=1;" vertex="1" parent="1"><mxGeometry x="{xs[j]}" y="110" width="{ws[j]}" height="34" as="geometry"/></mxCell>')
     y = 152
-    for i, (a, b, c) in enumerate(SWAPS):
-        colors = [(OLD_A, OLD_T), (DERO_A, DERO_T), (TOOL_A, TOOL_T)]
-        vals = [a, b, c]
+    for i, (a, b, c_) in enumerate(SWAPS):
+        vals = [a, b, c_]
+        accs = ["red", "green", "teal"]
         for j in range(3):
-            add(f'<mxCell id="s-r{i}c{j}" value="{esc(vals[j])}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={colors[j][1]};strokeColor={colors[j][0]};strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="{xs[j]}" y="{y}" width="{ws[j]}" height="64" as="geometry"/></mxCell>')
+            add(f'<mxCell id="s-r{i}c{j}" value="{S.esc(vals[j])}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={S.TH["panel"]};gradientColor={S.TH["panel2"]};gradientDirection=south;strokeColor={S.accent(accs[j])[0]};strokeWidth=1.4;shadow=1;fontSize=12;fontColor={S.TH["ink"]};align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1"><mxGeometry x="{xs[j]}" y="{y}" width="{ws[j]}" height="64" as="geometry"/></mxCell>')
         y += 72
-    add(f'<mxCell id="s-f" value="DERO is a general-purpose, private, decentralized application platform \u2014 the DHEBP stack, end to end." style="text;html=1;align=center;fontSize=12;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="{y+16}" width="1880" height="20" as="geometry"/></mxCell>')
-    return f'<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="{H2}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+    sf_txt = "DERO is a general-purpose, private, decentralized application platform \u2014 the DHEBP stack, end to end."
+    add(f'<mxCell id="s-f" value="{S.esc(sf_txt)}" style="text;html=1;align=center;fontSize=12.5;fontStyle=1;fontColor={S.accent("brand")[0]};" vertex="1" parent="1"><mxGeometry x="20" y="{y+16}" width="1880" height="20" as="geometry"/></mxCell>')
+    return S.d_graph(1920, H2, cells)
 
-def build_drawio():
-    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
-    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
-            f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device">\n'
-            f'  <diagram id="world" name="DERO Place in the Modern World">\n{inject_draft(build_page1())}\n  </diagram>\n'
-            f'  <diagram id="swap" name="The Swap Table">\n{inject_draft(build_page2())}\n  </diagram>\n'
-            '</mxfile>\n')
-
-# ================================================================ SVG ========
-def svg_esc(s):
-    return html.escape(s)
-
-def svg_cell(parts_lines, accent, x, y, w, h, title_font=12.5):
-    """parts_lines: (title, [body lines], [plain lines])"""
-    out = []
-    A = out.append
-    A(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="10" fill="#FFFFFF" stroke="{accent}" stroke-width="2"/>')
-    ty = y + 26
-    A(f'<text x="{x+12}" y="{ty}" font-size="{title_font}" font-weight="700" fill="{accent}">{svg_esc(parts_lines[0])}</text>')
-    ty += 19
-    for ln in parts_lines[1]:
-        A(f'<text x="{x+12}" y="{ty}" font-size="11" fill="{INK}">{svg_esc(ln)}</text>')
-        ty += 16
-    ty += 6
-    for ln in parts_lines[2]:
-        A(f'<text x="{x+12}" y="{ty}" font-size="10.5" font-style="italic" fill="#66727E">\U0001F4A1 {svg_esc(ln)}</text>')
-        ty += 15
-    return "\n".join(out)
-
-def build_svg_page1():
-    out = []
-    A = out.append
-    A(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" font-family="Segoe UI, Arial, sans-serif">')
-    A(f'<defs><marker id="arg2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="{EDGE_GREEN}"/></marker></defs>')
-    A(f'<rect x="0" y="0" width="{W}" height="{H}" fill="#FFFFFF"/>')
-    A(f'<text x="{W/2}" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="{TITLE_COLOR}">DERO\u2019S PLACE IN THE MODERN WORLD</text>')
-    A(f'<text x="{W/2}" y="82" text-anchor="middle" font-size="14" fill="{GRAY}">Same everyday needs. Completely different plumbing. \u2014 How the DHEBP stack replaces banks, clouds and middlemen.</text>')
-    A(f'<rect x="1600" y="60" width="290" height="30" rx="8" fill="#EAF2FB" stroke="{TITLE_COLOR}"/>')
-    A(f'<text x="1745" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="{TITLE_COLOR}">DERO \u00b7 DHEBP (Stargate) \u00b7 Layer 1 \u2192 2</text>')
-    # legend strip
-    A(f'<rect x="60" y="100" width="20" height="12" rx="3" fill="{NEED_T}" stroke="{NEED_A}" stroke-width="2"/>')
-    A(f'<text x="86" y="110" font-size="11" fill="{INK}">what you need</text>')
-    A(f'<rect x="240" y="100" width="20" height="12" rx="3" fill="{OLD_T}" stroke="{OLD_A}" stroke-width="2"/>')
-    A(f'<text x="266" y="110" font-size="11" fill="{INK}">old world \u2014 centralized</text>')
-    A(f'<rect x="480" y="100" width="20" height="12" rx="3" fill="{DERO_T}" stroke="{DERO_A}" stroke-width="2"/>')
-    A(f'<text x="506" y="110" font-size="11" fill="{INK}">DERO world \u2014 decentralized &amp; private</text>')
-    A(f'<text x="790" y="110" font-size="11" font-weight="700" fill="{EDGE_GREEN}">\u2192 replaced by</text>')
-
-    for i, r in enumerate(ROWS):
-        y = ROW_Y[i]
-        midy = y + ROW_H / 2
-        # need cell (tinted fill, badge)
-        A(f'<rect x="{NEED_X}" y="{y}" width="{NEED_W}" height="{ROW_H}" rx="10" fill="{NEED_T}" stroke="{NEED_A}" stroke-width="2"/>')
-        A(f'<circle cx="{NEED_X+20}" cy="{y+22}" r="13" fill="{NEED_A}" stroke="#FFFFFF" stroke-width="2"/>')
-        A(f'<text x="{NEED_X+20}" y="{y+27}" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">{r["num"]}</text>')
-        A(f'<text x="{NEED_X+40}" y="{y+27}" font-size="12" font-weight="700" fill="{NEED_A}">{svg_esc(r["need_title"])}</text>')
-        A(f'<text x="{NEED_X+12}" y="{y+52}" font-size="11" fill="{INK}">{svg_esc(r["need"])}</text>')
-        # old cell
-        ot, ob, op = cell_lines(r, "old", OLD_W)
-        A(f'<rect x="{OLD_X}" y="{y}" width="{OLD_W}" height="{ROW_H}" rx="10" fill="{OLD_T}" stroke="{OLD_A}" stroke-width="2"/>')
-        A(f'<text x="{OLD_X+12}" y="{y+26}" font-size="12.5" font-weight="700" fill="{OLD_A}">{svg_esc(ot[0])}</text>')
-        ty = y + 46
-        for ln in ob:
-            A(f'<text x="{OLD_X+12}" y="{ty}" font-size="11" fill="{INK}">{svg_esc(ln)}</text>'); ty += 16
-        ty += 6
-        for ln in op:
-            A(f'<text x="{OLD_X+12}" y="{ty}" font-size="10.5" font-style="italic" fill="#66727E">\U0001F4A1 {svg_esc(ln)}</text>'); ty += 15
-        # dero cell
-        dt, db, dp = cell_lines(r, "dero", DERO_W)
-        A(f'<rect x="{DERO_X}" y="{y}" width="{DERO_W}" height="{ROW_H}" rx="10" fill="{DERO_T}" stroke="{DERO_A}" stroke-width="2"/>')
-        A(f'<text x="{DERO_X+12}" y="{y+26}" font-size="12.5" font-weight="700" fill="{DERO_A}">{svg_esc(dt[0])}</text>')
-        ty = y + 46
-        for ln in db:
-            A(f'<text x="{DERO_X+12}" y="{ty}" font-size="11" fill="{INK}">{svg_esc(ln)}</text>'); ty += 16
-        ty += 6
-        for ln in dp:
-            A(f'<text x="{DERO_X+12}" y="{ty}" font-size="10.5" font-style="italic" fill="#66727E">\U0001F4A1 {svg_esc(ln)}</text>'); ty += 15
-        # swap arrow
-        A(f'<line x1="{OLD_X+OLD_W}" y1="{midy}" x2="{DERO_X}" y2="{midy}" stroke="{EDGE_GREEN}" stroke-width="3" marker-end="url(#arg2)"/>')
-        A(f'<text x="{(OLD_X+OLD_W+DERO_X)/2}" y="{midy-8}" text-anchor="middle" font-size="11" font-weight="700" fill="{EDGE_GREEN}" stroke="#FFFFFF" stroke-width="3" paint-order="stroke">replaced by</text>')
-
-    # toolbox
-    A(f'<text x="{TOOL_X+6}" y="158" font-size="14" font-weight="700" fill="{TOOL_A}">THE DERO TOOLBOX</text>')
-    ty = 172
-    for name, desc in TOOLBOX:
-        A(f'<rect x="{TOOL_X}" y="{ty}" width="{TOOL_W}" height="62" rx="8" fill="{TOOL_T}" stroke="{TOOL_A}" stroke-width="1.5"/>')
-        A(f'<text x="{TOOL_X+TOOL_W/2}" y="{ty+24}" text-anchor="middle" font-size="11" font-weight="700" fill="{TOOL_A}">{svg_esc(name)}</text>')
-        A(f'<text x="{TOOL_X+TOOL_W/2}" y="{ty+42}" text-anchor="middle" font-size="9.5" fill="#66727E">{svg_esc(desc)}</text>')
-        ty += 70
-
-    # bottom band
-    A(f'<text x="40" y="1116" font-size="15" font-weight="700" fill="{TITLE_COLOR}">THE SAME JOB \u2014 NO MIDDLEMAN</text>')
-    A(f'<rect x="40" y="1128" width="1810" height="96" rx="10" fill="#F4F8FC" stroke="{TITLE_COLOR}" stroke-width="1.5"/>')
-    A(f'<text x="60" y="1162" font-size="13.5" fill="{INK}">Money, deals, data, apps, identity \u2014 the modern world runs them on banks, clouds and platforms. DERO runs them on one shared, private,</text>')
-    A(f'<text x="60" y="1184" font-size="13.5" fill="{INK}">tamper-proof network: every node does the job, and none of them can see your business.</text>')
-    A('</svg>')
-    return "\n".join(out)
-
-def build_svg_page2():
-    out = []
-    A = out.append
-    H2 = 150 + 8 * 72 + 120
-    A(f'<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="{H2}" viewBox="0 0 1920 {H2}" font-family="Segoe UI, Arial, sans-serif">')
-    A(f'<rect x="0" y="0" width="1920" height="{H2}" fill="#FFFFFF"/>')
-    A(f'<text x="960" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="{TITLE_COLOR}">THE SWAP TABLE</text>')
-    A(f'<text x="960" y="82" text-anchor="middle" font-size="13.5" fill="{GRAY}">Every centralized service you use today has a DERO-native replacement. Same job, no middleman.</text>')
-    xs = [60, 720, 1380]; ws = [640, 640, 480]
-    headers = ["CENTRALIZED SERVICE TODAY", "DERO REPLACEMENT", "WHAT CHANGES FOR YOU"]
-    for j, htxt in enumerate(headers):
-        A(f'<rect x="{xs[j]}" y="110" width="{ws[j]}" height="34" rx="8" fill="#EAF2FB" stroke="{TITLE_COLOR}" stroke-width="2"/>')
-        A(f'<text x="{xs[j]+ws[j]/2}" y="131" text-anchor="middle" font-size="13" font-weight="700" fill="{TITLE_COLOR}">{svg_esc(htxt)}</text>')
-    y = 152
-    colors = [(OLD_A, OLD_T), (DERO_A, DERO_T), (TOOL_A, TOOL_T)]
-    for i, (a, b, c) in enumerate(SWAPS):
-        for j, v in enumerate([a, b, c]):
-            A(f'<rect x="{xs[j]}" y="{y}" width="{ws[j]}" height="64" rx="8" fill="{colors[j][1]}" stroke="{colors[j][0]}" stroke-width="1.5"/>')
-            A(f'<text x="{xs[j]+ws[j]/2}" y="{y+37}" text-anchor="middle" font-size="12" fill="{INK}">{svg_esc(v)}</text>')
-        y += 72
-    A(f'<text x="960" y="{y+40}" text-anchor="middle" font-size="12" font-weight="700" fill="{TITLE_COLOR}">DERO is a general-purpose, private, decentralized application platform \u2014 the DHEBP stack, end to end.</text>')
-    A('</svg>')
-    return "\n".join(out)
-
-# ================================================================ main ======
 if __name__ == "__main__":
-    import os
+    theme = sys.argv[1] if len(sys.argv) > 1 else "light"
+    S.set_theme(theme)
     d = os.path.dirname(os.path.abspath(__file__))
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device" background="{S.TH["bg0"]}">\n'
+           f'  <diagram id="world" name="DERO Place in the Modern World">\n{S.inject_draft(build_page1())}\n  </diagram>\n'
+           f'  <diagram id="swap" name="The Swap Table">\n{S.inject_draft(build_page2())}\n  </diagram>\n'
+           '</mxfile>\n')
     with open(os.path.join(d, "DERO.WORLD.drawio"), "w", encoding="utf-8") as f:
-        f.write(build_drawio())
-    for name, fn in [("preview_world1.svg", build_svg_page1), ("preview_world2.svg", build_svg_page2)]:
-        with open(os.path.join(d, name), "w", encoding="utf-8") as f:
-            f.write(inject_draft_svg(fn()))
-        with open(os.path.join(d, name.replace(".svg", ".html")), "w", encoding="utf-8") as f:
-            f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{inject_draft_svg(fn())}</body></html>')
-    print("written OK")
+        f.write(xml)
+    print(f"written OK (theme={theme})")

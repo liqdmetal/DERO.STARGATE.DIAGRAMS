@@ -1,36 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-DERO Process Diagram generator.
-One data model -> both draw.io XML and SVG preview.
+DERO Process Diagram generator (new template).
+One data model -> draw.io XML (theme-switchable) + previews via render_drawio_svg.
 Page 1: The Journey of One DERO Transaction (user -> DLT consensus -> back).
-Page 2 (drawio only): Plain-language translation tables.
+Page 2: Plain-language translation tables.
 """
 import xml.sax.saxutils as sax
-import datetime, html
+import datetime, html, os, sys
+import dero_style as S
 
-# ---------------------------------------------------------------- palette ---
-ACCENT = {
-    "user":    "#F9A825",  # amber
-    "wallet":  "#43A047",  # green
-    "node":    "#1E88E5",  # blue
-    "network": "#8E24AA",  # purple
-    "miners":  "#FB8C00",  # orange
-    "ledger":  "#00838F",  # teal
-    "confirm": "#2E7D32",  # dark green
-}
-TINT = {
-    "user":    "#FFF8E1",
-    "wallet":  "#E8F5E9",
-    "node":    "#E3F2FD",
-    "network": "#F3E5F5",
-    "miners":  "#FFF3E0",
-    "ledger":  "#E0F7FA",
+# ------------------------------------------------------- accent per lane ----
+# map lane keys -> dero_style accent names
+LANE_ACC = {
+    "user":    "amber",
+    "wallet":  "green",
+    "node":    "blue",
+    "network": "purple",
+    "miners":  "orange",
+    "ledger":  "teal",
+    "confirm": "green",
 }
 EDGE_BLUE = "#0076BE"
-TITLE_COLOR = "#4277BB"
-INK = "#22303C"
-GRAY = "#5A6B7A"
+EDGE_GREEN = S.TH["green"][0]
+TITLE_COLOR = S.TH["brand"]
+INK = S.TH["ink"]
+GRAY = S.TH["muted"]
 
 # ------------------------------------------------------------- canvas -------
 W, H = 1920, 1400
@@ -173,51 +168,38 @@ ret2 = [box_center(B[13], "bottom"), box_center(B[14], "top")]
 ret3_start = box_center(B[14], "left")
 ret3 = [ret3_start, (1450, ret3_start[1]), (1450, 185)]
 EDGES += [
-    ("r1", ret1, "#2E7D32", 3, None, None),
-    ("r2", ret2, "#2E7D32", 3, None, None),
-    ("r3", ret3, "#2E7D32", 3, "back to you \u2713", (1462, 235)),
+    ("r1", ret1, EDGE_GREEN, 3, None, None),
+    ("r2", ret2, EDGE_GREEN, 3, None, None),
+    ("r3", ret3, EDGE_GREEN, 3, "back to you \u2713", (1462, 235)),
 ]
+
+def acc(key):
+    return S.accent(LANE_ACC[key])[0]
 
 # ============================================================ draw.io XML ====
 def esc(s):
-    return sax.escape(s, {"'": "&apos;"})
+    return sax.escape(s, {"'": "&apos;", '"': "&quot;"})
 
 def val(s):
     """Final escape for drawio value attributes: tags as &lt;...&gt; (valid XML,
     rendered as HTML by drawio when html=1). Entities are left untouched."""
     return s.replace("<", "&lt;").replace(">", "&gt;")
 
-import re
-def _draft_cell(h):
-    return ('<mxCell id="draft" value="&#9888;&#65039; DRAFT &#8212; community draft \u2014 not verified, reviewed, or audited" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=2;fontSize=11;fontStyle=1;fontColor=#C62828;align=center;verticalAlign=middle;" vertex="1" parent="1">'
-            f'<mxGeometry x="18" y="{h-44}" width="380" height="34" as="geometry"/></mxCell>')
-
-def inject_draft(model):
-    m = re.search(r'pageHeight="(\d+)"', model)
-    h = int(m.group(1)) if m else 1400
-    return model.replace('<mxCell id="1" parent="0"/>', '<mxCell id="1" parent="0"/>' + _draft_cell(h), 1)
-
-def inject_draft_svg(svg):
-    m = re.search(r'height="(\d+)"', svg)
-    h = int(m.group(1)) if m else 1400
-    chip = (f'<rect x="18" y="{h-44}" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/>'
-            f'<text x="208" y="{h-22}" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">\u26A0\uFE0F DRAFT \u2014 community draft: not verified, reviewed, or audited</text>')
-    return svg.replace('</svg>', chip + '</svg>')
-
 def step_value(b):
-    acc = ACCENT[b["lane"]]
-    parts = [f'<font color=&quot;{acc}&quot;><b>{b["num"]} \u00b7 {esc(b["title"])}</b></font>']
+    c = acc(b["lane"])
+    parts = [f'<font color=&quot;{c}&quot;><b>{b["num"]} \u00b7 {esc(b["title"])}</b></font>']
     for ln in b["b"]:
         parts.append(esc(ln))
     parts.append("")
     for ln in b["p"]:
-        parts.append(f'<font color=&quot;#66727E&quot;><i>\U0001F4A1 {esc(ln)}</i></font>')
+        parts.append(f'<font color=&quot;{S.TH["muted"]}&quot;><i>\U0001F4A1 {esc(ln)}</i></font>')
     return val("<br>".join(parts))
 
 def drawio_step_style(b):
-    return ("rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=%s;"
-            "strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=18;"
-            "fontSize=10.5;fontColor=%s;shadow=0;" % (ACCENT[b["lane"]], INK))
+    return (f"rounded=1;whiteSpace=wrap;html=1;fillColor={S.TH['panel']};gradientColor={S.TH['panel2']};"
+            f"gradientDirection=south;strokeColor={acc(b['lane'])};"
+            f"strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=18;"
+            f"fontSize=10.5;fontColor={S.TH['ink']};shadow=1;")
 
 def build_page1():
     cells = []
@@ -227,20 +209,23 @@ def build_page1():
         cells.append(cell_xml)
 
     # title banner
-    add(f'<mxCell id="t1" value="THE JOURNEY OF ONE DERO TRANSACTION" style="text;html=1;align=center;fontSize=30;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="42" as="geometry"/></mxCell>')
-    add(f'<mxCell id="t2" value="From your wallet \u2192 through the network \u2192 into the encrypted ledger (DLT) \u2192 confirmation back to you.  Follow the numbers 1 \u2192 14 \u00b7 \U0001F4A1 lines = plain talk \u00b7 green arrows = confirmation back to you." style="text;html=1;align=center;fontSize=14;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
-    add(f'<mxCell id="t3" value="DERO \u00b7 DHEBP (Stargate) \u00b7 Layer 1" style="rounded=1;html=1;fillColor=#EAF2FB;strokeColor={TITLE_COLOR};fontColor={TITLE_COLOR};fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="1600" y="66" width="290" height="30" as="geometry"/></mxCell>')
+    t1_txt = "THE JOURNEY OF ONE DERO TRANSACTION"
+    t2_txt = "From your wallet \u2192 through the network \u2192 into the encrypted ledger (DLT) \u2192 confirmation back to you.  Follow the numbers 1 \u2192 14 \u00b7 \U0001F4A1 lines = plain talk \u00b7 green arrows = confirmation back to you."
+    t3_txt = "DERO \u00b7 DHEBP (Stargate) \u00b7 Layer 1"
+    add(f'<mxCell id="t1" value="{esc(t1_txt)}" style="text;html=1;align=center;fontSize=30;fontStyle=1;fontColor={S.TH["ink"]};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="42" as="geometry"/></mxCell>')
+    add(f'<mxCell id="t2" value="{esc(t2_txt)}" style="text;html=1;align=center;fontSize=14;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
+    add(f'<mxCell id="t3" value="{esc(t3_txt)}" style="rounded=1;html=1;fillColor={S.TH["panel"]};strokeColor={S.accent("brand")[0]};fontColor={S.accent("brand")[0]};fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="1600" y="66" width="290" height="30" as="geometry"/></mxCell>')
 
     # lanes
     for k, label, sub, y, h in LANES:
-        add(f'<mxCell id="lane-{k}" value="" style="rounded=0;html=1;fillColor={TINT[k]};strokeColor=#D8E2EC;strokeWidth=1;opacity=70;verticalAlign=top;pointerEvents=0;" vertex="1" parent="1"><mxGeometry x="{LANE_X0}" y="{y}" width="{LANE_X1-LANE_X0}" height="{h}" as="geometry"/></mxCell>')
-        add(f'<mxCell id="lane-t-{k}" value="\U0001F464 {esc(label)}" style="text;html=1;align=left;fontSize=19;fontStyle=1;fontColor={ACCENT[k]};" vertex="1" parent="1"><mxGeometry x="28" y="{y+14}" width="200" height="26" as="geometry"/></mxCell>')
+        add(f'<mxCell id="lane-{k}" value="" style="rounded=0;html=1;fillColor={S.TH["panel2"]};strokeColor={S.TH["border"]};strokeWidth=1;opacity=70;verticalAlign=top;pointerEvents=0;" vertex="1" parent="1"><mxGeometry x="{LANE_X0}" y="{y}" width="{LANE_X1-LANE_X0}" height="{h}" as="geometry"/></mxCell>')
+        add(f'<mxCell id="lane-t-{k}" value="\U0001F464 {esc(label)}" style="text;html=1;align=left;fontSize=19;fontStyle=1;fontColor={acc(k)};" vertex="1" parent="1"><mxGeometry x="28" y="{y+14}" width="200" height="26" as="geometry"/></mxCell>')
         add(f'<mxCell id="lane-s-{k}" value="{esc(sub)}" style="text;html=1;align=left;fontSize=11;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="28" y="{y+44}" width="200" height="18" as="geometry"/></mxCell>')
 
     # step boxes + badges
     for b in BOXES:
         add(f'<mxCell id="s{b["num"]}" value="{step_value(b)}" style="{drawio_step_style(b)}" vertex="1" parent="1"><mxGeometry x="{b["x"]}" y="{b["y"]}" width="{b["w"]}" height="{b["h"]}" as="geometry"/></mxCell>')
-        add(f'<mxCell id="bd{b["num"]}" value="{b["num"]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor={ACCENT[b["lane"]]};strokeColor=#FFFFFF;strokeWidth=2;fontColor=#FFFFFF;fontSize=14;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="{b["x"]-17}" y="{b["y"]-17}" width="34" height="34" as="geometry"/></mxCell>')
+        add(f'<mxCell id="bd{b["num"]}" value="{b["num"]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor={acc(b["lane"])};strokeColor=#0B1220;strokeWidth=2;fontColor=#FFFFFF;fontSize=14;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="{b["x"]-17}" y="{b["y"]-17}" width="34" height="34" as="geometry"/></mxCell>')
 
     # edges
     for eid, pts, color, width, label, labpos in EDGES:
@@ -252,7 +237,7 @@ def build_page1():
         lbl = ""
         if label:
             lbl = (f'<mxCell id="{eid}-l" value="{esc(label)}" style="edgeLabel;html=1;align=center;verticalAlign=middle;'
-                   f'labelBackgroundColor=#FFFFFF;fontSize=10.5;fontStyle=1;fontColor={color};" vertex="1" connectable="0">'
+                   f'labelBackgroundColor={S.TH["panel"]};fontSize=10.5;fontStyle=1;fontColor={color};" vertex="1" connectable="0">'
                    f'<mxGeometry x="0.5" y="0.5" relative="1" as="geometry"><mxPoint x="{labpos[0]-mid[0]}" y="{labpos[1]-mid[1]}" as="offset"/></mxGeometry></mxCell>')
         add(f'<mxCell id="{eid}" style="{style}" edge="1" parent="1">'
             f'<mxGeometry relative="1" as="geometry">'
@@ -260,15 +245,18 @@ def build_page1():
             f'<Array as="points">{way}</Array></mxGeometry>{lbl}</mxCell>')
 
     # return-path big label box
-    r1_label = val("\u2713 CONFIRMED (\u22481 MIN)<br>your wallet decrypts<br>your new balance \u2014<font color=&quot;#2E7D32&quot;><b>only you can read it</b></font>")
-    add(f'<mxCell id="r1-lb" value="{r1_label}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;fontSize=11;fontColor={INK};align=center;" vertex="1" parent="1"><mxGeometry x="1600" y="640" width="228" height="92" as="geometry"/></mxCell>')
+    r1_label = val("\u2713 CONFIRMED (\u22481 MIN)<br>your wallet decrypts<br>your new balance \u2014" + f'<font color=&quot;{S.accent("green")[0]}&quot;><b>only you can read it</b></font>')
+    add(f'<mxCell id="r1-lb" value="{r1_label}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={S.TH["panel"]};gradientColor={S.TH["panel2"]};gradientDirection=south;strokeColor={S.accent("green")[0]};strokeWidth=2;fontSize=11;fontColor={S.TH["ink"]};align=center;shadow=1;" vertex="1" parent="1"><mxGeometry x="1600" y="640" width="228" height="92" as="geometry"/></mxCell>')
 
     # footer banner
-    add(f'<mxCell id="f1" value="THE WHOLE POINT" style="text;html=1;align=left;fontSize=15;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="40" y="1185" width="300" height="22" as="geometry"/></mxCell>')
-    add(f'<mxCell id="f2" value="Your money never leaves your control. The network never sees your amount, your identity, or your balance \u2014 it only agrees, in math, that everything adds up. That is how DERO replaces banks, clouds and databases with one shared, private, tamper-proof notebook." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=13.5;fontColor={INK};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1210" width="1500" height="96" as="geometry"/></mxCell>')
+    f1_txt = "THE WHOLE POINT"
+    foot_txt = "Your money never leaves your control. The network never sees your amount, your identity, or your balance \u2014 it only agrees, in math, that everything adds up. That is how DERO replaces banks, clouds and databases with one shared, private, tamper-proof notebook."
+    add(f'<mxCell id="f1" value="{esc(f1_txt)}" style="text;html=1;align=left;fontSize=15;fontStyle=1;fontColor={S.accent("brand")[0]};" vertex="1" parent="1"><mxGeometry x="40" y="1185" width="300" height="22" as="geometry"/></mxCell>')
+    add(f'<mxCell id="f2" value="{esc(foot_txt)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={S.TH["panel"]};gradientColor={S.TH["panel2"]};gradientDirection=south;strokeColor={S.accent("brand")[0]};strokeWidth=1.5;shadow=1;fontSize=13.5;fontColor={S.TH["ink"]};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1210" width="1500" height="96" as="geometry"/></mxCell>')
 
     # legend
-    add(f'<mxCell id="lg" value="LEGEND" style="text;html=1;align=left;fontSize=14;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="1600" y="1185" width="200" height="22" as="geometry"/></mxCell>')
+    lg_txt = "LEGEND"
+    add(f'<mxCell id="lg" value="{esc(lg_txt)}" style="text;html=1;align=left;fontSize=14;fontStyle=1;fontColor={S.accent("brand")[0]};" vertex="1" parent="1"><mxGeometry x="1600" y="1185" width="200" height="22" as="geometry"/></mxCell>')
     lg_rows = [
         ("user",    "\U0001F464 YOU \u2014 the human"),
         ("wallet",  "\U0001F4BC YOUR WALLET \u2014 the app"),
@@ -282,19 +270,14 @@ def build_page1():
     ly = 1215
     for key, txt in lg_rows:
         if key == "edge":
-            add(f'<mxCell id="lg-chip-edge" value="" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor={EDGE_BLUE};strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="1610" y="{ly+1}" width="22" height="14" as="geometry"/></mxCell>')
-            add(f'<mxCell id="lg-t-edge" value="&#8595; {esc(txt)}" style="text;html=1;align=left;fontSize=10.5;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="1640" y="{ly-2}" width="240" height="18" as="geometry"/></mxCell>')
+            add(f'<mxCell id="lg-chip-edge" value="" style="rounded=1;html=1;fillColor={S.TH["panel"]};strokeColor={EDGE_BLUE};strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="1610" y="{ly+1}" width="22" height="14" as="geometry"/></mxCell>')
+            add(f'<mxCell id="lg-t-edge" value="&#8595; {esc(txt)}" style="text;html=1;align=left;fontSize=10.5;fontColor={S.TH["ink"]};" vertex="1" parent="1"><mxGeometry x="1640" y="{ly-2}" width="240" height="18" as="geometry"/></mxCell>')
         else:
-            add(f'<mxCell id="lg-chip-{key}" value="" style="rounded=1;html=1;fillColor={ACCENT[key]};strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1610" y="{ly+1}" width="22" height="14" as="geometry"/></mxCell>')
-            add(f'<mxCell id="lg-t-{key}" value="{esc(txt)}" style="text;html=1;align=left;fontSize=10.5;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="1640" y="{ly-2}" width="240" height="18" as="geometry"/></mxCell>')
+            add(f'<mxCell id="lg-chip-{key}" value="" style="rounded=1;html=1;fillColor={acc(key)};strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1610" y="{ly+1}" width="22" height="14" as="geometry"/></mxCell>')
+            add(f'<mxCell id="lg-t-{key}" value="{esc(txt)}" style="text;html=1;align=left;fontSize=10.5;fontColor={S.TH["ink"]};" vertex="1" parent="1"><mxGeometry x="1640" y="{ly-2}" width="240" height="18" as="geometry"/></mxCell>')
         ly += 24
 
-    return (
-        f'<mxGraphModel dx="1500" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" '
-        f'connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="{H}" '
-        f'math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>'
-        + "".join(cells) + "</root></mxGraphModel>"
-    )
+    return S.d_graph(W, H, cells)
 
 # ------------------------------------------------------- page 2 (drawio) ----
 TECH_PLAIN = [
@@ -330,158 +313,44 @@ def build_page2():
     def add(x):
         cid[0] += 1
         cells.append(x)
-    add(f'<mxCell id="p2t" value="THE SAME JOURNEY IN PLAIN WORDS" style="text;html=1;align=center;fontSize=28;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="40" as="geometry"/></mxCell>')
-    add(f'<mxCell id="p2s" value="Print or share this page with a non-technical audience \u2014 the companion to the \u2018Journey of One Transaction\u2019 diagram." style="text;html=1;align=center;fontSize=13.5;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
-    add(f'<mxCell id="p2h1" value="TECH SPEAK \u2192 PLAIN SPEAK" style="text;html=1;align=left;fontSize=17;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="60" y="115" width="500" height="26" as="geometry"/></mxCell>')
-    add(f'<mxCell id="p2h2" value="KEY NUMBERS" style="text;html=1;align=left;fontSize=17;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="1180" y="115" width="500" height="26" as="geometry"/></mxCell>')
+    p2t_txt = "THE SAME JOURNEY IN PLAIN WORDS"
+    p2s_txt = "Print or share this page with a non-technical audience \u2014 the companion to the \u2018Journey of One Transaction\u2019 diagram."
+    add(f'<mxCell id="p2t" value="{esc(p2t_txt)}" style="text;html=1;align=center;fontSize=28;fontStyle=1;fontColor={S.TH["ink"]};" vertex="1" parent="1"><mxGeometry x="20" y="22" width="1880" height="40" as="geometry"/></mxCell>')
+    add(f'<mxCell id="p2s" value="{esc(p2s_txt)}" style="text;html=1;align=center;fontSize=13.5;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="66" width="1880" height="22" as="geometry"/></mxCell>')
+    h1_txt = "TECH SPEAK \u2192 PLAIN SPEAK"
+    h2_txt = "KEY NUMBERS"
+    add(f'<mxCell id="p2h1" value="{esc(h1_txt)}" style="text;html=1;align=left;fontSize=17;fontStyle=1;fontColor={S.accent("brand")[0]};" vertex="1" parent="1"><mxGeometry x="60" y="115" width="500" height="26" as="geometry"/></mxCell>')
+    add(f'<mxCell id="p2h2" value="{esc(h2_txt)}" style="text;html=1;align=left;fontSize=17;fontStyle=1;fontColor={S.accent("brand")[0]};" vertex="1" parent="1"><mxGeometry x="1180" y="115" width="500" height="26" as="geometry"/></mxCell>')
     y = 150
     for i, (tech, plain) in enumerate(TECH_PLAIN):
-        add(f'<mxCell id="tp{i}" value="{val(f"<b>{esc(tech)}</b><br><font color=&quot;#66727E&quot;>{esc(plain)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C9D6E3;strokeWidth=1.5;fontSize=12;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="1080" height="52" as="geometry"/></mxCell>')
+        tp_html = f"<b>{esc(tech)}</b><br><font color=&quot;{S.TH['muted']}&quot;>{esc(plain)}</font>"
+        add(f'<mxCell id="tp{i}" value="{val(tp_html)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={S.TH["panel"]};gradientColor={S.TH["panel2"]};gradientDirection=south;strokeColor={S.TH["border"]};strokeWidth=1.5;shadow=1;fontSize=12;fontColor={S.TH["ink"]};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="1080" height="52" as="geometry"/></mxCell>')
         y += 60
     y2 = 150
     for i, (num, desc) in enumerate(KEY_NUMBERS):
-        add(f'<mxCell id="kn{i}" value="{val(f"<font color=&quot;{TITLE_COLOR}&quot;><b>{esc(num)}</b></font><br><font color=&quot;#66727E&quot;>{esc(desc)}</font>")}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="1180" y="{y2}" width="660" height="52" as="geometry"/></mxCell>')
+        kn_html = f"<font color=&quot;{S.accent('brand')[0]}&quot;><b>{esc(num)}</b></font><br><font color=&quot;{S.TH['muted']}&quot;>{esc(desc)}</font>"
+        add(f'<mxCell id="kn{i}" value="{val(kn_html)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={S.TH["panel"]};gradientColor={S.TH["panel2"]};gradientDirection=south;strokeColor={S.accent("brand")[0]};strokeWidth=1.5;shadow=1;fontSize=12;fontColor={S.TH["ink"]};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="1180" y="{y2}" width="660" height="52" as="geometry"/></mxCell>')
         y2 += 60
-    add(f'<mxCell id="p2f" value="DHEBP = DERO Homomorphic Encryption Blockchain Protocol \u00b7 codename Stargate \u00b7 Diagram v1 \u2014 collaborative repo: github.com/liqdmetal/DERO.STARGATE.DIAGRAMS" style="text;html=1;align=center;fontSize=11;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="{max(y, y2) + 30}" width="1880" height="20" as="geometry"/></mxCell>')
+    p2f_txt = "DHEBP = DERO Homomorphic Encryption Blockchain Protocol \u00b7 codename Stargate \u00b7 collaborative repo: github.com/liqdmetal/DERO.STARGATE.DIAGRAMS"
+    add(f'<mxCell id="p2f" value="{esc(p2f_txt)}" style="text;html=1;align=center;fontSize=11;fontColor={GRAY};" vertex="1" parent="1"><mxGeometry x="20" y="{max(y, y2) + 30}" width="1880" height="20" as="geometry"/></mxCell>')
     H2 = max(y, y2) + 80
-    return f'<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="{H2}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+    return S.d_graph(1920, H2, cells)
 
 def build_drawio():
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     return (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
-        f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device">\n'
-        f'  <diagram id="journey" name="The Journey of One Transaction">\n{inject_draft(build_page1())}\n  </diagram>\n'
-        f'  <diagram id="translation" name="Plain-Language Translation">\n{inject_draft(build_page2())}\n  </diagram>\n'
+        f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device" background="{S.TH["bg0"]}">\n'
+        f'  <diagram id="journey" name="The Journey of One Transaction">\n{S.inject_draft(build_page1())}\n  </diagram>\n'
+        f'  <diagram id="translation" name="Plain-Language Translation">\n{S.inject_draft(build_page2())}\n  </diagram>\n'
         '</mxfile>\n'
     )
 
-# ================================================================ SVG ========
-def svg_esc(s):
-    return html.escape(s)
-
-def build_svg():
-    out = []
-    A = out.append
-    A(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" font-family="Segoe UI, Arial, sans-serif">')
-    A(f'<defs>'
-      f'<marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="{EDGE_BLUE}"/></marker>'
-      f'<marker id="arg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/></marker>'
-      f'</defs>')
-    A(f'<rect x="0" y="0" width="{W}" height="{H}" fill="#FFFFFF"/>')
-
-    # title
-    A(f'<text x="{W/2}" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="{TITLE_COLOR}">THE JOURNEY OF ONE DERO TRANSACTION</text>')
-    A(f'<text x="{W/2}" y="82" text-anchor="middle" font-size="14" fill="{GRAY}">From your wallet \u2192 through the network \u2192 into the encrypted ledger (DLT) \u2192 confirmation back to you.  Follow the numbers 1 \u2192 14.</text>')
-    A(f'<rect x="1600" y="60" width="290" height="30" rx="8" fill="#EAF2FB" stroke="{TITLE_COLOR}"/>')
-    A(f'<text x="1745" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="{TITLE_COLOR}">DERO \u00b7 DHEBP (Stargate) \u00b7 Layer 1</text>')
-
-    # lanes
-    for k, label, sub, y, h in LANES:
-        A(f'<rect x="{LANE_X0}" y="{y}" width="{LANE_X1-LANE_X0}" height="{h}" rx="6" fill="{TINT[k]}" fill-opacity="0.55" stroke="#D8E2EC"/>')
-        A(f'<text x="34" y="{y+36}" font-size="19" font-weight="700" fill="{ACCENT[k]}">\U0001F464 {svg_esc(label)}</text>')
-        A(f'<text x="34" y="{y+62}" font-size="11" fill="{GRAY}">{svg_esc(sub)}</text>')
-
-    # step boxes
-    for b in BOXES:
-        x, y, w, h = b["x"], b["y"], b["w"], b["h"]
-        acc = ACCENT[b["lane"]]
-        A(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="10" fill="#FFFFFF" stroke="{acc}" stroke-width="2"/>')
-        A(f'<circle cx="{x}" cy="{y}" r="17" fill="{acc}" stroke="#FFFFFF" stroke-width="2.5"/>')
-        A(f'<text x="{x}" y="{y+5}" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFFFF">{b["num"]}</text>')
-        ty = y + 34
-        A(f'<text x="{x+12}" y="{ty}" font-size="13" font-weight="700" fill="{acc}">{b["num"]} \u00b7 {svg_esc(b["title"])}</text>')
-        ty += 21
-        for ln in b["b"]:
-            A(f'<text x="{x+12}" y="{ty}" font-size="10.5" fill="{INK}">{svg_esc(ln)}</text>')
-            ty += 15
-        ty += 6
-        for ln in b["p"]:
-            A(f'<text x="{x+12}" y="{ty}" font-size="10" font-style="italic" fill="#66727E">\U0001F4A1 {svg_esc(ln)}</text>')
-            ty += 14
-
-    # edges
-    for eid, pts, color, width, label, labpos in EDGES:
-        mk = "arg" if color == "#2E7D32" else "ar"
-        d = " ".join(f'L {p[0]} {p[1]}' for p in pts[1:])
-        A(f'<path d="M {pts[0][0]} {pts[0][1]} {d}" fill="none" stroke="{color}" stroke-width="{width}" marker-end="url(#{mk})"/>')
-        if label:
-            A(f'<text x="{labpos[0]}" y="{labpos[1]}" font-size="10.5" font-weight="600" fill="{color}" '
-              f'stroke="#FFFFFF" stroke-width="3" paint-order="stroke">{svg_esc(label)}</text>')
-
-    # return label box (clear of step 14: y 640..732)
-    A(f'<rect x="1600" y="640" width="228" height="92" rx="10" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>')
-    A(f'<text x="1714" y="666" text-anchor="middle" font-size="12" font-weight="700" fill="#2E7D32">\u2713 CONFIRMED (\u22481 MIN)</text>')
-    A(f'<text x="1714" y="688" text-anchor="middle" font-size="11" fill="{INK}">your wallet decrypts</text>')
-    A(f'<text x="1714" y="706" text-anchor="middle" font-size="11" fill="{INK}">your new balance \u2014</text>')
-    A(f'<text x="1714" y="724" text-anchor="middle" font-size="11" font-weight="700" fill="#2E7D32">only you can read it</text>')
-
-    # footer
-    A(f'<text x="40" y="1206" font-size="15" font-weight="700" fill="{TITLE_COLOR}">THE WHOLE POINT</text>')
-    A(f'<rect x="40" y="1218" width="1500" height="96" rx="10" fill="#F4F8FC" stroke="{TITLE_COLOR}" stroke-width="1.5"/>')
-    A(f'<text x="60" y="1252" font-size="13.5" fill="{INK}">Your money never leaves your control. The network never sees your amount, your identity, or your balance \u2014 it only agrees, in math,</text>')
-    A(f'<text x="60" y="1272" font-size="13.5" fill="{INK}">that everything adds up. That is how DERO replaces banks, clouds and databases with one shared, private, tamper-proof notebook.</text>')
-
-    # legend
-    A(f'<text x="1600" y="1206" font-size="14" font-weight="700" fill="{TITLE_COLOR}">LEGEND</text>')
-    ly = 1222
-    for key, txt in [
-        ("user", "YOU \u2014 the human"), ("wallet", "YOUR WALLET \u2014 the app"),
-        ("node", "YOUR NODE \u2014 your daemon"), ("network", "THE NETWORK \u2014 every node"),
-        ("miners", "MINERS \u2014 PoW consensus"), ("ledger", "THE LEDGER \u2014 shared DLT"),
-        ("confirm", "\u21A9 Confirmation back to you"), ("edge", "\u2193 The transaction\u2019s journey"),
-    ]:
-        if key == "edge":
-            A(f'<rect x="1610" y="{ly}" width="22" height="14" rx="4" fill="#FFFFFF" stroke="{EDGE_BLUE}" stroke-width="2"/>')
-        else:
-            A(f'<rect x="1610" y="{ly}" width="22" height="14" rx="4" fill="{ACCENT[key]}"/>')
-        A(f'<text x="1642" y="{ly+12}" font-size="10.5" fill="{INK}">{svg_esc(txt)}</text>')
-        ly += 24
-
-    A('</svg>')
-    return "\n".join(out)
-
-def build_svg_page2():
-    out = []
-    A = out.append
-    W2, H2 = 1920, 950
-    A(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W2}" height="{H2}" viewBox="0 0 {W2} {H2}" font-family="Segoe UI, Arial, sans-serif">')
-    A(f'<rect x="0" y="0" width="{W2}" height="{H2}" fill="#FFFFFF"/>')
-    A(f'<text x="{W2/2}" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="{TITLE_COLOR}">THE SAME JOURNEY IN PLAIN WORDS</text>')
-    A(f'<text x="{W2/2}" y="82" text-anchor="middle" font-size="13.5" fill="{GRAY}">Print or share this page with a non-technical audience \u2014 the companion to the \u2018Journey of One Transaction\u2019 diagram.</text>')
-    A(f'<text x="60" y="130" font-size="17" font-weight="700" fill="{TITLE_COLOR}">TECH SPEAK \u2192 PLAIN SPEAK</text>')
-    A(f'<text x="1180" y="130" font-size="17" font-weight="700" fill="{TITLE_COLOR}">KEY NUMBERS</text>')
-    y = 150
-    for i, (tech, plain) in enumerate(TECH_PLAIN):
-        A(f'<rect x="60" y="{y}" width="1080" height="52" rx="8" fill="#FFFFFF" stroke="#C9D6E3" stroke-width="1.5"/>')
-        A(f'<text x="76" y="{y+22}" font-size="12.5" font-weight="700" fill="{INK}">{svg_esc(tech)}</text>')
-        A(f'<text x="76" y="{y+40}" font-size="11.5" fill="#66727E">{svg_esc(plain)}</text>')
-        y += 60
-    y2 = 150
-    for i, (num, desc) in enumerate(KEY_NUMBERS):
-        A(f'<rect x="1180" y="{y2}" width="660" height="52" rx="8" fill="#F4F8FC" stroke="{TITLE_COLOR}" stroke-width="1.5"/>')
-        A(f'<text x="1210" y="{y2+24}" font-size="15" font-weight="700" fill="{TITLE_COLOR}">{svg_esc(num)}</text>')
-        A(f'<text x="1210" y="{y2+43}" font-size="11.5" fill="#66727E">{svg_esc(desc)}</text>')
-        y2 += 60
-    A(f'<text x="{W2/2}" y="{max(y, y2) + 30}" text-anchor="middle" font-size="11" fill="{GRAY}">DHEBP = DERO Homomorphic Encryption Blockchain Protocol \u00b7 codename Stargate \u00b7 Diagram v1 \u2014 collaborative repo: github.com/liqdmetal/DERO.STARGATE.DIAGRAMS</text>')
-    A('</svg>')
-    return "\n".join(out)
-
 # ================================================================ main ======
 if __name__ == "__main__":
-    import os
+    theme = sys.argv[1] if len(sys.argv) > 1 else "light"
+    S.set_theme(theme)
     d = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(d, "DERO.PROCESS.COMPLETE.drawio"), "w", encoding="utf-8") as f:
         f.write(build_drawio())
-    with open(os.path.join(d, "preview_page1.svg"), "w", encoding="utf-8") as f:
-        f.write(inject_draft_svg(build_svg()))
-    with open(os.path.join(d, "preview_page2.svg"), "w", encoding="utf-8") as f:
-        f.write(inject_draft_svg(build_svg_page2()))
-    with open(os.path.join(d, "preview_page1.html"), "w", encoding="utf-8") as f:
-        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{inject_draft_svg(build_svg())}</body></html>')
-    with open(os.path.join(d, "preview_page2.html"), "w", encoding="utf-8") as f:
-        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{inject_draft_svg(build_svg_page2())}</body></html>')
-    print("written OK")
-    # report geometry stats
-    for b in BOXES:
-        print(f'step {b["num"]:>2}: y={b["y"]:>4} h={b["h"]:>3}  lane={b["lane"]:>7}  lines b={len(b["b"])} p={len(b["p"])}')
+    print(f"written OK (theme={theme})")

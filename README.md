@@ -15,6 +15,12 @@ Plain-language process diagrams explaining how DERO (DHEBP / Stargate) works —
 from a single transaction, to the network's place in the modern world, to the
 community ecosystem building on it today and what it can grow into.
 
+## 🗂️ Start here: `index.html`
+
+The whole library on one page — every diagram with a preview thumbnail and
+an **Open in drawio** link (via the diagrams.net viewer, no install needed).
+Open `index.html` in a browser (it lives in this repo).
+
 Every diagram ships as an editable `.drawio` file (open at
 [app.diagrams.net](https://app.diagrams.net)) plus PNG previews. Each diagram
 is written for laymen: numbered steps, swimlanes, and a "💡 in plain words"

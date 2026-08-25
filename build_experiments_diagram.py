@@ -7,13 +7,19 @@ Page 2: five-step ramp to run your own experiment + primitive cheat sheet.
 Sources: derod.org corpus use-case taxonomy, community repos.
 """
 import xml.sax.saxutils as sax
+import sys
+import dero_style as S
+S.set_theme(sys.argv[1] if len(sys.argv) > 1 else "light")
+PANEL = S.TH["panel"]; PANEL2 = S.TH["panel2"]; BORDER = S.TH["border"]
+BG0 = S.TH["bg0"]; MUTED = S.TH["muted"]
 import datetime, html, re
+import sys
 
-TITLE_COLOR = "#4277BB"
-INK, GRAY = "#22303C", "#5A6B7A"
-STATUS = {"LIVE": ("#2E7D32", "\U0001F7E2 LIVE \u2014 USE IT TODAY"),
-          "PARTIAL": ("#F9A825", "\U0001F7E1 PARTIAL \u2014 BUILD ON IT"),
-          "EXP": ("#C62828", "\U0001F534 EXPERIMENTAL \u2014 PROTOTYPE IT")}
+TITLE_COLOR = S.TH["brand"]
+INK, GRAY = S.TH["ink"], S.TH["muted"]
+STATUS = {"LIVE": (S.accent("green")[0], "\U0001F7E2 LIVE \u2014 USE IT TODAY"),
+          "PARTIAL": (S.accent("amber")[0], "\U0001F7E1 PARTIAL \u2014 BUILD ON IT"),
+          "EXP": (S.accent("red")[0], "\U0001F534 EXPERIMENTAL \u2014 PROTOTYPE IT")}
 W, H = 1920, 1420
 
 CARDS = [
@@ -164,21 +170,8 @@ def wrap(text, width_px, font_px, factor=0.55):
         lines.append(cur)
     return lines
 
-def _draft_cell(h):
-    return ('<mxCell id="draft" value="&#9888;&#65039; DRAFT &#8212; community draft \u2014 not verified, reviewed, or audited" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=2;fontSize=11;fontStyle=1;fontColor=#C62828;align=center;verticalAlign=middle;" vertex="1" parent="1">'
-            f'<mxGeometry x="18" y="{h-44}" width="380" height="34" as="geometry"/></mxCell>')
-
-def inject_draft(model):
-    m = re.search(r'pageHeight="(\d+)"', model)
-    h = int(m.group(1)) if m else 1400
-    return model.replace('<mxCell id="1" parent="0"/>', '<mxCell id="1" parent="0"/>' + _draft_cell(h), 1)
-
-def inject_draft_svg(svg):
-    m = re.search(r'height="(\d+)"', svg)
-    h = int(m.group(1)) if m else 1400
-    chip = (f'<rect x="18" y="{h-44}" width="380" height="34" rx="8" fill="#FDECEA" stroke="#C62828" stroke-width="2"/>'
-            f'<text x="208" y="{h-22}" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">\u26A0\uFE0F DRAFT \u2014 community draft: not verified, reviewed, or audited</text>')
-    return svg.replace('</svg>', chip + '</svg>')
+inject_draft = S.inject_draft
+inject_draft_svg = lambda s: s
 
 def card_value(name, status_key, problem, fit, tryit, filled_by):
     sc, stxt = STATUS[status_key]
@@ -207,11 +200,11 @@ def build_page1():
     for i, (name, status_key, problem, fit, tryit, filled_by) in enumerate(CARDS):
         r, c = divmod(i, 3)
         x, y = xs[c], ys[r]
-        add(f'<mxCell id="x-c{i}" value="{card_value(name, status_key, problem, fit, tryit, filled_by)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={STATUS[status_key][0]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=12;fontSize=10.5;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{ws}" height="{hs}" as="geometry"/></mxCell>')
+        add(f'<mxCell id="x-c{i}" value="{card_value(name, status_key, problem, fit, tryit, filled_by)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={STATUS[status_key][0]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=12;fontSize=10.5;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="{x}" y="{y}" width="{ws}" height="{hs}" as="geometry"/></mxCell>')
         sc, _ = STATUS[status_key]
         add(f'<mxCell id="x-bd{i}" value="{i+1}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor={sc};strokeColor=#FFFFFF;strokeWidth=2;fontColor=#FFFFFF;fontSize=13;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="{x-15}" y="{y-15}" width="30" height="30" as="geometry"/></mxCell>')
-    add(f'<mxCell id="x-f" value="Nothing here is a product claim \u2014 statuses are best-effort reads of what exists in the repos vs what is still an idea.  The point of this page is to give experiments a starting line." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1330" width="1840" height="56" as="geometry"/></mxCell>')
-    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="{H}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+    add(f'<mxCell id="x-f" value="Nothing here is a product claim \u2014 statuses are best-effort reads of what exists in the repos vs what is still an idea.  The point of this page is to give experiments a starting line." style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="1330" width="1840" height="56" as="geometry"/></mxCell>')
+    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="{W}" pageHeight="{H}" background="{BG0}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 def build_page2():
     cells = []
@@ -224,17 +217,17 @@ def build_page2():
         b = wrap(body, 1560 - 40, 12.5)
         btext = " ".join(b)
         step_html = f"<font color=&quot;{ACC[color]}&quot;><b>STEP {i+1} \u00b7 {esc(title)}</b></font><br>{esc(btext)}"
-        add(f'<mxCell id="r-s{i}" value="{val(step_html)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor={ACC[color]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=14;fontSize=12.5;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="1560" height="88" as="geometry"/></mxCell>')
+        add(f'<mxCell id="r-s{i}" value="{val(step_html)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={ACC[color]};strokeWidth=2;verticalAlign=top;align=left;spacing=10;spacingTop=14;fontSize=12.5;fontColor={INK};" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="1560" height="88" as="geometry"/></mxCell>')
         add(f'<mxCell id="r-bd{i}" value="{i+1}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor={ACC[color]};strokeColor=#FFFFFF;strokeWidth=2;fontColor=#FFFFFF;fontSize=15;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="{60-15}" y="{y-15}" width="30" height="30" as="geometry"/></mxCell>')
         y += 100
     add(f'<mxCell id="r-h" value="WHEN TO REACH FOR WHICH PRIMITIVE" style="text;html=1;align=left;fontSize=17;fontStyle=1;fontColor={TITLE_COLOR};" vertex="1" parent="1"><mxGeometry x="60" y="{y}" width="600" height="26" as="geometry"/></mxCell>')
     y += 34
     for i, (name, role, when) in enumerate(PRIMITIVES):
         prim_html = f"<font color=&quot;{TITLE_COLOR}&quot;><b>{esc(name)}</b></font> <font color=&quot;#5A6B7A&quot;>\u2014 {esc(role)}</font><br><font color=&quot;#66727E&quot;>{esc(when)}</font>"
-        add(f'<mxCell id="r-p{i}" value="{val(prim_html)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{60 + (i%2)*940}" y="{y}" width="900" height="64" as="geometry"/></mxCell>')
+        add(f'<mxCell id="r-p{i}" value="{val(prim_html)}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={INK};align=center;verticalAlign=middle;spacing=6;" vertex="1" parent="1"><mxGeometry x="{60 + (i%2)*940}" y="{y}" width="900" height="64" as="geometry"/></mxCell>')
         if i % 2 == 1:
             y += 74
-    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="{y + 60}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="{y + 60}" background="{BG0}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 def build_svg_p1():
     out = []
@@ -334,15 +327,15 @@ def build_page3():
         # code box
         add(f'<mxCell id="d-c{i}" value="{code_label}" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor={acc};" vertex="1" parent="1"><mxGeometry x="{x+16}" y="244" width="600" height="18" as="geometry"/></mxCell>')
         code_html = val("<br>".join(esc(ln) if ln else "" for ln in dd["code"]))
-        add(f'<mxCell id="d-cb{i}" value="{code_html}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7F9FB;strokeColor=#C9D6E3;strokeWidth=1.5;fontFamily=Courier New;fontSize=10.5;fontColor={INK};align=left;verticalAlign=top;spacing=10;spacingTop=10;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="266" width="868" height="380" as="geometry"/></mxCell>')
+        add(f'<mxCell id="d-cb{i}" value="{code_html}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7F9FB;strokeColor={BORDER};strokeWidth=1.5;fontFamily=Courier New;fontSize=10.5;fontColor={INK};align=left;verticalAlign=top;spacing=10;spacingTop=10;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="266" width="868" height="380" as="geometry"/></mxCell>')
         # missing
         add(f'<mxCell id="d-m{i}" value="{missing_label}" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#C62828;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="660" width="600" height="18" as="geometry"/></mxCell>')
         add(f'<mxCell id="d-mb{i}" value="{esc(dd["missing"])}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEA;strokeColor=#C62828;strokeWidth=1.5;fontSize=11.5;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="682" width="868" height="92" as="geometry"/></mxCell>')
         # test
         add(f'<mxCell id="d-t{i}" value="{test_label}" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor={acc};" vertex="1" parent="1"><mxGeometry x="{x+16}" y="788" width="600" height="18" as="geometry"/></mxCell>')
-        add(f'<mxCell id="d-tb{i}" value="{esc(dd["test"])}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={acc};strokeWidth=1.5;fontSize=11.5;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="810" width="868" height="78" as="geometry"/></mxCell>')
-    add(f'<mxCell id="d-f" value="Next step for either: run the simulator, deploy the sketch, and break it. If it survives, take it to testnet and share it in the community \u2014 that is how greenfield slots get filled." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FC;strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="920" width="1840" height="56" as="geometry"/></mxCell>')
-    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1000" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
+        add(f'<mxCell id="d-tb{i}" value="{esc(dd["test"])}" style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={acc};strokeWidth=1.5;fontSize=11.5;fontColor={INK};align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1"><mxGeometry x="{x+16}" y="810" width="868" height="78" as="geometry"/></mxCell>')
+    add(f'<mxCell id="d-f" value="Next step for either: run the simulator, deploy the sketch, and break it. If it survives, take it to testnet and share it in the community \u2014 that is how greenfield slots get filled." style="rounded=1;whiteSpace=wrap;html=1;fillColor={PANEL};strokeColor={TITLE_COLOR};strokeWidth=1.5;fontSize=12;fontColor={GRAY};align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="40" y="920" width="1840" height="56" as="geometry"/></mxCell>')
+    return f'<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1000" background="{BG0}" math="0" shadow="0"><root><mxCell id="0"/><mxCell id="1" parent="0"/>' + "".join(cells) + "</root></mxGraphModel>"
 
 def build_svg_p3():
     out = []
@@ -386,27 +379,15 @@ def build_svg_p3():
 
 if __name__ == "__main__":
     import os
+    theme = sys.argv[1] if len(sys.argv) > 1 else "light"
     d = os.path.dirname(os.path.abspath(__file__))
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
-    p2, h2 = build_svg_p2()
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-           f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device">\n'
+           f'<mxfile host="app.diagrams.net" modified="{now}" agent="Hermes-AI" version="24.4.8" type="device" background="{BG0}">\n'
            f'  <diagram id="experiments" name="Experimental Field Guide">\n{inject_draft(build_page1())}\n  </diagram>\n'
            f'  <diagram id="ramp" name="Run Your Own Experiment">\n{inject_draft(build_page2())}\n  </diagram>\n'
            f'  <diagram id="deepdives" name="{esc("Deep Dives - M2M and Insurance")}">\n{inject_draft(build_page3())}\n  </diagram>\n'
            '</mxfile>\n')
     with open(os.path.join(d, "DERO.EXPERIMENTS.drawio"), "w", encoding="utf-8") as f:
         f.write(xml)
-    svg1 = inject_draft_svg(build_svg_p1())
-    svg2 = inject_draft_svg(p2)
-    svg3 = inject_draft_svg(build_svg_p3())
-    for name, svg in [("preview_experiments1.svg", svg1), ("preview_experiments2.svg", svg2)]:
-        with open(os.path.join(d, name), "w", encoding="utf-8") as f:
-            f.write(svg)
-        with open(os.path.join(d, name.replace(".svg", ".html")), "w", encoding="utf-8") as f:
-            f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{svg}</body></html>')
-    with open(os.path.join(d, "preview_experiments3.svg"), "w", encoding="utf-8") as f:
-        f.write(svg3)
-    with open(os.path.join(d, "preview_experiments3.html"), "w", encoding="utf-8") as f:
-        f.write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;}}</style></head><body>{svg3}</body></html>')
-    print("written OK")
+    print(f"written OK (theme={theme})")

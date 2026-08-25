@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1000" viewBox="0 0 1920 1000" font-family="Segoe UI, Arial, sans-serif">
+<rect x="0" y="0" width="1920" height="1000" fill="#0B1220"/>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#38BDF8"/></marker></defs>
+<rect x="18.0" y="954.0" width="400.0" height="34.0" rx="10" fill="#2A1216" stroke="#F87171" stroke-width="1.5"/>
+<text x="30.0" y="976.0" font-size="12.5" font-weight="700" fill="#F87171">⚠️ DRAFT — community draft — not verified, reviewed, or audited</text>
+<rect x="20.0" y="22.0" width="1880.0" height="40.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="32.0" y="44.0" font-size="12.5" font-weight="700" fill="#26334D">DEEP DIVES — TWO GREENFIELD EXPERIMENTS</text>
+<rect x="20.0" y="66.0" width="1880.0" height="22.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="32.0" y="88.0" font-size="12.5" font-weight="700" fill="#26334D">Both use cases are empty slots in the ecosystem (greenfield). Here is the pattern, an illustrative DVM-BASIC starter contract, the honest blockers, and the test path. Sketches are NOT deployed or audited — they are a starting line.</text>
+<rect x="40.0" y="110.0" width="900.0" height="120.0" rx="10" fill="#E3F2FD" stroke="#1E88E5" stroke-width="2.0"/>
+<rect x="56.0" y="118.0" width="700.0" height="24.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="68.0" y="140.0" font-size="12.5" font-weight="700" fill="#26334D">🤖 M2M PAYMENTS — DEVICE-TO-DEVICE VALUE</text>
+<rect x="56.0" y="150.0" width="220.0" height="26.0" rx="10" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="68.0" y="172.0" font-size="12.5" font-weight="700" fill="#C62828">🔴 GREENFIELD — NOT FILLED YET</text>
+<rect x="56.0" y="180.0" width="160.0" height="18.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="68.0" y="202.0" font-size="12.5" font-weight="700" fill="#26334D">THE PATTERN</text>
+<rect x="150.0" y="174.0" width="770.0" height="46.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="162.0" y="196.0" font-size="12.5" font-weight="700" fill="#26334D">1 · Device contract holds a prepaid balance → 2 · every service use fires a micro-transfer (18 s finality) → 3 · provider releases the service on payment</text>
+<rect x="56.0" y="244.0" width="600.0" height="18.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="68.0" y="266.0" font-size="12.5" font-weight="700" fill="#26334D">CONTRACT SKETCH — DVM-BASIC (illustrative)</text>
+<rect x="56.0" y="266.0" width="868.0" height="380.0" rx="10" fill="#F7F9FB" stroke="#26334D" stroke-width="1.5"/>
+<text x="68.0" y="288.0" font-size="12.5" font-weight="700" fill="#26334D">Function Initialize() Uint64</text>
+<text x="68.0" y="303.0" font-size="10.5" font-weight="400" fill="#5A6B7A">  10 STORE(&quot;owner&quot;, SIGNER())</text>
+<text x="68.0" y="318.0" font-size="10.5" font-weight="400" fill="#5A6B7A">  20 STORE(&quot;balance&quot;, 0)</text>
+<text x="68.0" y="333.0" font-size="10.5" font-weight="400" fill="#5A6B7A">  30 RETURN 0</text>
+<rect x="56.0" y="660.0" width="600.0" height="18.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="68.0" y="682.0" font-size="12.5" font-weight="700" fill="#26334D">WHAT’S MISSING (honest blockers)</text>
+<rect x="56.0" y="682.0" width="868.0" height="92.0" rx="10" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="68.0" y="704.0" font-size="12.5" font-weight="700" fill="#C62828">Device key custody (secure element per device) · device identity registry (extend the Name Service) · dust-fee economics &amp; IoT-scale throughput · user override (XSWD-style approval for big spends)</text>
+<rect x="56.0" y="788.0" width="600.0" height="18.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="68.0" y="810.0" font-size="12.5" font-weight="700" fill="#26334D">TEST IT — simulator path</text>
+<rect x="56.0" y="810.0" width="868.0" height="78.0" rx="10" fill="#141E36" stroke="#1E88E5" stroke-width="1.5"/>
+<text x="68.0" y="832.0" font-size="12.5" font-weight="700" fill="#1E88E5">derod --simulator → deploy the contract → TopUp from wallet RPC → fire 100 UseService calls → watch the balance drain and confirmations land (~18 s each). Measure time and cost.</text>
+<rect x="980.0" y="110.0" width="900.0" height="120.0" rx="10" fill="#FFF3E0" stroke="#FB8C00" stroke-width="2.0"/>
+<rect x="996.0" y="118.0" width="700.0" height="24.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="1008.0" y="140.0" font-size="12.5" font-weight="700" fill="#26334D">🛡️ PARAMETRIC INSURANCE — PAYOUTS BY CODE</text>
+<rect x="996.0" y="150.0" width="220.0" height="26.0" rx="10" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="1008.0" y="172.0" font-size="12.5" font-weight="700" fill="#C62828">🔴 GREENFIELD — NOT FILLED YET</text>
+<rect x="996.0" y="180.0" width="160.0" height="18.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="1008.0" y="202.0" font-size="12.5" font-weight="700" fill="#26334D">THE PATTERN</text>
+<rect x="1090.0" y="174.0" width="770.0" height="46.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="1102.0" y="196.0" font-size="12.5" font-weight="700" fill="#26334D">1 · policies buy in, premiums pool in the SC → 2 · an oracle reports the trigger (e.g. 120-min delay) → 3 · contract pays every policy automatically — no adjuster</text>
+<rect x="996.0" y="244.0" width="600.0" height="18.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="1008.0" y="266.0" font-size="12.5" font-weight="700" fill="#26334D">CONTRACT SKETCH — DVM-BASIC (illustrative)</text>
+<rect x="996.0" y="266.0" width="868.0" height="380.0" rx="10" fill="#F7F9FB" stroke="#26334D" stroke-width="1.5"/>
+<text x="1008.0" y="288.0" font-size="12.5" font-weight="700" fill="#26334D">Function Initialize() Uint64</text>
+<text x="1008.0" y="303.0" font-size="10.5" font-weight="400" fill="#5A6B7A">  10 STORE(&quot;pool&quot;, 0)</text>
+<text x="1008.0" y="318.0" font-size="10.5" font-weight="400" fill="#5A6B7A">  20 STORE(&quot;policies&quot;, 0)</text>
+<text x="1008.0" y="333.0" font-size="10.5" font-weight="400" fill="#5A6B7A">  30 RETURN 0</text>
+<rect x="996.0" y="660.0" width="600.0" height="18.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="1008.0" y="682.0" font-size="12.5" font-weight="700" fill="#26334D">WHAT’S MISSING (honest blockers)</text>
+<rect x="996.0" y="682.0" width="868.0" height="92.0" rx="10" fill="#FDECEA" stroke="#C62828" stroke-width="1.5"/>
+<text x="1008.0" y="704.0" font-size="12.5" font-weight="700" fill="#C62828">The oracle problem — DERO has no native oracle: trusted reporter, multi-signer threshold, or crowd attestation · capital-pool sizing &amp; underwriting · dispute/refund path · regulatory grey area</text>
+<rect x="996.0" y="788.0" width="600.0" height="18.0" rx="10" fill="#FFFFFF" stroke="#26334D" stroke-width="1.4"/>
+<text x="1008.0" y="810.0" font-size="12.5" font-weight="700" fill="#26334D">TEST IT — simulator path</text>
+<rect x="996.0" y="810.0" width="868.0" height="78.0" rx="10" fill="#141E36" stroke="#FB8C00" stroke-width="1.5"/>
+<text x="1008.0" y="832.0" font-size="12.5" font-weight="700" fill="#FB8C00">Simulator + fake oracle: call ReportEvent(180) via wallet RPC → verify automatic payout to every policy holder. Try edge cases: empty pool, double event, 119 minutes.</text>
+<rect x="40.0" y="920.0" width="1840.0" height="56.0" rx="10" fill="#141E36" stroke="#38BDF8" stroke-width="1.5"/>
+<text x="52.0" y="942.0" font-size="12.5" font-weight="700" fill="#38BDF8">Next step for either: run the simulator, deploy the sketch, and break it. If it survives, take it to testnet and share it in the community — that is how greenfield slots get filled.</text>
+</svg>
