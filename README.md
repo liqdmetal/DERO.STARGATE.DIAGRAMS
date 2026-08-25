@@ -26,43 +26,47 @@ Every diagram ships as an editable `.drawio` file (open at
 is written for laymen: numbered steps, swimlanes, and a "💡 in plain words"
 line under every step.
 
-## The diagrams
+## The diagrams (11 files, 30+ pages)
 
 | File | What it shows |
 |------|---------------|
-| **`DERO.PROCESS.COMPLETE.drawio`** | **The Journey of One DERO Transaction** — user → wallet → node → network → miners (AstroBWTv3 PoW) → encrypted ledger (DLT) → confirmation back to you. 2 pages: diagram + plain-language translation. |
-| **`DERO.WORLD.drawio`** | **DERO's Place in the Modern World** — 5 everyday needs (paying, deals, data, apps, identity): centralized old world vs the DERO world. 2 pages: comparison + swap table. |
-| **`DERO.MINING.drawio`** | **How DERO Mining Works — the Σ-block loop** — the network-is-the-pool design: ~2 s Σ-blocks, 18 s blocks, 9+1 mini-blocks, reward split, solo mining. 2 pages: loop + key numbers & FAQ. |
-| **`DERO.TELA.drawio`** | **From Idea to On-Chain App** — building a dApp: DVM smart contract → `install_sc` → XSWD wallet bridge → TELA. 3 pages: flow + the dApp stack + **the community ecosystem index**. |
-| **`DERO.UNIVERSE.drawio`** | **The DERO Universe** — one surfable map with a reading path: numbered zones (① engine → ② curated repos → ③ live use cases → ④ what can be born → ⑤ speculation), a "how to read" strip, and a 30-second TL;DR. Curated chips + pointers to the deep dives (full repo index lives on TELA p3; experimental use cases on the field guide). Solid borders = live now, dashed = hypothetical. |
-| **`DERO.EXPERIMENTS.drawio`** | **Real-world use cases — the experimental field guide** — 12 use cases (gambling, patronage, DAO voting, private DeFi, marketplaces, supply chain, social, M2M payments, credentials, remittances, insurance, P2E) each with problem → DERO fit → status (live/partial/experimental) → FILLED BY (the real project in that slot, or "greenfield"). 3 pages: field guide + 5-step "run your own experiment" ramp + **deep dives: M2M payments & parametric insurance** (pattern, illustrative DVM-BASIC starter contract, honest blockers, simulator test path). |
-| **`DERO.SYSTEMS.drawio`** | **Systems reference — how the whole stack fits together** — 4 pages: **full-node architecture** (derod internals: P2P/TLS, mempool, consensus core, GravitonDB, DVM, JSON-RPC, GETWORK + attached wallets/miners/services with ports), **network topology & ports** (who connects to whom, P2P 10101 / GETWORK 10100 / RPC 10102 / wallet 10103, security rules), **the protocol stack** (cryptography → consensus → ledger → VM → interfaces → applications), and **the derohe source-tree map** (each repo package and what it owns). |
-| **`DERO.STYLE.drawio`** | **Template system showcase** — the shared design language for all diagrams. Two themes: **DHEBP Night** (dark, glass, glow — for sharing/cyber) and **DHEBP Paper** (light, print-friendly). Every component shown: gradient headers, zone panels, chips, number badges, status pills, arrows, TL;DR, draft stamp. Powered by `dero_style.py` — one file, both themes. |
-| **`DERO.MASTER.drawio`** | **The DERO Universe (v2 skin)** — same content as DERO.UNIVERSE, rendered in the new template system. Generate dark or light with `python build_master_diagram.py dark|light`. |
-| **`DERO.GUIDES.drawio`** | **Onboarding & safety** (3 pages): *Where Do I Begin?* (one entry → branch to the right diagram) · *Choose Your Wallet* (decision tree: CLI / Engram / g45w → seed backup) · *Self-Custody Security Poster* (DO/DON'T + threat model — DERO has no recovery). |
-| **`DERO.PRIVACY.drawio`** | **Honest privacy & economics** (3 pages): *What 'Private' Actually Means* (hidden vs visible, honest limits — private ≠ anonymous) · *Privacy Scorecard* (DERO vs BTC vs Monero vs ETH, color-coded heuristic risk, DRAFT disclaimer) · *DERO Economics* (hard cap ~20.89M, emission, halving ~4yr, reward split — DRAFT numbers flagged). |
-| **`DERO.DEVOPS.drawio`** | **Operator & builder reference** (4 pages): *Node Operator Runbook* (8 steps: download→sync→monitor→update→backup) · *XSWD Permission Model* (dApp↔wallet, ask/accept-always/deny-always, security rules) · *DVM-BASIC Cheat-Sheet* (install_sc, RETURN 0, STORE/LOAD, signatures, gas) · *Bridges & Interop* (ETH↔DERO, cldex, honest risk map). |
-| `Stargate.High.Level` | Original high-level sketch (Layer 1 PoW → DVM). |
+| **`DERO.GUIDES.drawio`** | **Onboarding & safety** (3p): Where Do I Begin? · Choose Your Wallet · Self-Custody Security poster. |
+| **`DERO.PROCESS.COMPLETE.drawio`** | **The Journey of One Transaction** (2p): user → wallet → node → network → miners → encrypted ledger → confirmation. |
+| **`DERO.WORLD.drawio`** | **DERO's Place in the Modern World** (2p): 5 needs — old centralized vs DERO world + swap table. |
+| **`DERO.MINING.drawio`** | **Mining: the Σ-block loop** (2p): network IS the pool, ~2s Σ-blocks, 18s blocks, 9+1, FAQ. |
+| **`DERO.TELA.drawio`** | **From Idea to On-Chain App** (3p): DVM → install_sc → XSWD → TELA + dApp stack + **community ecosystem index (40+ repos)**. |
+| **`DERO.MASTER.drawio`** | **The DERO Universe** (1p): engine → repos → live use cases → what can be born → speculation. Glanceable, dark/light. |
+| **`DERO.EXPERIMENTS.drawio`** | **Real-world use cases** (3p): 12 use cases + FILLED BY project + 5-step experiment ramp + deep dives (M2M, insurance). |
+| **`DERO.SYSTEMS.drawio`** | **Systems reference** (4p): full-node architecture · network topology & ports · protocol stack · derohe source-tree map. |
+| **`DERO.PRIVACY.drawio`** | **Honest privacy & economics** (3p): What "private" actually means · DERO vs BTC vs XMR vs ETH · DERO Economics. |
+| **`DERO.DEVOPS.drawio`** | **Operator & builder reference** (4p): node runbook · XSWD permission model · DVM cheat-sheet (Release153-grounded) · bridges & interop. |
+| **`DERO.STYLE.drawio`** | **Template system showcase** (2p): DHEBP Night (dark) + DHEBP Paper (light) — all components. |
+| `Stargate.High.Level` | Original high-level sketch. |
 | `DERO.CLOUD.drawio` | Original cloud-architecture sketch. |
 
 ## Regenerating
 
-Each diagram is generated from a **single Python data model** that emits both
-the draw.io XML and the SVG preview, so the two can never drift apart.
+Each diagram is generated from a Python data model. Pass `light` or `dark` for
+the theme (DHEBP Paper / DHEBP Night):
 
 ```bash
-python build_diagram.py          # -> DERO.PROCESS.COMPLETE.drawio
-python build_world_diagram.py    # -> DERO.WORLD.drawio
-python build_more_diagrams.py    # -> DERO.MINING.drawio + DERO.TELA.drawio
-python build_universe_diagram.py # -> DERO.UNIVERSE.drawio
-python build_experiments_diagram.py # -> DERO.EXPERIMENTS.drawio
-python build_systems_diagram.py  # -> DERO.SYSTEMS.drawio
-python build_guides_diagram.py   # -> DERO.GUIDES.drawio
-python build_privacy_diagram.py  # -> DERO.PRIVACY.drawio
-python build_devops_diagram.py   # -> DERO.DEVOPS.drawio
+python build_diagram.py light|dark          # -> DERO.PROCESS.COMPLETE.drawio
+python build_world_diagram.py light|dark    # -> DERO.WORLD.drawio
+python build_more_diagrams.py light|dark    # -> DERO.MINING.drawio + DERO.TELA.drawio
+python build_master_diagram.py light|dark   # -> DERO.MASTER.drawio + preview
+python build_experiments_diagram.py light|dark # -> DERO.EXPERIMENTS.drawio
+python build_systems_diagram.py light|dark  # -> DERO.SYSTEMS.drawio
+python build_guides_diagram.py light|dark   # -> DERO.GUIDES.drawio
+python build_privacy_diagram.py light|dark  # -> DERO.PRIVACY.drawio
+python build_devops_diagram.py light|dark   # -> DERO.DEVOPS.drawio
 ```
 
-PNG previews are rendered from the SVGs with headless Chromium/Edge.
+SVG previews for all diagrams (except MASTER/STYLE which have their own):
+```bash
+python render_drawio_svg.py DERO.*.drawio   # -> preview_DERO.*.svg
+```
+
+PNG screenshots are rendered from the SVG previews with headless Edge/Chromium.
 
 ## Sources & verification
 
